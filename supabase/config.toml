@@ -1,0 +1,4 @@
+project_id = "drwjkekivcxoiidxutit"
+
+[functions.analyze-chess]
+verify_jwt = false
