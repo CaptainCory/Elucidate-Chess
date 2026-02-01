@@ -1,4 +1,4 @@
-import { Chessboard } from 'react-chessboard';
+import Chessboard from 'chessboardjsx';
 
 interface ChessBoardProps {
   fen: string;
@@ -11,17 +11,18 @@ export function ChessBoard({ fen, orientation = 'white' }: ChessBoardProps) {
       <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border">
         <Chessboard
           position={fen}
-          boardOrientation={orientation}
-          arePiecesDraggable={false}
-          customBoardStyle={{
+          orientation={orientation}
+          draggable={false}
+          boardStyle={{
             borderRadius: '0.75rem',
           }}
-          customDarkSquareStyle={{
+          darkSquareStyle={{
             backgroundColor: 'hsl(25, 25%, 35%)',
           }}
-          customLightSquareStyle={{
+          lightSquareStyle={{
             backgroundColor: 'hsl(35, 30%, 75%)',
           }}
+          calcWidth={({ screenWidth }) => Math.min(500, screenWidth - 32)}
         />
       </div>
     </div>
