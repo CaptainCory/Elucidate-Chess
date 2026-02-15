@@ -20,12 +20,18 @@ const Index = () => {
   const [scores, setScores] = useState<number[]>([]);
   const [streak, setStreak] = useState(0);
   const [currentDifficulty, setCurrentDifficulty] = useState<ChessPuzzle['difficulty']>('beginner');
+  const [selectedMove, setSelectedMove] = useState<string | null>(null);
 
   const averageScore = scores.length > 0 
     ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) 
     : 0;
 
-  const handleSubmit = useCallback(async (thinking: string, suggestedMove: string) => {
+  const handleMove = useCallback((move: string) => {
+    setSelectedMove(move);
+  }, []);
+
+  const handleSubmit = useCallback(async (thinking: string) => {
+    if (!selectedMove) return;
     setGameState('analyzing');
 
     try {
@@ -33,21 +39,19 @@ const Index = () => {
         body: {
           fen: currentPuzzle.fen,
           userThinking: thinking,
-          userMove: suggestedMove,
+          userMove: selectedMove,
           bestMove: currentPuzzle.bestMove,
           puzzleExplanation: currentPuzzle.explanation,
           puzzleDifficulty: currentPuzzle.difficulty,
         },
       });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       const analysisResult: AnalysisData = {
         score: data.score,
         moveCorrect: data.moveCorrect,
-        userMove: suggestedMove,
+        userMove: selectedMove,
         bestMove: currentPuzzle.bestMove,
         reasoningFeedback: data.reasoningFeedback,
         keyInsights: data.keyInsights || [],
@@ -64,13 +68,12 @@ const Index = () => {
       }
 
       setGameState('result');
-
     } catch (error) {
       console.error('Analysis error:', error);
       toast.error('Failed to analyze your response. Please try again.');
       setGameState('thinking');
     }
-  }, [currentPuzzle]);
+  }, [currentPuzzle, selectedMove]);
 
   const handleNext = useCallback(() => {
     const newDifficulty = analysis ? getNextDifficulty(currentDifficulty, analysis.score) : currentDifficulty;
@@ -82,6 +85,7 @@ const Index = () => {
     const nextPuzzle = getRandomPuzzle(newSolvedPuzzles, newDifficulty);
     setCurrentPuzzle(nextPuzzle);
     setAnalysis(null);
+    setSelectedMove(null);
     setGameState('thinking');
   }, [analysis, currentDifficulty, currentPuzzle.id, solvedPuzzles]);
 
@@ -106,7 +110,7 @@ const Index = () => {
             <Sparkles className="w-8 h-8 text-accent" />
           </div>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            Sharpen your chess thinking. Analyze positions, explain your reasoning, and receive AI-powered feedback.
+            Sharpen your chess thinking. Drag pieces to make your move, explain your reasoning, and receive AI-powered feedback.
           </p>
         </header>
 
@@ -136,6 +140,8 @@ const Index = () => {
             <ChessBoard 
               fen={currentPuzzle.fen} 
               orientation="white"
+              interactive={gameState === 'thinking'}
+              onMove={handleMove}
             />
 
             {currentPuzzle.name && (
@@ -160,6 +166,7 @@ const Index = () => {
               <ThinkingInput 
                 onSubmit={handleSubmit} 
                 isLoading={false}
+                moveSelected={!!selectedMove}
               />
             )}
 
