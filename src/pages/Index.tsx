@@ -56,6 +56,7 @@ const Index = () => {
         reasoningFeedback: data.reasoningFeedback,
         keyInsights: data.keyInsights || [],
         improvement: data.improvement || '',
+        positionVerification: data.positionVerification,
       };
 
       setAnalysis(analysisResult);
