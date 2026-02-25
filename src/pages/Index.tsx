@@ -127,7 +127,7 @@ const Index = () => {
         {/* Main Content */}
         <div className="grid lg:grid-cols-2 gap-8 items-start">
           {/* Chess Board Section */}
-          <div className="space-y-4 animate-slide-up">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <TurnIndicator fen={currentPuzzle.fen} />
