@@ -2,6 +2,28 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Lightbulb } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
+export interface PositionPiece {
+  square: string;
+  piece: 'King' | 'Queen' | 'Rook' | 'Bishop' | 'Knight' | 'Pawn';
+  color: 'white' | 'black';
+}
+
+export interface PositionVerification {
+  pieces: PositionPiece[];
+  whitePieceCount: number;
+  blackPieceCount: number;
+  sideToMove: 'white' | 'black';
+  castlingRights: string;
+  enPassantTarget: string;
+  isCheck: boolean;
+  isCheckmate: boolean;
+  isStalemate: boolean;
+  legalMovesCount: number;
+  userMoveLegal: boolean;
+  bestMoveLegal: boolean;
+  bestMoveLeadsToMate: boolean;
+}
+
 export interface AnalysisData {
   score: number;
   moveCorrect: boolean;
@@ -10,6 +32,7 @@ export interface AnalysisData {
   reasoningFeedback: string;
   keyInsights: string[];
   improvement: string;
+  positionVerification?: PositionVerification;
 }
 
 interface AnalysisResultProps {
@@ -18,6 +41,17 @@ interface AnalysisResultProps {
 }
 
 export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
+  const formatPieceList = (pieces: PositionPiece[]) =>
+    pieces.map((piece) => `${piece.piece}@${piece.square}`).join(', ');
+
+  const verification = analysis.positionVerification;
+  const whitePieces = verification
+    ? verification.pieces.filter((piece) => piece.color === 'white')
+    : [];
+  const blackPieces = verification
+    ? verification.pieces.filter((piece) => piece.color === 'black')
+    : [];
+
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-success';
     if (score >= 60) return 'text-primary';
@@ -102,6 +136,33 @@ export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
           <p className="text-sm text-secondary-foreground">
             <span className="font-semibold text-primary">💡 To improve:</span> {analysis.improvement}
           </p>
+        </div>
+      )}
+
+      {/* Position Verification */}
+      {verification && (
+        <div className="chess-card p-4 space-y-3">
+          <h3 className="font-semibold font-display text-foreground">Position Verification</h3>
+          <div className="grid sm:grid-cols-2 gap-2 text-sm text-secondary-foreground">
+            <p><span className="text-muted-foreground">Side to move:</span> {verification.sideToMove}</p>
+            <p><span className="text-muted-foreground">Legal moves:</span> {verification.legalMovesCount}</p>
+            <p><span className="text-muted-foreground">In check:</span> {verification.isCheck ? 'Yes' : 'No'}</p>
+            <p><span className="text-muted-foreground">Checkmate now:</span> {verification.isCheckmate ? 'Yes' : 'No'}</p>
+            <p><span className="text-muted-foreground">Best move legal:</span> {verification.bestMoveLegal ? 'Yes' : 'No'}</p>
+            <p><span className="text-muted-foreground">Best move mates:</span> {verification.bestMoveLeadsToMate ? 'Yes' : 'No'}</p>
+            <p><span className="text-muted-foreground">Your move legal:</span> {verification.userMoveLegal ? 'Yes' : 'No'}</p>
+            <p><span className="text-muted-foreground">Castling:</span> {verification.castlingRights}</p>
+          </div>
+
+          <details className="rounded-md bg-muted/50 p-3">
+            <summary className="cursor-pointer text-sm font-medium text-foreground">Show piece map from FEN</summary>
+            <div className="mt-2 space-y-2 text-sm text-secondary-foreground">
+              <p><span className="text-muted-foreground">White ({verification.whitePieceCount}):</span> {formatPieceList(whitePieces)}</p>
+              <p><span className="text-muted-foreground">Black ({verification.blackPieceCount}):</span> {formatPieceList(blackPieces)}</p>
+              <p><span className="text-muted-foreground">En passant:</span> {verification.enPassantTarget}</p>
+              <p><span className="text-muted-foreground">Stalemate now:</span> {verification.isStalemate ? 'Yes' : 'No'}</p>
+            </div>
+          </details>
         </div>
       )}
 
