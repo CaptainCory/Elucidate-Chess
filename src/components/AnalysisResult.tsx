@@ -101,6 +101,16 @@ export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
         </div>
       </div>
 
+      {/* Next Position (top) */}
+      <Button
+        onClick={onNext}
+        className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90"
+        size="lg"
+      >
+        Next Position
+        <ArrowRight className="w-5 h-5 ml-2" />
+      </Button>
+
       {/* Reasoning Feedback */}
       <div className="chess-card p-4 space-y-3">
         <div className="flex items-center gap-2 text-foreground">
