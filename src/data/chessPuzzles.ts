@@ -33,12 +33,12 @@ export const chessPuzzles: ChessPuzzle[] = [
   },
   {
     id: '3',
-    name: 'Knight Fork',
+    name: 'Fried Liver Setup',
     fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4',
     bestMove: 'Ng5',
     difficulty: 'intermediate',
-    explanation: 'Ng5 attacks the weak f7 pawn, creating threats. The knight also eyes the e6 square and creates tactical opportunities against the uncastled black king.',
-    themes: ['attack', 'weak pawn', 'development'],
+    explanation: 'Ng5 launches the Fried Liver Attack, targeting the vulnerable f7 pawn which is only defended by the king. The knight teams up with the bishop on c4 to create a double attack on f7. Black must respond carefully — after the common 5...d5 6.exd5 Na5, the Fried Liver continues with Bb5+ or d6, leading to sharp tactical play against the exposed king.',
+    themes: ['attack', 'weak f7', 'opening theory'],
   },
   {
     id: '4',
