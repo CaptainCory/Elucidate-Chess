@@ -7,6 +7,11 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const logStep = (step: string, details?: any) => {
+  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
+  console.log(`[CHECK-SUBSCRIPTION] ${step}${detailsStr}`);
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -19,45 +24,59 @@ serve(async (req) => {
   );
 
   try {
+    logStep("Function started");
+
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
+    logStep("Stripe key verified");
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("No authorization header");
+    logStep("Auth header found");
 
     const token = authHeader.replace("Bearer ", "");
     const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
     if (userError) throw new Error(`Auth error: ${userError.message}`);
     const user = userData.user;
     if (!user?.email) throw new Error("User not authenticated");
+    logStep("User authenticated", { userId: user.id, email: user.email });
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+    logStep("Stripe customer lookup", { found: customers.data.length });
 
     if (customers.data.length === 0) {
-      // Also update profiles table
       await supabaseClient.from("profiles").update({ is_premium: false }).eq("user_id", user.id);
+      logStep("No customer found, returning unsubscribed");
       return new Response(JSON.stringify({ subscribed: false }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const customerId = customers.data[0].id;
+    logStep("Found customer", { customerId });
+
     const subscriptions = await stripe.subscriptions.list({ customer: customerId, status: "active", limit: 1 });
     const hasActiveSub = subscriptions.data.length > 0;
+    logStep("Subscription check", { hasActiveSub, count: subscriptions.data.length });
 
-    // Sync premium status to profiles table
     await supabaseClient.from("profiles").update({ is_premium: hasActiveSub }).eq("user_id", user.id);
+    logStep("Profile updated", { is_premium: hasActiveSub });
 
     let subscriptionEnd = null;
     if (hasActiveSub) {
       subscriptionEnd = new Date(subscriptions.data[0].current_period_end * 1000).toISOString();
+      logStep("Subscription end", { subscriptionEnd });
     }
 
-    return new Response(JSON.stringify({ subscribed: hasActiveSub, subscription_end: subscriptionEnd }), {
+    const response = { subscribed: hasActiveSub, subscription_end: subscriptionEnd };
+    logStep("Returning response", response);
+
+    return new Response(JSON.stringify(response), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
+    logStep("ERROR", { message: error.message });
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
