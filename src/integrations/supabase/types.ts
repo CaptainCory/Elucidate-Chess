@@ -17,6 +17,8 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          average_score: number
+          best_streak: number
           created_at: string
           display_name: string | null
           id: string
@@ -27,6 +29,8 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          average_score?: number
+          best_streak?: number
           created_at?: string
           display_name?: string | null
           id?: string
@@ -37,6 +41,8 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          average_score?: number
+          best_streak?: number
           created_at?: string
           display_name?: string | null
           id?: string

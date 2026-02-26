@@ -8,6 +8,7 @@ import { ProgressStats } from '@/components/ProgressStats';
 import { PlanBadge } from '@/components/PlanBadge';
 import { UserMenu } from '@/components/UserMenu';
 import { UpgradeOverlay } from '@/components/UpgradeOverlay';
+import { Leaderboard } from '@/components/Leaderboard';
 import { getRandomPuzzle, getNextDifficulty, ChessPuzzle } from '@/data/chessPuzzles';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -87,12 +88,33 @@ const Index = () => {
       };
 
       setAnalysis(analysisResult);
-      setScores(prev => [...prev, analysisResult.score]);
+      const newScores = [...scores, analysisResult.score];
+      setScores(newScores);
       
+      let newStreak: number;
       if (analysisResult.score >= 70) {
-        setStreak(prev => prev + 1);
+        newStreak = streak + 1;
+        setStreak(newStreak);
       } else {
+        newStreak = 0;
         setStreak(0);
+      }
+
+      // Persist stats to DB for signed-in users
+      if (user) {
+        const avgScore = Math.round(newScores.reduce((a, b) => a + b, 0) / newScores.length);
+        const newSolvedCount = solvedPuzzles.length + 1;
+        supabase
+          .from('profiles')
+          .update({
+            puzzles_solved: newSolvedCount,
+            average_score: avgScore,
+            best_streak: Math.max(newStreak, streak),
+          })
+          .eq('user_id', user.id)
+          .then(({ error }) => {
+            if (error) console.error('Failed to update stats:', error);
+          });
       }
 
       setGameState('result');
@@ -101,7 +123,7 @@ const Index = () => {
       toast.error('Failed to analyze your response. Please try again.');
       setGameState('thinking');
     }
-  }, [currentPuzzle, selectedMove]);
+  }, [currentPuzzle, selectedMove, scores, streak, solvedPuzzles, user]);
 
   const handleNext = useCallback(() => {
     const newDifficulty = analysis ? getNextDifficulty(currentDifficulty, analysis.score) : currentDifficulty;
@@ -270,6 +292,11 @@ const Index = () => {
               />
             )}
           </div>
+        </div>
+
+        {/* Leaderboard */}
+        <div className="mt-12 max-w-2xl mx-auto">
+          <Leaderboard />
         </div>
 
         {/* Footer */}

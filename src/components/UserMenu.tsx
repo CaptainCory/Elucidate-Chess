@@ -25,14 +25,14 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-          <Avatar className="h-9 w-9 border border-border">
+        <Button variant="ghost" className="relative h-12 w-12 rounded-full">
+          <Avatar className="h-12 w-12 border-2 border-border">
             <AvatarImage src={avatarUrl} alt={displayName} />
-            <AvatarFallback className="bg-secondary text-secondary-foreground text-xs">{initials}</AvatarFallback>
+            <AvatarFallback className="bg-secondary text-secondary-foreground text-sm">{initials}</AvatarFallback>
           </Avatar>
           {isPremium && (
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary">
-              <Crown className="h-2.5 w-2.5 text-primary-foreground" />
+            <span className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30">
+              <Crown className="h-3.5 w-3.5 text-primary-foreground" />
             </span>
           )}
         </Button>
@@ -40,7 +40,15 @@ export function UserMenu() {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{displayName}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium leading-none">{displayName}</p>
+              {isPremium && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-wider">
+                  <Crown className="w-2.5 h-2.5" />
+                  Premium
+                </span>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground">{user.email}</p>
           </div>
         </DropdownMenuLabel>
