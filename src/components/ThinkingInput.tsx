@@ -20,7 +20,8 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && e.ctrlKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSubmit();
     }
   };
