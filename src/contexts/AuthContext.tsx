@@ -33,10 +33,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkSubscription = useCallback(async () => {
     try {
+      console.log('[AuthContext] Checking subscription...');
       const { data, error } = await supabase.functions.invoke('check-subscription');
+      console.log('[AuthContext] Subscription response:', { data, error });
       if (!error && data) {
         setIsPremium(data.subscribed === true);
         setSubscriptionEnd(data.subscription_end || null);
+        console.log('[AuthContext] Set isPremium:', data.subscribed === true);
+      } else {
+        console.error('[AuthContext] Subscription check error:', error);
       }
     } catch (e) {
       console.error('Subscription check failed:', e);
