@@ -96,21 +96,26 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
   const playClickSound = useCallback(() => {
     try {
       const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const len = Math.floor(ctx.sampleRate * 0.035);
+      const len = Math.floor(ctx.sampleRate * 0.06);
       const buffer = ctx.createBuffer(1, len, ctx.sampleRate);
       const d = buffer.getChannelData(0);
       for (let i = 0; i < len; i++) {
         const t = i / ctx.sampleRate;
-        d[i] = Math.exp(-t * 140) * (Math.random() * 2 - 1) * 0.35;
+        // Sharp initial transient + fast decay = knock character
+        const transient = Math.exp(-t * 60) * (Math.random() * 2 - 1);
+        const thump = Math.exp(-t * 40) * Math.sin(2 * Math.PI * 120 * t);
+        d[i] = (transient * 0.6 + thump * 0.5) * 0.8;
       }
       const src = ctx.createBufferSource();
       src.buffer = buffer;
-      const bp = ctx.createBiquadFilter();
-      bp.type = 'bandpass';
-      bp.frequency.value = 2000;
-      bp.Q.value = 1.5;
-      src.connect(bp);
-      bp.connect(ctx.destination);
+      const gain = ctx.createGain();
+      gain.gain.value = 1.5;
+      const lp = ctx.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.value = 3000;
+      src.connect(lp);
+      lp.connect(gain);
+      gain.connect(ctx.destination);
       src.start();
     } catch {}
   }, []);
