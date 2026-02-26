@@ -139,32 +139,6 @@ export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
         </div>
       )}
 
-      {/* Position Verification */}
-      {verification && (
-        <div className="chess-card p-4 space-y-3">
-          <h3 className="font-semibold font-display text-foreground">Position Verification</h3>
-          <div className="grid sm:grid-cols-2 gap-2 text-sm text-secondary-foreground">
-            <p><span className="text-muted-foreground">Side to move:</span> {verification.sideToMove}</p>
-            <p><span className="text-muted-foreground">Legal moves:</span> {verification.legalMovesCount}</p>
-            <p><span className="text-muted-foreground">In check:</span> {verification.isCheck ? 'Yes' : 'No'}</p>
-            <p><span className="text-muted-foreground">Checkmate now:</span> {verification.isCheckmate ? 'Yes' : 'No'}</p>
-            <p><span className="text-muted-foreground">Best move legal:</span> {verification.bestMoveLegal ? 'Yes' : 'No'}</p>
-            <p><span className="text-muted-foreground">Best move mates:</span> {verification.bestMoveLeadsToMate ? 'Yes' : 'No'}</p>
-            <p><span className="text-muted-foreground">Your move legal:</span> {verification.userMoveLegal ? 'Yes' : 'No'}</p>
-            <p><span className="text-muted-foreground">Castling:</span> {verification.castlingRights}</p>
-          </div>
-
-          <details className="rounded-md bg-muted/50 p-3">
-            <summary className="cursor-pointer text-sm font-medium text-foreground">Show piece map from FEN</summary>
-            <div className="mt-2 space-y-2 text-sm text-secondary-foreground">
-              <p><span className="text-muted-foreground">White ({verification.whitePieceCount}):</span> {formatPieceList(whitePieces)}</p>
-              <p><span className="text-muted-foreground">Black ({verification.blackPieceCount}):</span> {formatPieceList(blackPieces)}</p>
-              <p><span className="text-muted-foreground">En passant:</span> {verification.enPassantTarget}</p>
-              <p><span className="text-muted-foreground">Stalemate now:</span> {verification.isStalemate ? 'Yes' : 'No'}</p>
-            </div>
-          </details>
-        </div>
-      )}
 
       {/* Next Button */}
       <Button
