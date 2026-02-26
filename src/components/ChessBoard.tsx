@@ -93,6 +93,23 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
     return () => clearTimeout(timer);
   }, [isAnimatingIntro, previousFen, fen]);
 
+  const playClickSound = useCallback(() => {
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(800, ctx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + 0.1);
+    } catch {}
+  }, []);
+
   const handleDrop = useCallback(({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string }) => {
     if (!interactive || userMove || isAnimatingIntro) return;
 
@@ -105,6 +122,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
       });
 
       if (move) {
+        playClickSound();
         const moveNotation = move.san;
         setUserMove(moveNotation);
         setDisplayFen(game.fen());
@@ -117,7 +135,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
     } catch {
       // Invalid move, ignore
     }
-  }, [fen, interactive, userMove, isAnimatingIntro, onMove]);
+  }, [fen, interactive, userMove, isAnimatingIntro, onMove, playClickSound]);
 
   return (
     <div className="w-full max-w-[500px] mx-auto">
