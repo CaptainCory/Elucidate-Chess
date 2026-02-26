@@ -70,12 +70,16 @@ const Membership = () => {
       })
     : null;
 
-  if (loading || !user) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
+  }
+
+  if (!user) {
+    return null;
   }
 
   const displayName = user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'User';
