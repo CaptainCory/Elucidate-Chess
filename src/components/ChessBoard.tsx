@@ -86,12 +86,8 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
         // ignore
       }
 
-      // Clear highlights after another second
-      const clearTimer = setTimeout(() => {
-        setHighlightSquares({});
-        setIsAnimatingIntro(false);
-      }, 1200);
-      return () => clearTimeout(clearTimer);
+      // Keep the destination highlight persistent
+      setIsAnimatingIntro(false);
     }, 600);
 
     return () => clearTimeout(timer);
