@@ -181,6 +181,23 @@ const Index = () => {
                 : 'Sign in to continue'}
             </p>
           )}
+          {user && !isPremium && (
+            <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary">
+              <span className="text-xs font-medium text-muted-foreground">
+                {DAILY_PUZZLE_LIMIT - dailySolved > 0
+                  ? `${DAILY_PUZZLE_LIMIT - dailySolved} puzzle${DAILY_PUZZLE_LIMIT - dailySolved !== 1 ? 's' : ''} remaining today`
+                  : 'Daily limit reached'}
+              </span>
+              <div className="flex gap-0.5">
+                {Array.from({ length: DAILY_PUZZLE_LIMIT }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`w-2 h-2 rounded-full ${i < dailySolved ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </header>
 
         {/* Progress Stats */}
