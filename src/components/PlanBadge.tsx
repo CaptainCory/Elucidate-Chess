@@ -7,15 +7,15 @@ export function PlanBadge() {
 
   if (isPremium) {
     return (
-      <Badge className="bg-primary/20 text-primary border-primary/30 hover:bg-primary/30">
-        <Crown className="w-3 h-3 mr-1" />
+      <Badge className="bg-primary/20 text-primary border-primary/30 hover:bg-primary/30 gap-1.5 px-3 py-1 text-sm">
+        <Crown className="w-4 h-4" />
         Premium
       </Badge>
     );
   }
 
   return (
-    <Badge variant="secondary" className="text-muted-foreground">
+    <Badge variant="secondary" className="text-muted-foreground px-3 py-1">
       Basic · 3 puzzles/day
     </Badge>
   );
