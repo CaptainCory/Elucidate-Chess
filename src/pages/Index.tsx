@@ -5,6 +5,7 @@ import { ThinkingInput } from '@/components/ThinkingInput';
 import { AnalysisResult, AnalysisData } from '@/components/AnalysisResult';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { ProgressStats } from '@/components/ProgressStats';
+import { PlanBadge } from '@/components/PlanBadge';
 import { UserMenu } from '@/components/UserMenu';
 import { AuthModal } from '@/components/AuthModal';
 import { getRandomPuzzle, getNextDifficulty, ChessPuzzle } from '@/data/chessPuzzles';
@@ -127,7 +128,7 @@ const Index = () => {
         {/* Header */}
         <header className="text-center mb-8 animate-fade-in">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-24" /> {/* Spacer */}
+            <PlanBadge />
             <div className="flex items-center gap-3">
               <Crown className="w-10 h-10 text-primary" />
               <h1 className="text-4xl md:text-5xl font-bold font-display text-foreground">

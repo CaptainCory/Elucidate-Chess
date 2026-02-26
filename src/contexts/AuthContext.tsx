@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 
@@ -8,6 +8,7 @@ interface AuthContextType {
   loading: boolean;
   isPremium: boolean;
   signOut: () => Promise<void>;
+  checkSubscription: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   isPremium: false,
   signOut: async () => {},
+  checkSubscription: async () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -26,6 +28,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(false);
 
+  const checkSubscription = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('check-subscription');
+      if (!error && data) {
+        setIsPremium(data.subscribed === true);
+      }
+    } catch (e) {
+      console.error('Subscription check failed:', e);
+    }
+  }, []);
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
@@ -33,13 +46,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Fetch premium status
-          const { data } = await supabase
-            .from('profiles')
-            .select('is_premium')
-            .eq('user_id', session.user.id)
-            .single();
-          setIsPremium(data?.is_premium ?? false);
+          // Check Stripe subscription status
+          setTimeout(() => checkSubscription(), 500);
         } else {
           setIsPremium(false);
         }
@@ -51,18 +59,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user) {
+        checkSubscription();
+      }
       if (!session) setLoading(false);
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [checkSubscription]);
+
+  // Periodic subscription check every 60s
+  useEffect(() => {
+    if (!user) return;
+    const interval = setInterval(checkSubscription, 60000);
+    return () => clearInterval(interval);
+  }, [user, checkSubscription]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, isPremium, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, isPremium, signOut, checkSubscription }}>
       {children}
     </AuthContext.Provider>
   );
