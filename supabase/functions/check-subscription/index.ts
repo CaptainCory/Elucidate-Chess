@@ -65,8 +65,16 @@ serve(async (req) => {
 
     let subscriptionEnd = null;
     if (hasActiveSub) {
-      subscriptionEnd = new Date(subscriptions.data[0].current_period_end * 1000).toISOString();
-      logStep("Subscription end", { subscriptionEnd });
+      try {
+        const endTimestamp = subscriptions.data[0].current_period_end;
+        logStep("Raw end timestamp", { endTimestamp, type: typeof endTimestamp });
+        if (endTimestamp && typeof endTimestamp === 'number') {
+          subscriptionEnd = new Date(endTimestamp * 1000).toISOString();
+        }
+        logStep("Subscription end", { subscriptionEnd });
+      } catch (dateErr) {
+        logStep("Date parse warning, skipping end date", { error: dateErr.message });
+      }
     }
 
     const response = { subscribed: hasActiveSub, subscription_end: subscriptionEnd };
