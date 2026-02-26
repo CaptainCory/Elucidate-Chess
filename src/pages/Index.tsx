@@ -8,11 +8,13 @@ import { ProgressStats } from '@/components/ProgressStats';
 import { PlanBadge } from '@/components/PlanBadge';
 import { UserMenu } from '@/components/UserMenu';
 import { AuthModal } from '@/components/AuthModal';
+import { UpgradeOverlay } from '@/components/UpgradeOverlay';
 import { getRandomPuzzle, getNextDifficulty, ChessPuzzle } from '@/data/chessPuzzles';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Brain, Crown, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const FREE_PUZZLE_LIMIT = 3;
 const DAILY_PUZZLE_LIMIT = 3;
@@ -45,6 +47,7 @@ const Index = () => {
   const [currentDifficulty, setCurrentDifficulty] = useState<ChessPuzzle['difficulty']>('beginner');
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [dailySolved, setDailySolved] = useState(getDailySolvedCount);
 
   const averageScore = scores.length > 0 
@@ -124,7 +127,7 @@ const Index = () => {
       const newDaily = getDailySolvedCount();
       setDailySolved(newDaily);
       if (newDaily >= DAILY_PUZZLE_LIMIT) {
-        toast.info("You've reached your daily limit. Upgrade to premium for unlimited puzzles!");
+        setShowUpgradeOverlay(true);
         return;
       }
     }
@@ -275,8 +278,12 @@ const Index = () => {
                   <Crown className="w-8 h-8 text-primary" />
                 </div>
                 <p className="text-muted-foreground">
-                  You've reached your daily limit of {DAILY_PUZZLE_LIMIT} puzzles. Upgrade to premium for unlimited access!
+                  You've reached your daily limit of {DAILY_PUZZLE_LIMIT} puzzles.
                 </p>
+                <Button onClick={() => setShowUpgradeOverlay(true)} className="gap-2">
+                  <Crown className="w-4 h-4" />
+                  Upgrade to Premium
+                </Button>
               </div>
             )}
 
@@ -313,6 +320,7 @@ const Index = () => {
       </div>
 
       <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
+      <UpgradeOverlay open={showUpgradeOverlay} onClose={() => setShowUpgradeOverlay(false)} />
     </div>
   );
 };
