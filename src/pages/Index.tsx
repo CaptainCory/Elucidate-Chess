@@ -177,6 +177,7 @@ const Index = () => {
             
             <ChessBoard 
               fen={currentPuzzle.fen} 
+              previousFen={currentPuzzle.previousFen}
               orientation="white"
               interactive={gameState === 'thinking' && !isGated && !isSessionLimited}
               onMove={handleMove}

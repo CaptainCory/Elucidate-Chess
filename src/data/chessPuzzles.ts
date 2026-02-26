@@ -5,6 +5,7 @@ export interface ChessPuzzle {
   id: string;
   name: string;
   fen: string;
+  previousFen?: string; // FEN before opponent's last move, for intro animation
   bestMove: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'master';
   explanation: string;
@@ -106,6 +107,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     id: '11',
     name: 'Central Pawn Break',
     fen: 'rn1q1rk1/4bppp/ppbppn2/8/PP1PP3/2N1BN2/4BPPP/R2Q1RK1 w - - 1 12',
+    previousFen: 'rn1q1rk1/p3bppp/1pbppn2/8/PP1PP3/2N1BN2/4BPPP/R2Q1RK1 b - - 0 11',
     bestMove: 'd5',
     difficulty: 'advanced',
     explanation: 'The pawn push d5 is the strongest move, forcing Black to isolate their d-pawn. The alternative e5 is inferior as it leads to exchanges where Black maintains space and solid structure. Rook to c1 is a mistake because the e4 pawn is attacked twice and only defended once.',
