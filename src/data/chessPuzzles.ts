@@ -73,8 +73,8 @@ export const chessPuzzles: ChessPuzzle[] = [
     fen: 'r1bq1rk1/pp2bppp/2n1pn2/2pp4/3P4/2PBPN2/PP1N1PPP/R1BQ1RK1 w - - 0 8',
     bestMove: 'dxc5',
     difficulty: 'intermediate',
-    explanation: 'Capturing dxc5 opens the d-file and creates an isolated pawn on d5 for Black. White can then target this weakness while maintaining a solid position.',
-    themes: ['pawn structure', 'positional play', 'isolated pawn'],
+    explanation: 'Capturing dxc5 wins a pawn and opens the d-file for White\'s pieces. Black\'s d5 pawn remains supported by the e6 pawn, but White gains a spatial advantage and can use the open c-file and d-file to apply pressure. The extra pawn and improved piece activity give White a clear edge.',
+    themes: ['pawn structure', 'positional play', 'open files'],
   },
   {
     id: '8',
