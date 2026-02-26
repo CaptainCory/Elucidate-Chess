@@ -44,7 +44,7 @@ export function PlanBadge() {
   return (
     <div className="flex items-center gap-2">
       <Badge variant="secondary" className="text-muted-foreground">
-        Free 3 Puzzles
+        Free · 3 puzzles/day
       </Badge>
       <Button
         size="sm"
