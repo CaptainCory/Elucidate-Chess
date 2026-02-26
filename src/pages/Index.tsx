@@ -74,7 +74,17 @@ const Index = () => {
         },
       });
 
-      if (error) throw error;
+      console.log('Analysis response:', { data, error });
+
+      if (error) {
+        console.error('Invoke error details:', error);
+        throw error;
+      }
+
+      if (!data || typeof data.score === 'undefined') {
+        console.error('Unexpected response shape:', data);
+        throw new Error('Invalid analysis response');
+      }
 
       const analysisResult: AnalysisData = {
         score: data.score,
