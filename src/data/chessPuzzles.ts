@@ -54,16 +54,6 @@ export const chessPuzzles: ChessPuzzle[] = [
     themes: ['knight check', 'tactics', 'material gain'],
   },
   {
-    id: '5',
-    name: 'Greek Gift Sacrifice',
-    fen: 'r1bq1rk1/ppp2ppp/2nb1n2/3pp3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 7',
-    previousFen: 'r1bq1rk1/pppp1ppp/2nb1n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 b - - 0 6',
-    bestMove: 'Bxh7+',
-    difficulty: 'advanced',
-    explanation: 'The classic Greek Gift sacrifice! Bxh7+ forces the king to capture, then Ng5+ continues the attack. After Kh6, White has Qg4 with a devastating attack.',
-    themes: ['sacrifice', 'attack on king', 'classical pattern'],
-  },
-  {
     id: '6',
     name: 'Smothered Mate Setup',
     fen: 'r1b1k2r/ppppqppp/2n2n2/2b1p1N1/2B1P3/3P4/PPP2PPP/RNBQK2R w KQkq - 5 6',
