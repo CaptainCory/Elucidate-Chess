@@ -308,7 +308,7 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="mt-12 text-center text-sm text-muted-foreground">
-          <p>Powered by AI • Practice makes perfect</p>
+          <p>Powered by AI • Practice Makes Progress</p>
         </footer>
       </div>
 
