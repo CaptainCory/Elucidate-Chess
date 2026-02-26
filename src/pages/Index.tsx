@@ -171,7 +171,7 @@ const Index = () => {
                 <DifficultyBadge difficulty={currentPuzzle.difficulty} />
               </div>
               <span className="text-sm text-muted-foreground">
-                #{solvedPuzzles.length + 1}
+                Puzzle #{currentPuzzle.id}
               </span>
             </div>
             
