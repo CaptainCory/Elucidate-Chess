@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, useRef, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 
@@ -30,7 +30,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(false);
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
+  const stripeCheckInFlight = useRef(false);
+  const lastStripeCheck = useRef(0);
 
+  // Fast: read is_premium from the database (already synced by edge function)
+  const loadPremiumFromProfile = useCallback(async (userId: string) => {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('is_premium')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (profile) {
+      setIsPremium(profile.is_premium === true);
+    }
+  }, []);
+
+  // Slow: verify with Stripe (deduplicated, max once per 5 minutes)
   const checkSubscription = useCallback(async () => {
     if (!user) {
       setIsPremium(false);
@@ -38,32 +54,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const syncPremiumFromProfile = async () => {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('is_premium')
-        .eq('user_id', user.id)
-        .maybeSingle();
+    const now = Date.now();
+    if (stripeCheckInFlight.current || now - lastStripeCheck.current < 300_000) {
+      return;
+    }
 
-      if (profile) {
-        const premiumFromProfile = profile.is_premium === true;
-        setIsPremium(premiumFromProfile);
-        if (!premiumFromProfile) setSubscriptionEnd(null);
-      }
-    };
+    stripeCheckInFlight.current = true;
+    lastStripeCheck.current = now;
 
     try {
       const { data, error } = await supabase.functions.invoke('check-subscription');
       if (!error && data) {
         setIsPremium(data.subscribed === true);
         setSubscriptionEnd(data.subscription_end || null);
-        return;
       }
-
-      await syncPremiumFromProfile();
     } catch (e) {
       console.error('Subscription check failed:', e);
-      await syncPremiumFromProfile();
+    } finally {
+      stripeCheckInFlight.current = false;
     }
   }, [user]);
 
@@ -72,15 +80,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
+
         if (session?.user) {
-          // Check Stripe subscription status
-          setTimeout(() => checkSubscription(), 500);
+          // Instantly load premium from DB
+          await loadPremiumFromProfile(session.user.id);
+          // Background Stripe sync (deferred)
+          setTimeout(() => checkSubscription(), 2000);
         } else {
           setIsPremium(false);
           setSubscriptionEnd(null);
         }
-        
+
         setLoading(false);
       }
     );
@@ -89,18 +99,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        checkSubscription();
+        loadPremiumFromProfile(session.user.id);
       }
       if (!session) setLoading(false);
     });
 
     return () => subscription.unsubscribe();
-  }, [checkSubscription]);
+  }, [checkSubscription, loadPremiumFromProfile]);
 
-  // Periodic subscription check every 60s
+  // Background re-check every 5 minutes (not 60s)
   useEffect(() => {
     if (!user) return;
-    const interval = setInterval(checkSubscription, 60000);
+    const interval = setInterval(checkSubscription, 300_000);
     return () => clearInterval(interval);
   }, [user, checkSubscription]);
 
