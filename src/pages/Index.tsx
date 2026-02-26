@@ -7,16 +7,13 @@ import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { ProgressStats } from '@/components/ProgressStats';
 import { PlanBadge } from '@/components/PlanBadge';
 import { UserMenu } from '@/components/UserMenu';
-import { AuthModal } from '@/components/AuthModal';
 import { UpgradeOverlay } from '@/components/UpgradeOverlay';
 import { getRandomPuzzle, getNextDifficulty, ChessPuzzle } from '@/data/chessPuzzles';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Brain, Crown, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
-const FREE_PUZZLE_LIMIT = 3;
 const DAILY_PUZZLE_LIMIT = 3;
 
 const getDailyKey = () => `chess_daily_${new Date().toISOString().slice(0, 10)}`;
@@ -46,7 +43,6 @@ const Index = () => {
   const [streak, setStreak] = useState(0);
   const [currentDifficulty, setCurrentDifficulty] = useState<ChessPuzzle['difficulty']>('beginner');
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [dailySolved, setDailySolved] = useState(getDailySolvedCount);
 
@@ -54,10 +50,8 @@ const Index = () => {
     ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) 
     : 0;
 
-  // Check if user has hit the free puzzle limit
-  const isGated = !user && solvedPuzzles.length >= FREE_PUZZLE_LIMIT;
-  // Signed-in but not premium: 3 puzzles per day
-  const isSessionLimited = user && !isPremium && dailySolved >= DAILY_PUZZLE_LIMIT;
+  // Daily limit applies to all non-premium users (signed in or not)
+  const isLimited = !isPremium && dailySolved >= DAILY_PUZZLE_LIMIT;
 
   const handleMove = useCallback((move: string) => {
     setSelectedMove(move);
@@ -116,13 +110,8 @@ const Index = () => {
     const newSolvedPuzzles = [...solvedPuzzles, currentPuzzle.id];
     setSolvedPuzzles(newSolvedPuzzles);
 
-    // Check gate after solving
-    if (!user && newSolvedPuzzles.length >= FREE_PUZZLE_LIMIT) {
-      setShowAuthModal(true);
-      return;
-    }
-
-    if (user && !isPremium) {
+    // Track daily usage for all non-premium users
+    if (!isPremium) {
       incrementDailySolved();
       const newDaily = getDailySolvedCount();
       setDailySolved(newDaily);
@@ -137,7 +126,9 @@ const Index = () => {
     setAnalysis(null);
     setSelectedMove(null);
     setGameState('thinking');
-  }, [analysis, currentDifficulty, currentPuzzle.id, solvedPuzzles, user, isPremium]);
+  }, [analysis, currentDifficulty, currentPuzzle.id, solvedPuzzles, isPremium]);
+
+  const remaining = DAILY_PUZZLE_LIMIT - dailySolved;
 
   return (
     <div className="min-h-screen bg-background">
@@ -161,34 +152,18 @@ const Index = () => {
               </h1>
               <Sparkles className="w-8 h-8 text-accent" />
             </div>
-            <div className="flex items-center gap-2">
-              {!user ? (
-                <button
-                  onClick={() => setShowAuthModal(true)}
-                  className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
-                >
-                  Sign in
-                </button>
-              ) : (
-                <UserMenu />
-              )}
+            <div>
+              {user && <UserMenu />}
             </div>
           </div>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
             Sharpen your chess thinking. Drag pieces to make your move, explain your reasoning, and receive AI-powered feedback.
           </p>
-          {!user && (
-            <p className="text-xs text-muted-foreground mt-2">
-              {FREE_PUZZLE_LIMIT - solvedPuzzles.length > 0
-                ? `${FREE_PUZZLE_LIMIT - solvedPuzzles.length} free puzzle${FREE_PUZZLE_LIMIT - solvedPuzzles.length !== 1 ? 's' : ''} remaining`
-                : 'Sign in to continue'}
-            </p>
-          )}
-          {user && !isPremium && (
+          {!isPremium && (
             <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary">
               <span className="text-xs font-medium text-muted-foreground">
-                {DAILY_PUZZLE_LIMIT - dailySolved > 0
-                  ? `${DAILY_PUZZLE_LIMIT - dailySolved} puzzle${DAILY_PUZZLE_LIMIT - dailySolved !== 1 ? 's' : ''} remaining today`
+                {remaining > 0
+                  ? `${remaining} puzzle${remaining !== 1 ? 's' : ''} remaining today`
                   : 'Daily limit reached'}
               </span>
               <div className="flex gap-0.5">
@@ -231,7 +206,7 @@ const Index = () => {
               fen={currentPuzzle.fen} 
               previousFen={currentPuzzle.previousFen}
               orientation="white"
-              interactive={gameState === 'thinking' && !isGated && !isSessionLimited}
+              interactive={gameState === 'thinking' && !isLimited}
               onMove={handleMove}
             />
 
@@ -247,32 +222,14 @@ const Index = () => {
             <div className="flex items-center gap-2 text-foreground">
               <Brain className="w-6 h-6 text-primary" />
               <h2 className="text-xl font-semibold font-display">
-                {isGated && 'Sign in to continue'}
-                {isSessionLimited && 'Daily limit reached'}
-                {!isGated && !isSessionLimited && gameState === 'thinking' && "What's the best move?"}
+                {isLimited && 'Daily limit reached'}
+                {!isLimited && gameState === 'thinking' && "What's the best move?"}
                 {gameState === 'analyzing' && 'Analyzing your response...'}
                 {gameState === 'result' && 'Analysis Complete'}
               </h2>
             </div>
 
-            {isGated && (
-              <div className="flex flex-col items-center justify-center py-8 space-y-4 text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
-                  <Crown className="w-8 h-8 text-primary" />
-                </div>
-                <p className="text-muted-foreground">
-                  You've solved {FREE_PUZZLE_LIMIT} free puzzles! Sign in to keep improving.
-                </p>
-                <button
-                  onClick={() => setShowAuthModal(true)}
-                  className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
-                >
-                  Sign in to continue
-                </button>
-              </div>
-            )}
-
-            {isSessionLimited && (
+            {isLimited && (
               <div className="flex flex-col items-center justify-center py-8 space-y-4 text-center">
                 <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
                   <Crown className="w-8 h-8 text-primary" />
@@ -280,14 +237,16 @@ const Index = () => {
                 <p className="text-muted-foreground">
                   You've reached your daily limit of {DAILY_PUZZLE_LIMIT} puzzles.
                 </p>
-                <Button onClick={() => setShowUpgradeOverlay(true)} className="gap-2">
-                  <Crown className="w-4 h-4" />
+                <button
+                  onClick={() => setShowUpgradeOverlay(true)}
+                  className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+                >
                   Upgrade to Premium
-                </Button>
+                </button>
               </div>
             )}
 
-            {!isGated && !isSessionLimited && gameState === 'thinking' && (
+            {!isLimited && gameState === 'thinking' && (
               <ThinkingInput 
                 onSubmit={handleSubmit} 
                 isLoading={false}
@@ -319,7 +278,6 @@ const Index = () => {
         </footer>
       </div>
 
-      <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
       <UpgradeOverlay open={showUpgradeOverlay} onClose={() => setShowUpgradeOverlay(false)} />
     </div>
   );
