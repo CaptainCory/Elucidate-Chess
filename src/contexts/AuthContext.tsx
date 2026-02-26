@@ -32,21 +32,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
 
   const checkSubscription = useCallback(async () => {
+    if (!user) {
+      setIsPremium(false);
+      setSubscriptionEnd(null);
+      return;
+    }
+
+    const syncPremiumFromProfile = async () => {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_premium')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (profile) {
+        const premiumFromProfile = profile.is_premium === true;
+        setIsPremium(premiumFromProfile);
+        if (!premiumFromProfile) setSubscriptionEnd(null);
+      }
+    };
+
     try {
-      console.log('[AuthContext] Checking subscription...');
       const { data, error } = await supabase.functions.invoke('check-subscription');
-      console.log('[AuthContext] Subscription response:', { data, error });
       if (!error && data) {
         setIsPremium(data.subscribed === true);
         setSubscriptionEnd(data.subscription_end || null);
-        console.log('[AuthContext] Set isPremium:', data.subscribed === true);
-      } else {
-        console.error('[AuthContext] Subscription check error:', error);
+        return;
       }
+
+      await syncPremiumFromProfile();
     } catch (e) {
       console.error('Subscription check failed:', e);
+      await syncPremiumFromProfile();
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
