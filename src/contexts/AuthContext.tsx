@@ -115,7 +115,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user, checkSubscription]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut({ scope: 'local' });
+    } catch (e) {
+      console.error('Sign out error:', e);
+    }
+    // Clear any remaining auth state
+    setUser(null);
+    setSession(null);
+    setIsPremium(false);
+    setSubscriptionEnd(null);
+    // Hard reload to fully reset app state
     window.location.href = '/';
   };
 
