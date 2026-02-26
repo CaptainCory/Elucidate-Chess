@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { ChessBoard } from '@/components/ChessBoard';
 import { TurnIndicator } from '@/components/TurnIndicator';
 import { ThinkingInput } from '@/components/ThinkingInput';
@@ -8,12 +9,11 @@ import { ProgressStats } from '@/components/ProgressStats';
 import { PlanBadge } from '@/components/PlanBadge';
 import { UserMenu } from '@/components/UserMenu';
 import { UpgradeOverlay } from '@/components/UpgradeOverlay';
-import { Leaderboard } from '@/components/Leaderboard';
 import { getRandomPuzzle, getNextDifficulty, ChessPuzzle } from '@/data/chessPuzzles';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Brain, Crown, Sparkles } from 'lucide-react';
+import { Brain, Crown, Sparkles, Trophy } from 'lucide-react';
 
 const DAILY_PUZZLE_LIMIT = 3;
 
@@ -166,7 +166,13 @@ const Index = () => {
         {/* Header */}
         <header className="text-center mb-8 animate-fade-in">
           <div className="flex items-center justify-between mb-3">
-            <PlanBadge />
+            <div className="flex items-center gap-3">
+              <PlanBadge />
+              <Link to="/leaderboard" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground">
+                <Trophy className="w-4 h-4 text-primary" />
+                Leaderboard
+              </Link>
+            </div>
             <div className="flex items-center gap-3">
               <Crown className="w-10 h-10 text-primary" />
               <h1 className="text-4xl md:text-5xl font-bold font-display text-foreground">
@@ -292,11 +298,6 @@ const Index = () => {
               />
             )}
           </div>
-        </div>
-
-        {/* Leaderboard */}
-        <div className="mt-12 max-w-2xl mx-auto">
-          <Leaderboard />
         </div>
 
         {/* Footer */}
