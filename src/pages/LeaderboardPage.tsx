@@ -25,7 +25,7 @@ const LeaderboardPage = () => {
           </Link>
           <div className="flex items-center gap-2">
             <Crown className="w-6 h-6 text-primary" />
-            <span className="text-lg font-bold font-display text-foreground">Elucidate Chess</span>
+            <a href="/" className="text-lg font-bold font-display text-foreground hover:text-primary transition-colors cursor-pointer">Elucidate Chess</a>
           </div>
           <div className="flex items-center gap-3">
             <PlanBadge />
