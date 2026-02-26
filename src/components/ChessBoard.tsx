@@ -96,24 +96,29 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
   const playClickSound = useCallback(() => {
     try {
       const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const len = Math.floor(ctx.sampleRate * 0.06);
+      const len = Math.floor(ctx.sampleRate * 0.035);
       const buffer = ctx.createBuffer(1, len, ctx.sampleRate);
       const d = buffer.getChannelData(0);
       for (let i = 0; i < len; i++) {
         const t = i / ctx.sampleRate;
-        // Sharp initial transient + fast decay = knock character
-        const transient = Math.exp(-t * 60) * (Math.random() * 2 - 1);
-        const thump = Math.exp(-t * 40) * Math.sin(2 * Math.PI * 120 * t);
-        d[i] = (transient * 0.6 + thump * 0.5) * 0.8;
+        // Sharp woody click: fast attack, very fast decay, higher frequency content
+        const click = Math.exp(-t * 200) * (Math.random() * 2 - 1);
+        const tap = Math.exp(-t * 120) * Math.sin(2 * Math.PI * 800 * t) * 0.3;
+        const body = Math.exp(-t * 80) * Math.sin(2 * Math.PI * 2200 * t) * 0.15;
+        d[i] = (click * 0.7 + tap + body) * 0.9;
       }
       const src = ctx.createBufferSource();
       src.buffer = buffer;
       const gain = ctx.createGain();
-      gain.gain.value = 1.5;
+      gain.gain.value = 1.2;
+      const hp = ctx.createBiquadFilter();
+      hp.type = 'highpass';
+      hp.frequency.value = 400;
       const lp = ctx.createBiquadFilter();
       lp.type = 'lowpass';
-      lp.frequency.value = 3000;
-      src.connect(lp);
+      lp.frequency.value = 6000;
+      src.connect(hp);
+      hp.connect(lp);
       lp.connect(gain);
       gain.connect(ctx.destination);
       src.start();
