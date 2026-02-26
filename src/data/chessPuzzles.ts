@@ -46,8 +46,8 @@ export const chessPuzzles: ChessPuzzle[] = [
     fen: 'r2qkb1r/ppp2ppp/2n1bn2/3Np3/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 2 6',
     bestMove: 'Nxf6+',
     difficulty: 'intermediate',
-    explanation: 'Nxf6+ is a discovered check from the bishop on c4 through to the king, while also winning the knight on f6. Black must deal with the check, allowing White to maintain material advantage.',
-    themes: ['discovered attack', 'tactics', 'material gain'],
+    explanation: 'Nxf6+ delivers check with the knight while capturing Black\'s knight. The bishop on e6 and pawn on f7 block the c4 bishop\'s diagonal, so this is not a discovered check — it\'s a direct knight check. After Black deals with the check (likely gxf6), White has won a piece since the knight on d5 was already attacking and now trades favorably.',
+    themes: ['knight check', 'tactics', 'material gain'],
   },
   {
     id: '5',
