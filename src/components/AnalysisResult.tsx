@@ -120,7 +120,7 @@ export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
             <h3 className="font-semibold font-display">Key Insights</h3>
           </div>
           <ul className="space-y-2">
-            {analysis.keyInsights.map((insight, i) => (
+            {analysis.keyInsights.slice(0, 2).map((insight, i) => (
               <li key={i} className="flex items-start gap-2 text-secondary-foreground">
                 <span className="text-primary mt-1">•</span>
                 <span>{insight}</span>
