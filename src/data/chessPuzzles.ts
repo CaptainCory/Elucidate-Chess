@@ -95,13 +95,13 @@ export const chessPuzzles: ChessPuzzle[] = [
   },
   {
     id: '9',
-    name: 'Windmill Tactic',
+    name: 'Rook Checking Sequence',
     fen: '6k1/6p1/8/6K1/8/1r6/8/7R w - - 0 1',
     previousFen: '6k1/6p1/8/6K1/8/8/1r6/7R b - - 0 0',
     bestMove: 'Rh8+',
     difficulty: 'master',
-    explanation: 'Rh8+ begins a windmill sequence. After Kf7, Rh7+ picks up the g7 pawn. The rook can keep giving checks while winning material.',
-    themes: ['windmill', 'perpetual threats', 'tactics'],
+    explanation: 'Rh8+ forces the king to f7 (the only legal move). Then Rh7+ wins the g7 pawn while keeping the initiative with check. White\'s active king on g5 supports the rook\'s assault, and Black\'s rook on b3 is too far away to help defend.',
+    themes: ['rook activity', 'checking sequence', 'material gain'],
   },
   {
     id: '10',
