@@ -175,9 +175,9 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-3">
               <Crown className="w-10 h-10 text-primary" />
-              <h1 className="text-4xl md:text-5xl font-bold font-display text-foreground">
+              <a href="/" className="text-4xl md:text-5xl font-bold font-display text-foreground hover:text-primary transition-colors cursor-pointer">
                 Elucidate Chess
-              </h1>
+              </a>
               <Sparkles className="w-8 h-8 text-accent" />
             </div>
             <div>
