@@ -52,17 +52,17 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
 
             <div className="space-y-2">
               <h2 className="text-2xl font-bold font-display text-foreground">
-                You're out of puzzles today
+                You're out of positions today
               </h2>
               <p className="text-muted-foreground text-sm">
-                Upgrade to Premium for unlimited puzzles and AI analysis every day.
+                Upgrade to Premium for unlimited positions and AI analysis every day.
               </p>
             </div>
 
             <div className="w-full space-y-3 text-left">
               <div className="flex items-center gap-3 text-sm text-foreground">
                 <Zap className="w-4 h-4 text-primary shrink-0" />
-                <span>Unlimited puzzles daily</span>
+                <span>Unlimited positions daily</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-foreground">
                 <Brain className="w-4 h-4 text-primary shrink-0" />
