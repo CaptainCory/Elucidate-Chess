@@ -15,6 +15,22 @@ import { toast } from 'sonner';
 import { Brain, Crown, Sparkles } from 'lucide-react';
 
 const FREE_PUZZLE_LIMIT = 3;
+const DAILY_PUZZLE_LIMIT = 3;
+
+const getDailyKey = () => `chess_daily_${new Date().toISOString().slice(0, 10)}`;
+
+const getDailySolvedCount = (): number => {
+  try {
+    return parseInt(localStorage.getItem(getDailyKey()) || '0', 10);
+  } catch { return 0; }
+};
+
+const incrementDailySolved = () => {
+  try {
+    const key = getDailyKey();
+    localStorage.setItem(key, String(getDailySolvedCount() + 1));
+  } catch {}
+};
 
 type GameState = 'thinking' | 'analyzing' | 'result';
 
@@ -29,6 +45,7 @@ const Index = () => {
   const [currentDifficulty, setCurrentDifficulty] = useState<ChessPuzzle['difficulty']>('beginner');
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [dailySolved, setDailySolved] = useState(getDailySolvedCount);
 
   const averageScore = scores.length > 0 
     ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) 
@@ -36,8 +53,8 @@ const Index = () => {
 
   // Check if user has hit the free puzzle limit
   const isGated = !user && solvedPuzzles.length >= FREE_PUZZLE_LIMIT;
-  // Signed-in but not premium: allow limited extra puzzles per session (10 total)
-  const isSessionLimited = user && !isPremium && solvedPuzzles.length >= 10;
+  // Signed-in but not premium: 3 puzzles per day
+  const isSessionLimited = user && !isPremium && dailySolved >= DAILY_PUZZLE_LIMIT;
 
   const handleMove = useCallback((move: string) => {
     setSelectedMove(move);
@@ -102,9 +119,14 @@ const Index = () => {
       return;
     }
 
-    if (user && !isPremium && newSolvedPuzzles.length >= 10) {
-      toast.info("You've reached your session limit. Upgrade to premium for unlimited puzzles!");
-      return;
+    if (user && !isPremium) {
+      incrementDailySolved();
+      const newDaily = getDailySolvedCount();
+      setDailySolved(newDaily);
+      if (newDaily >= DAILY_PUZZLE_LIMIT) {
+        toast.info("You've reached your daily limit. Upgrade to premium for unlimited puzzles!");
+        return;
+      }
     }
     
     const nextPuzzle = getRandomPuzzle(newSolvedPuzzles, newDifficulty);
@@ -196,7 +218,7 @@ const Index = () => {
               <Brain className="w-6 h-6 text-primary" />
               <h2 className="text-xl font-semibold font-display">
                 {isGated && 'Sign in to continue'}
-                {isSessionLimited && 'Session limit reached'}
+                {isSessionLimited && 'Daily limit reached'}
                 {!isGated && !isSessionLimited && gameState === 'thinking' && "What's the best move?"}
                 {gameState === 'analyzing' && 'Analyzing your response...'}
                 {gameState === 'result' && 'Analysis Complete'}
@@ -226,7 +248,7 @@ const Index = () => {
                   <Crown className="w-8 h-8 text-primary" />
                 </div>
                 <p className="text-muted-foreground">
-                  You've reached your session limit. Upgrade to premium for unlimited puzzles!
+                  You've reached your daily limit of {DAILY_PUZZLE_LIMIT} puzzles. Upgrade to premium for unlimited access!
                 </p>
               </div>
             )}
