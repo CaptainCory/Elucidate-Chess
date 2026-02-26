@@ -102,6 +102,15 @@ export const chessPuzzles: ChessPuzzle[] = [
     explanation: 'Simply trading queens with Qxf6 is the best move, simplifying to a roughly equal endgame.',
     themes: ['simplification', 'exchange'],
   },
+  {
+    id: '11',
+    name: 'Central Pawn Break',
+    fen: 'rn1q1rk1/4bppp/ppbppn2/8/PP1PP3/2N1BN2/4BPPP/R2Q1RK1 w - - 1 12',
+    bestMove: 'd5',
+    difficulty: 'advanced',
+    explanation: 'The pawn push d5 is the strongest move, forcing Black to isolate their d-pawn. The alternative e5 is inferior as it leads to exchanges where Black maintains space and solid structure. Rook to c1 is a mistake because the e4 pawn is attacked twice and only defended once.',
+    themes: ['pawn break', 'positional play', 'isolated pawn', 'central control'],
+  },
 ];
 
 export function getRandomPuzzle(excludeIds: string[] = [], difficultyFilter?: ChessPuzzle['difficulty']): ChessPuzzle {
