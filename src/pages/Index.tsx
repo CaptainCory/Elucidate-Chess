@@ -192,7 +192,8 @@ const Index = () => {
                 {Array.from({ length: DAILY_PUZZLE_LIMIT }).map((_, i) => (
                   <div
                     key={i}
-                    className={`w-2 h-2 rounded-full ${i < dailySolved ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                    className={`w-2 h-2 rounded-full transition-all duration-500 ${i < dailySolved ? 'bg-primary scale-125' : 'bg-muted-foreground/30 scale-100'}`}
+                    style={{ transitionDelay: `${i * 100}ms` }}
                   />
                 ))}
               </div>
