@@ -113,6 +113,15 @@ export const chessPuzzles: ChessPuzzle[] = [
     explanation: 'The pawn push d5 is the strongest move, forcing Black to isolate their d-pawn. The alternative e5 is inferior as it leads to exchanges where Black maintains space and solid structure. Rook to c1 is a mistake because the e4 pawn is attacked twice and only defended once.',
     themes: ['pawn push', 'pawn structure'],
   },
+  {
+    id: '12',
+    name: 'Intermezzo Knight',
+    fen: 'rn3rk1/2qn1ppp/ppb1p3/4P3/P4B2/2b2N2/2Q1BPPP/R2R2K1 w - - 0 17',
+    bestMove: 'Ng5',
+    difficulty: 'advanced',
+    explanation: 'The tempting response is to capture the bishop with the queen, restoring material equality instantly. But the advanced move is Ng5, threatening checkmate on h7. Black must respond with g6 to block the checkmate, then you capture the bishop on c3. This has bought you an extra tempo — your knight is now closer to the enemy king and out of the way of the c6 bishop, which now lacks a piece target.',
+    themes: ['intermezzo', 'gain tempo'],
+  },
 ];
 
 export function getRandomPuzzle(excludeIds: string[] = [], difficultyFilter?: ChessPuzzle['difficulty']): ChessPuzzle {
