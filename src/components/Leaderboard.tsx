@@ -31,6 +31,7 @@ export function Leaderboard() {
       const { data } = await supabase
         .from('profiles')
         .select('display_name, avatar_url, puzzles_solved, average_score, best_streak, is_premium')
+        .eq('is_premium', true)
         .gt(config.field as string, 0)
         .order(config.field as string, { ascending: false })
         .limit(10);
