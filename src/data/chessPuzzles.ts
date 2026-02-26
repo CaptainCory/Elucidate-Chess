@@ -26,11 +26,11 @@ export const chessPuzzles: ChessPuzzle[] = [
   {
     id: '2',
     name: "Scholar's Mate",
-    fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4',
+    fen: 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4',
     previousFen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 3 3',
     bestMove: 'Qxf7#',
     difficulty: 'beginner',
-    explanation: 'This is the famous Scholar\'s Mate setup. White can deliver checkmate immediately with Qxf7#, as the queen is protected by the bishop and the black king cannot escape.',
+    explanation: 'This is the famous Scholar\'s Mate. Black blundered with Bc5, leaving f7 completely undefended along the f-file. White delivers checkmate with Qxf7# — the queen is protected by the bishop on c4, and the king is trapped by its own pieces (queen on d8, knight on g8).',
     themes: ['checkmate', 'scholars mate'],
   },
   {
