@@ -24,7 +24,7 @@ export const chessPuzzles: ChessPuzzle[] = [
   },
   {
     id: '2',
-    name: 'Queen Fork',
+    name: "Scholar's Mate",
     fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4',
     bestMove: 'Qxf7#',
     difficulty: 'beginner',
