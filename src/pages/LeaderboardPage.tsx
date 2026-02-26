@@ -1,0 +1,42 @@
+import { Link } from 'react-router-dom';
+import { Leaderboard } from '@/components/Leaderboard';
+import { PlanBadge } from '@/components/PlanBadge';
+import { UserMenu } from '@/components/UserMenu';
+import { useAuth } from '@/contexts/AuthContext';
+import { Crown, Sparkles, ArrowLeft } from 'lucide-react';
+
+const LeaderboardPage = () => {
+  const { user } = useAuth();
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div
+        className="fixed inset-0 pointer-events-none opacity-30"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 0%, hsl(38 92% 50% / 0.15), transparent 60%)',
+        }}
+      />
+
+      <div className="relative container max-w-3xl mx-auto px-4 py-8">
+        <header className="flex items-center justify-between mb-8">
+          <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm font-medium">Back to Puzzles</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Crown className="w-6 h-6 text-primary" />
+            <span className="text-lg font-bold font-display text-foreground">Elucidate Chess</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <PlanBadge />
+            {user && <UserMenu />}
+          </div>
+        </header>
+
+        <Leaderboard />
+      </div>
+    </div>
+  );
+};
+
+export default LeaderboardPage;
