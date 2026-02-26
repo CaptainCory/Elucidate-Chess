@@ -77,31 +77,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        setLoading(false);
 
         if (session?.user) {
-          // Instantly load premium from DB
-          await loadPremiumFromProfile(session.user.id);
-          // Background Stripe sync (deferred)
-          setTimeout(() => checkSubscription(), 2000);
+          void loadPremiumFromProfile(session.user.id);
+          setTimeout(() => {
+            void checkSubscription();
+          }, 2000);
         } else {
           setIsPremium(false);
           setSubscriptionEnd(null);
         }
-
-        setLoading(false);
       }
     );
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      setLoading(false);
+
       if (session?.user) {
-        loadPremiumFromProfile(session.user.id);
+        void loadPremiumFromProfile(session.user.id);
+        setTimeout(() => {
+          void checkSubscription();
+        }, 2000);
       }
-      if (!session) setLoading(false);
     });
 
     return () => subscription.unsubscribe();
