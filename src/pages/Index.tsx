@@ -158,8 +158,17 @@ const Index = () => {
               </h1>
               <Sparkles className="w-8 h-8 text-accent" />
             </div>
-            <div className="w-24 flex justify-end">
-              <UserMenu />
+            <div className="flex items-center gap-2">
+              {!user ? (
+                <button
+                  onClick={() => setShowAuthModal(true)}
+                  className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+                >
+                  Sign in
+                </button>
+              ) : (
+                <UserMenu />
+              )}
             </div>
           </div>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
