@@ -11,6 +11,7 @@ const Membership = () => {
   const { user, isPremium, subscriptionEnd, loading, checkSubscription } = useAuth();
   const navigate = useNavigate();
   const [portalLoading, setPortalLoading] = useState(false);
+  const [restoreLoading, setRestoreLoading] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -35,6 +36,28 @@ const Membership = () => {
       toast.error('Could not open subscription management. You may not have an active subscription.');
     } finally {
       setPortalLoading(false);
+    }
+  };
+
+  const handleRestoreMembership = async () => {
+    setRestoreLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('check-subscription');
+      if (error) throw error;
+
+      if (data?.subscribed === true) {
+        await checkSubscription();
+        toast.success('Membership restored. Unlimited puzzles are active.');
+        navigate('/');
+        return;
+      }
+
+      toast.info('No active membership was found for this account yet.');
+    } catch (e) {
+      console.error('Restore membership error:', e);
+      toast.error('Could not restore membership right now.');
+    } finally {
+      setRestoreLoading(false);
     }
   };
 
@@ -171,10 +194,18 @@ const Membership = () => {
                   toast.error('Failed to start checkout.');
                 }
               }}
-              className="gap-2"
+              className="gap-2 w-full"
             >
               <Crown className="w-4 h-4" />
               Upgrade to Premium
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleRestoreMembership}
+              disabled={restoreLoading}
+              className="w-full mt-3"
+            >
+              {restoreLoading ? 'Checking membership...' : 'Already subscribed? Restore Membership'}
             </Button>
           </div>
         )}
