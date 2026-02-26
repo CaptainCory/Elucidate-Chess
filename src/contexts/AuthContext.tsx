@@ -116,17 +116,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut({ scope: 'local' });
+      await supabase.auth.signOut();
     } catch (e) {
       console.error('Sign out error:', e);
     }
-    // Clear any remaining auth state
+
+    const clearAuthStorage = (storage: Storage) => {
+      Object.keys(storage).forEach((key) => {
+        if ((key.startsWith('sb-') && key.endsWith('-auth-token')) || key === 'supabase.auth.token') {
+          storage.removeItem(key);
+        }
+      });
+    };
+
+    clearAuthStorage(window.localStorage);
+    clearAuthStorage(window.sessionStorage);
+
     setUser(null);
     setSession(null);
     setIsPremium(false);
     setSubscriptionEnd(null);
-    // Hard reload to fully reset app state
-    window.location.href = '/';
+
+    window.location.replace(`/?signed_out=${Date.now()}`);
   };
 
   return (
