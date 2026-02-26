@@ -51,10 +51,10 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
       try {
         const prevGame = new Chess(previousFen);
         const currGame = new Chess(fen);
-        // Find which squares differ to highlight the move
         const prevBoard = prevGame.board();
         const currBoard = currGame.board();
-        const changed: Record<string, React.CSSProperties> = {};
+        let fromSquare: string | null = null;
+        let toSquare: string | null = null;
         for (let r = 0; r < 8; r++) {
           for (let c = 0; c < 8; c++) {
             const prevPiece = prevBoard[r][c];
@@ -64,11 +64,24 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
             if (pStr !== cStr) {
               const file = String.fromCharCode(97 + c);
               const rank = 8 - r;
-              changed[`${file}${rank}`] = { backgroundColor: 'hsla(200, 70%, 50%, 0.35)' };
+              const sq = `${file}${rank}`;
+              // Square that lost a piece = from; square that gained a piece = to
+              if (prevPiece && !currPiece) {
+                fromSquare = sq;
+              } else if (currPiece) {
+                toSquare = sq;
+              }
             }
           }
         }
-        setHighlightSquares(changed);
+        const highlights: Record<string, React.CSSProperties> = {};
+        if (fromSquare) {
+          highlights[fromSquare] = { backgroundColor: 'hsla(30, 70%, 45%, 0.35)' }; // dull orange
+        }
+        if (toSquare) {
+          highlights[toSquare] = { backgroundColor: 'hsla(30, 90%, 55%, 0.6)' }; // bright orange
+        }
+        setHighlightSquares(highlights);
       } catch {
         // ignore
       }
