@@ -109,7 +109,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     bestMove: 'd5',
     difficulty: 'advanced',
     explanation: 'The pawn push d5 is the strongest move, forcing Black to isolate their d-pawn. The alternative e5 is inferior as it leads to exchanges where Black maintains space and solid structure. Rook to c1 is a mistake because the e4 pawn is attacked twice and only defended once.',
-    themes: ['pawn break', 'positional play', 'isolated pawn', 'central control'],
+    themes: ['pawn push', 'pawn structure'],
   },
 ];
 
