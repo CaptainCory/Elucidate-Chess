@@ -7,6 +7,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   isPremium: boolean;
+  subscriptionEnd: string | null;
   signOut: () => Promise<void>;
   checkSubscription: () => Promise<void>;
 }
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType>({
   session: null,
   loading: true,
   isPremium: false,
+  subscriptionEnd: null,
   signOut: async () => {},
   checkSubscription: async () => {},
 });
@@ -27,12 +29,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(false);
+  const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
 
   const checkSubscription = useCallback(async () => {
     try {
       const { data, error } = await supabase.functions.invoke('check-subscription');
       if (!error && data) {
         setIsPremium(data.subscribed === true);
+        setSubscriptionEnd(data.subscription_end || null);
       }
     } catch (e) {
       console.error('Subscription check failed:', e);
@@ -50,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setTimeout(() => checkSubscription(), 500);
         } else {
           setIsPremium(false);
+          setSubscriptionEnd(null);
         }
         
         setLoading(false);
@@ -80,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, isPremium, signOut, checkSubscription }}>
+    <AuthContext.Provider value={{ user, session, loading, isPremium, subscriptionEnd, signOut, checkSubscription }}>
       {children}
     </AuthContext.Provider>
   );
