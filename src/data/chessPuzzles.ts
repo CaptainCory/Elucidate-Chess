@@ -5,7 +5,7 @@ export interface ChessPuzzle {
   id: string;
   name: string;
   fen: string;
-  previousFen?: string; // FEN before opponent's last move, for intro animation
+  previousFen: string; // FEN before opponent's last move, for intro animation (REQUIRED)
   bestMove: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'master';
   explanation: string;
