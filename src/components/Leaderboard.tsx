@@ -16,7 +16,7 @@ type Tab = 'solved' | 'score' | 'streak';
 const TAB_CONFIG: { key: Tab; label: string; icon: typeof Trophy; field: keyof LeaderboardEntry }[] = [
   { key: 'solved', label: 'Most Solved', icon: Trophy, field: 'puzzles_solved' },
   { key: 'score', label: 'Highest Avg', icon: Target, field: 'average_score' },
-  { key: 'streak', label: 'Best Streak', icon: Flame, field: 'best_streak' },
+  { key: 'streak', label: 'Longest Streak', icon: Flame, field: 'best_streak' },
 ];
 
 export function Leaderboard() {
