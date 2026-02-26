@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Chessboard from 'chessboardjsx';
 import { Chess, Square } from 'chess.js';
 
@@ -19,27 +19,73 @@ const pieceImages: Record<string, string> = {
 
 interface ChessBoardProps {
   fen: string;
+  previousFen?: string;
   orientation?: 'white' | 'black';
   onMove?: (move: string) => void;
   interactive?: boolean;
 }
 
-export function ChessBoard({ fen, orientation = 'white', onMove, interactive = false }: ChessBoardProps) {
+export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, interactive = false }: ChessBoardProps) {
   const [userMove, setUserMove] = useState<string | null>(null);
   const [highlightSquares, setHighlightSquares] = useState<Record<string, React.CSSProperties>>({});
-  const [displayFen, setDisplayFen] = useState(fen);
+  const [displayFen, setDisplayFen] = useState(previousFen || fen);
+  const [isAnimatingIntro, setIsAnimatingIntro] = useState(!!previousFen);
 
   // Reset when fen prop changes (new puzzle)
   const [prevFen, setPrevFen] = useState(fen);
   if (fen !== prevFen) {
     setPrevFen(fen);
-    setDisplayFen(fen);
+    setDisplayFen(previousFen || fen);
     setUserMove(null);
     setHighlightSquares({});
+    setIsAnimatingIntro(!!previousFen);
   }
 
+  // Animate from previousFen to current fen after a short delay
+  useEffect(() => {
+    if (!isAnimatingIntro || !previousFen) return;
+
+    const timer = setTimeout(() => {
+      setDisplayFen(fen);
+      // Highlight the squares that changed (opponent's last move)
+      try {
+        const prevGame = new Chess(previousFen);
+        const currGame = new Chess(fen);
+        // Find which squares differ to highlight the move
+        const prevBoard = prevGame.board();
+        const currBoard = currGame.board();
+        const changed: Record<string, React.CSSProperties> = {};
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const prevPiece = prevBoard[r][c];
+            const currPiece = currBoard[r][c];
+            const pStr = prevPiece ? `${prevPiece.color}${prevPiece.type}` : '';
+            const cStr = currPiece ? `${currPiece.color}${currPiece.type}` : '';
+            if (pStr !== cStr) {
+              const file = String.fromCharCode(97 + c);
+              const rank = 8 - r;
+              changed[`${file}${rank}`] = { backgroundColor: 'hsla(200, 70%, 50%, 0.35)' };
+            }
+          }
+        }
+        setHighlightSquares(changed);
+      } catch {
+        // ignore
+      }
+
+      // Clear highlights after another second
+      const clearTimer = setTimeout(() => {
+        setHighlightSquares({});
+        setIsAnimatingIntro(false);
+      }, 1200);
+      return () => clearTimeout(clearTimer);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [isAnimatingIntro, previousFen, fen]);
+
   const handleDrop = useCallback(({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string }) => {
-    if (!interactive || userMove) return;
+    if (!interactive || userMove || isAnimatingIntro) return;
 
     const game = new Chess(fen);
     try {
@@ -62,16 +108,22 @@ export function ChessBoard({ fen, orientation = 'white', onMove, interactive = f
     } catch {
       // Invalid move, ignore
     }
-  }, [fen, interactive, userMove, onMove]);
+  }, [fen, interactive, userMove, isAnimatingIntro, onMove]);
 
   return (
     <div className="w-full max-w-[500px] mx-auto">
-      <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border">
+      <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border relative">
+        {isAnimatingIntro && (
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-full bg-muted/90 text-xs font-medium text-muted-foreground backdrop-blur-sm">
+            Opponent's last move...
+          </div>
+        )}
         <Chessboard
           position={displayFen}
           orientation={orientation}
-          draggable={interactive && !userMove}
+          draggable={interactive && !userMove && !isAnimatingIntro}
           onDrop={handleDrop}
+          transitionDuration={isAnimatingIntro ? 600 : 300}
           boardStyle={{
             borderRadius: '0.75rem',
           }}
