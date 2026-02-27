@@ -77,16 +77,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
+      (_event, newSession) => {
+        setSession(newSession);
+        setUser(newSession?.user ?? null);
         setLoading(false);
 
-        if (session?.user) {
-          void loadPremiumFromProfile(session.user.id);
-          setTimeout(() => {
-            void checkSubscription();
-          }, 2000);
+        if (newSession?.user) {
+          void loadPremiumFromProfile(newSession.user.id);
         } else {
           setIsPremium(false);
           setSubscriptionEnd(null);
@@ -94,21 +91,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
       setLoading(false);
 
-      if (session?.user) {
-        void loadPremiumFromProfile(session.user.id);
-        setTimeout(() => {
-          void checkSubscription();
-        }, 2000);
+      if (currentSession?.user) {
+        void loadPremiumFromProfile(currentSession.user.id);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [checkSubscription, loadPremiumFromProfile]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadPremiumFromProfile]);
+
+  // Deferred Stripe check when user becomes available
+  useEffect(() => {
+    if (!user) return;
+    const timeout = setTimeout(() => {
+      void checkSubscription();
+    }, 2000);
+    return () => clearTimeout(timeout);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   // Background re-check every 5 minutes (not 60s)
   useEffect(() => {
