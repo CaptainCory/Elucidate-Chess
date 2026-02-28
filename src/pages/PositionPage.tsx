@@ -86,9 +86,8 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
               )}
             </div>
           </div>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            Sharpen your chess thinking. Drag pieces to make your move, explain your reasoning, and receive AI-powered feedback.
-          </p>
+
+
           {!game.isPremium && (
             <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary">
               <span className="text-xs font-medium text-muted-foreground">
@@ -182,8 +181,11 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
         </div>
 
         {/* Footer */}
-        <footer className="mt-12 text-center text-sm text-muted-foreground">
-          <p>Powered by AI • Practice Makes Progress</p>
+        <footer className="mt-12 text-center text-muted-foreground">
+          <p className="text-lg max-w-xl mx-auto mb-2">
+            Sharpen your chess thinking. Drag pieces to make your move, explain your reasoning, and receive AI-powered feedback.
+          </p>
+          <p className="text-sm">Powered by AI • Practice Makes Progress</p>
         </footer>
       </div>
 
