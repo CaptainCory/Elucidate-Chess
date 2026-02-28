@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import PositionPage from "./pages/PositionPage";
+import ProfilePage from "./pages/ProfilePage";
 import Membership from "./pages/Membership";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import NotFound from "./pages/NotFound";
@@ -22,6 +23,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/position/:id" element={<PositionPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/membership" element={<Membership />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
