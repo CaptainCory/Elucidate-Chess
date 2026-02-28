@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LogOut, Crown, CreditCard } from 'lucide-react';
+import { LogOut, Crown, CreditCard, User } from 'lucide-react';
 
 export function UserMenu() {
   const { user, isPremium, signOut } = useAuth();
@@ -53,6 +53,10 @@ export function UserMenu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => navigate('/profile')}>
+          <User className="mr-2 h-4 w-4" />
+          Profile
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate('/membership')}>
           <CreditCard className="mr-2 h-4 w-4" />
           {isPremium ? 'Premium Membership' : 'Membership'}

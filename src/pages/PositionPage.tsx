@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { chessPuzzles } from '@/data/chessPuzzles';
 import { ChessBoard } from '@/components/ChessBoard';
@@ -9,9 +10,11 @@ import { ProgressStats } from '@/components/ProgressStats';
 import { PlanBadge } from '@/components/PlanBadge';
 import { UserMenu } from '@/components/UserMenu';
 import { UpgradeOverlay } from '@/components/UpgradeOverlay';
+import { AuthModal } from '@/components/AuthModal';
+import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Crown, Sparkles, Trophy } from 'lucide-react';
+import { Brain, Crown, Sparkles, Trophy, LogIn } from 'lucide-react';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +32,7 @@ const PositionPage = () => {
 // Separate component so the hook resets when puzzle changes via key prop
 function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number]; user: any }) {
   const game = useChessGame(puzzle);
+  const [showSignIn, setShowSignIn] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -64,7 +68,16 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
               </Link>
               <Sparkles className="w-8 h-8 text-accent" />
             </div>
-            <div><UserMenu /></div>
+            <div className="flex items-center gap-3">
+              {user ? (
+                <UserMenu />
+              ) : (
+                <Button variant="outline" size="sm" onClick={() => setShowSignIn(true)}>
+                  <LogIn className="w-4 h-4 mr-1" />
+                  Sign In
+                </Button>
+              )}
+            </div>
           </div>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
             Sharpen your chess thinking. Drag pieces to make your move, explain your reasoning, and receive AI-powered feedback.
@@ -168,6 +181,7 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
       </div>
 
       <UpgradeOverlay open={game.showUpgradeOverlay} onClose={() => game.setShowUpgradeOverlay(false)} />
+      <AuthModal open={showSignIn} onOpenChange={setShowSignIn} />
     </div>
   );
 }
