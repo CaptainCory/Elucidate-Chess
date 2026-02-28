@@ -50,6 +50,13 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <PlanBadge />
+              <Link
+                to="/how-it-works"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
+              >
+                <HelpCircle className="w-4 h-4 text-primary" />
+                How It Works
+              </Link>
             </div>
             <div className="flex items-center gap-3">
               <Crown className="w-10 h-10 text-primary" />
@@ -62,13 +69,6 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
               <Sparkles className="w-8 h-8 text-accent" />
             </div>
             <div className="flex items-center gap-3">
-              <Link
-                to="/how-it-works"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                <HelpCircle className="w-4 h-4 text-primary" />
-                How It Works
-              </Link>
               <Link
                 to="/leaderboard"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
