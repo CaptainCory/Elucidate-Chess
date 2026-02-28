@@ -64,7 +64,7 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
               </Link>
               <Sparkles className="w-8 h-8 text-accent" />
             </div>
-            <div>{user && <UserMenu />}</div>
+            <div><UserMenu /></div>
           </div>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
             Sharpen your chess thinking. Drag pieces to make your move, explain your reasoning, and receive AI-powered feedback.

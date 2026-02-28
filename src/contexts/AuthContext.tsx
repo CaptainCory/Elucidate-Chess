@@ -32,6 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
   const stripeCheckInFlight = useRef(false);
   const lastStripeCheck = useRef(0);
+  const initialized = useRef(false);
 
   // Fast: read is_premium from the database (already synced by edge function)
   const loadPremiumFromProfile = useCallback(async (userId: string) => {
@@ -76,14 +77,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   useEffect(() => {
+    // 1. Set up the listener FIRST (required by Supabase docs)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, newSession) => {
+      (event, newSession) => {
+        console.log('[Auth] onAuthStateChange:', event, !!newSession?.user);
+        
+        // Skip the INITIAL_SESSION from the listener if getSession already handled it
+        if (event === 'INITIAL_SESSION' && initialized.current) {
+          return;
+        }
+
         setSession(newSession);
         setUser(newSession?.user ?? null);
         setLoading(false);
+        initialized.current = true;
 
         if (newSession?.user) {
-          void loadPremiumFromProfile(newSession.user.id);
+          // Use setTimeout to avoid calling Supabase inside the callback synchronously
+          setTimeout(() => {
+            void loadPremiumFromProfile(newSession.user.id);
+          }, 0);
         } else {
           setIsPremium(false);
           setSubscriptionEnd(null);
@@ -91,19 +104,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
+    // 2. Then restore session from storage
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
-      setSession(currentSession);
-      setUser(currentSession?.user ?? null);
-      setLoading(false);
+      console.log('[Auth] getSession:', !!currentSession?.user);
+      
+      // Only apply if the listener hasn't already set a real session
+      if (!initialized.current) {
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
+        setLoading(false);
+        initialized.current = true;
 
-      if (currentSession?.user) {
-        void loadPremiumFromProfile(currentSession.user.id);
+        if (currentSession?.user) {
+          void loadPremiumFromProfile(currentSession.user.id);
+        }
       }
     });
 
     return () => subscription.unsubscribe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadPremiumFromProfile]);
+  }, []);
 
   // Deferred Stripe check when user becomes available
   useEffect(() => {
@@ -115,7 +135,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  // Background re-check every 5 minutes (not 60s)
+  // Background re-check every 5 minutes
   useEffect(() => {
     if (!user) return;
     const interval = setInterval(checkSubscription, 300_000);
@@ -144,6 +164,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSession(null);
     setIsPremium(false);
     setSubscriptionEnd(null);
+    initialized.current = false;
 
     window.location.replace(`/?signed_out=${Date.now()}`);
   };
