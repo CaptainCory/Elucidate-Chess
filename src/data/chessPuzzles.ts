@@ -1,69 +1,28 @@
 // Collection of famous chess positions with known best moves
 // FEN format: piece positions, active color, castling, en passant, halfmove, fullmove
 
-// Standard chess coaching theme taxonomy (~50 themes)
+// Top 20 most popular Lichess puzzle themes
 export type ChessTheme =
-  // Tactics
   | 'fork'
   | 'pin'
   | 'skewer'
-  | 'double-attack'
   | 'discovered-attack'
-  | 'discovered-check'
   | 'double-check'
   | 'deflection'
   | 'decoy'
   | 'overloading'
   | 'removing-the-defender'
-  | 'interference'
-  | 'clearance-sacrifice'
   | 'zwischenzug'
-  | 'x-ray-attack'
   | 'trapped-piece'
-  | 'desperado'
-  | 'windmill'
-  // Mating Patterns
   | 'back-rank-mate'
   | 'smothered-mate'
-  | 'arabian-mate'
-  | 'anastasias-mate'
-  | 'bodens-mate'
-  | 'opera-mate'
-  | 'scholars-mate'
-  | 'ladder-mate'
-  | 'epaulette-mate'
-  | 'dovetail-mate'
   | 'checkmate'
-  // Positional / Strategic
-  | 'open-position'
-  | 'closed-position'
-  | 'weak-squares'
-  | 'isolated-pawn'
-  | 'doubled-pawns'
-  | 'backward-pawn'
-  | 'passed-pawn'
-  | 'pawn-majority'
-  | 'bad-bishop'
-  | 'two-bishops-advantage'
-  | 'knight-vs-bishop'
-  | 'open-file'
-  | 'seventh-rank-domination'
-  | 'king-safety'
-  | 'space-advantage'
-  | 'initiative'
-  | 'prophylaxis'
-  | 'piece-coordination'
-  | 'pawn-break'
-  // Endgame
-  | 'king-and-pawn-endgame'
-  | 'opposition'
-  | 'triangulation'
-  | 'rook-endgame'
-  | 'lucena-position'
-  | 'philidor-position'
-  | 'fortress'
-  | 'pawn-promotion'
-  | 'zugzwang';
+  | 'sacrifice'
+  | 'hanging-piece'
+  | 'x-ray'
+  | 'promotion'
+  | 'endgame'
+  | 'quiet-move';
 
 export interface ChessPuzzle {
   id: string;
@@ -95,7 +54,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     bestMove: 'Qxf7#',
     difficulty: 'beginner',
     explanation: 'This is the famous Scholar\'s Mate. Black blundered with Bc5, leaving f7 completely undefended along the f-file. White delivers checkmate with Qxf7# — the queen is protected by the bishop on c4, and the king is trapped by its own pieces (queen on d8, knight on g8).',
-    themes: ['checkmate', 'scholars-mate'],
+    themes: ['checkmate'],
   },
   {
     id: '3',
@@ -105,7 +64,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     bestMove: 'Ng5',
     difficulty: 'intermediate',
     explanation: 'Ng5 launches the Fried Liver Attack, targeting the vulnerable f7 pawn which is only defended by the king. The knight teams up with the bishop on c4 to create a double attack on f7. Black must respond carefully — after the common 5...d5 6.exd5 Na5, the Fried Liver continues with Bb5+ or d6, leading to sharp tactical play against the exposed king.',
-    themes: ['double-attack', 'king-safety', 'initiative'],
+    themes: ['fork', 'sacrifice'],
   },
   {
     id: '4',
@@ -125,7 +84,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     bestMove: 'Nxf7',
     difficulty: 'advanced',
     explanation: 'Nxf7 is a powerful fork attacking the queen and rook. If Kxf7, the king becomes exposed. This tactical blow wins significant material.',
-    themes: ['fork', 'king-safety'],
+    themes: ['fork', 'sacrifice'],
   },
   {
     id: '7',
@@ -135,7 +94,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     bestMove: 'dxc5',
     difficulty: 'intermediate',
     explanation: 'Capturing dxc5 wins a pawn and opens the d-file for White\'s pieces. Black\'s d5 pawn remains supported by the e6 pawn, but White gains a spatial advantage and can use the open c-file and d-file to apply pressure. The extra pawn and improved piece activity give White a clear edge.',
-    themes: ['pawn-break', 'open-file', 'space-advantage'],
+    themes: ['quiet-move', 'hanging-piece'],
   },
   {
     id: '8',
@@ -155,7 +114,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     bestMove: 'Rh8+',
     difficulty: 'master',
     explanation: 'Rh8+ forces the king to f7 (the only legal move). Then Rh7+ wins the g7 pawn while keeping the initiative with check. White\'s active king on g5 supports the rook\'s assault, and Black\'s rook on b3 is too far away to help defend.',
-    themes: ['seventh-rank-domination', 'initiative'],
+    themes: ['endgame', 'checkmate'],
   },
   {
     id: '10',
@@ -175,7 +134,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     bestMove: 'd5',
     difficulty: 'advanced',
     explanation: 'The pawn push d5 is the strongest move, forcing Black to isolate their d-pawn. The alternative e5 is inferior as it leads to exchanges where Black maintains space and solid structure. Rook to c1 is a mistake because the e4 pawn is attacked twice and only defended once.',
-    themes: ['pawn-break', 'space-advantage'],
+    themes: ['quiet-move'],
   },
   {
     id: '12',
@@ -185,7 +144,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     bestMove: 'Ng5',
     difficulty: 'advanced',
     explanation: 'The tempting response is to capture the bishop with the queen, restoring material equality instantly. But the advanced move is Ng5, threatening checkmate on h7. Black must respond with g6 to block the checkmate, then you capture the bishop on c3. This has bought you an extra tempo — your knight is now closer to the enemy king and out of the way of the c6 bishop, which now lacks a piece target.',
-    themes: ['zwischenzug', 'initiative'],
+    themes: ['zwischenzug', 'sacrifice'],
   },
 ];
 
