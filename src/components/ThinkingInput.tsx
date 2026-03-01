@@ -62,12 +62,19 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-xs font-medium text-muted-foreground">Tip:</span>
           {['Checks', 'Captures', 'Attacks', 'Material Count', 'Loose Pieces', 'King Safety', 'Pawn Breaks'].map((tip) => (
-            <span
+            <button
               key={tip}
-              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20"
+              type="button"
+              disabled={disabled || isLoading || !moveSelected}
+              onClick={() => {
+                const prefix = thinking.trim() ? `${thinking.trimEnd()}, ` : '';
+                setThinking(`${prefix}${tip}: `);
+                textareaRef.current?.focus();
+              }}
+              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {tip}
-            </span>
+            </button>
           ))}
         </div>
       </div>
