@@ -1,15 +1,24 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Send, Loader2 } from 'lucide-react';
+import type { ChessTheme } from '@/data/chessPuzzles';
 
 interface ThinkingInputProps {
   onSubmit: (thinking: string) => void;
   isLoading?: boolean;
   disabled?: boolean;
   moveSelected?: boolean;
+  themes?: ChessTheme[];
 }
 
-export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, moveSelected = false }: ThinkingInputProps) {
+function formatTheme(theme: ChessTheme): string {
+  return theme
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, moveSelected = false, themes = [] }: ThinkingInputProps) {
   const [thinking, setThinking] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -20,6 +29,20 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
       setTimeout(() => textareaRef.current?.focus(), 400);
     }
   }, [moveSelected]);
+
+  const matchedThemes = useMemo(() => {
+    if (!thinking.trim()) return new Set<ChessTheme>();
+    const lower = thinking.toLowerCase();
+    const matched = new Set<ChessTheme>();
+    for (const theme of themes) {
+      // Match against the readable form (e.g. "closed center") and hyphenated form
+      const readable = theme.replace(/-/g, ' ');
+      if (lower.includes(readable) || lower.includes(theme)) {
+        matched.add(theme);
+      }
+    }
+    return matched;
+  }, [thinking, themes]);
 
   const handleSubmit = () => {
     if (thinking.trim() && moveSelected) {
@@ -59,24 +82,26 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             </div>
           )}
         </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-xs font-medium text-muted-foreground">Tip:</span>
-          {['Checks', 'Captures', 'Attacks', 'Material Count', 'Loose Pieces', 'King Safety', 'Pawn Breaks'].map((tip) => (
-            <button
-              key={tip}
-              type="button"
-              disabled={disabled || isLoading || !moveSelected}
-              onClick={() => {
-                const prefix = thinking.trim() ? `${thinking.trimEnd()}, ` : '';
-                setThinking(`${prefix}${tip}: `);
-                textareaRef.current?.focus();
-              }}
-              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {tip}
-            </button>
-          ))}
-        </div>
+        {themes.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-xs font-medium text-muted-foreground">Themes:</span>
+            {themes.map((theme) => {
+              const isMatched = matchedThemes.has(theme);
+              return (
+                <span
+                  key={theme}
+                  className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border transition-all duration-300 ${
+                    isMatched
+                      ? 'bg-primary text-primary-foreground border-primary shadow-sm scale-105'
+                      : 'bg-primary/10 text-primary/60 border-primary/20'
+                  }`}
+                >
+                  {formatTheme(theme)}
+                </span>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <Button
