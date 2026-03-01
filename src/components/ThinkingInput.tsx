@@ -60,7 +60,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
           )}
         </div>
         <p className="text-xs text-muted-foreground">
-          Tip: Describe the position, identify threats, and justify your choice.
+          Tip: Checks, Captures, Attacks, Material Count, Loose Pieces, Evaluate King Safety, Where are Pawn Breaks?
         </p>
       </div>
 
