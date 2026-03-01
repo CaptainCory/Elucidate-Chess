@@ -133,7 +133,7 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
               onMove={game.handleMove}
             />
 
-            {puzzle.name && <p className="text-center text-sm text-muted-foreground font-medium">{puzzle.name}</p>}
+            
           </div>
 
           {/* Interaction Section */}
