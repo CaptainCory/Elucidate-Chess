@@ -18,9 +18,10 @@ const pieceImages: Record<string, string> = {
 interface MiniChessBoardProps {
   fen: string;
   size?: number;
+  highlightSquares?: Record<string, React.CSSProperties>;
 }
 
-export function MiniChessBoard({ fen, size = 240 }: MiniChessBoardProps) {
+export function MiniChessBoard({ fen, size = 240, highlightSquares = {} }: MiniChessBoardProps) {
   return (
     <div className="rounded-lg overflow-hidden ring-1 ring-border/50 inline-block">
       <Chessboard
@@ -30,6 +31,7 @@ export function MiniChessBoard({ fen, size = 240 }: MiniChessBoardProps) {
         boardStyle={{ borderRadius: '0.5rem' }}
         darkSquareStyle={{ backgroundColor: 'hsl(25, 25%, 35%)' }}
         lightSquareStyle={{ backgroundColor: 'hsl(35, 30%, 75%)' }}
+        squareStyles={highlightSquares}
         pieces={Object.fromEntries(
           Object.entries(pieceImages).map(([piece, src]) => [
             piece,

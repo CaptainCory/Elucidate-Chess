@@ -1,12 +1,18 @@
 import type { ChessTheme } from '@/data/chessPuzzles';
+import React from 'react';
 
 export interface ThemeEntry {
   theme: ChessTheme;
   title: string;
   description: string;
   example: string;
-  fen: string; // illustrative position
+  fen: string;
+  highlights: Record<string, React.CSSProperties>;
 }
+
+const accent = (opacity = 0.55) => ({ backgroundColor: `hsla(38, 92%, 50%, ${opacity})` });
+const danger = (opacity = 0.5) => ({ backgroundColor: `hsla(0, 75%, 55%, ${opacity})` });
+const info = (opacity = 0.45) => ({ backgroundColor: `hsla(200, 80%, 50%, ${opacity})` });
 
 export const themeEntries: ThemeEntry[] = [
   {
@@ -15,8 +21,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'A single piece attacks two or more enemy pieces at the same time, forcing the opponent to lose material because they can only save one.',
     example:
-      'A knight jumps to a square where it simultaneously attacks the king and queen. The opponent must move the king, losing the queen.',
-    fen: '4k3/8/8/3N4/8/8/8/4K3 w - - 0 1', // Nd5 forks king and would fork queen
+      'The white knight on c7 simultaneously attacks the king on e8 and the rook on a8. Black must move the king, losing the rook.',
+    // Nc7 forks Ke8 and Ra8
+    fen: 'r3k3/2N5/8/8/8/8/8/4K3 w q - 0 1',
+    highlights: { c7: accent(), a8: danger(), e8: danger() },
   },
   {
     theme: 'pin',
@@ -24,8 +32,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'A piece attacks an enemy piece that cannot move without exposing a more valuable piece behind it. An absolute pin involves the king — the pinned piece literally cannot move.',
     example:
-      'A bishop pins a knight to the king along a diagonal. The knight cannot move because it would leave the king in check.',
-    fen: '4k3/8/5n2/8/3B4/8/8/4K3 w - - 0 1', // Bd4 pins Nf6 to king
+      'The white bishop on b5 pins the knight on c6 to the king on e8. The knight cannot move because it would leave the king in check.',
+    // Bb5 pins Nc6 to Ke8
+    fen: 'r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1',
+    highlights: { b5: accent(), c6: danger(), e8: danger() },
   },
   {
     theme: 'skewer',
@@ -33,8 +43,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'The reverse of a pin — a more valuable piece is attacked and forced to move, exposing a less valuable piece behind it to capture.',
     example:
-      'A rook checks the king along a file. The king moves, and the rook captures the unprotected queen behind it.',
-    fen: '4k3/4q3/8/8/8/8/8/4R1K1 w - - 0 1', // Re1 skewers king then queen
+      'The white rook checks the king on a8. The king must move, and the rook captures the queen on a4.',
+    // Ra1 skewers Ka8 through to Qa4
+    fen: 'k7/8/8/8/q7/8/8/R5K1 w - - 0 1',
+    highlights: { a1: accent(), a8: danger(), a4: danger() },
   },
   {
     theme: 'discovered-attack',
@@ -42,8 +54,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Moving one piece reveals an attack from another piece behind it. When the revealed attack is a check, it\'s called a discovered check — one of the most powerful tactical weapons.',
     example:
-      'A knight moves to attack the queen, simultaneously uncovering a bishop that now attacks the rook.',
-    fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 0 1',
+      'When the white knight on e6 moves (e.g. Nc5), it uncovers the rook on d1 which now attacks the undefended rook on d8.',
+    // Ne6 blocks Rd1→Rd8. Moving the knight discovers the rook attack.
+    fen: '3r1k2/8/4N3/8/8/8/8/3R2K1 w - - 0 1',
+    highlights: { e6: accent(), d1: info(), d8: danger() },
   },
   {
     theme: 'double-check',
@@ -51,8 +65,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'A special case of discovered attack where both the moving piece and the uncovered piece give check. The only defense is to move the king — blocking or capturing won\'t work.',
     example:
-      'A knight moves to deliver check while also uncovering a bishop check. The king must flee since you can\'t block two checks at once.',
-    fen: '4k3/8/8/1B6/3N4/8/8/4K3 w - - 0 1', // Nc6+ discovers Bb5 check
+      'The knight jumps from e4 to d6, giving check. This also uncovers the rook on e1 which checks along the e-file. Two checks at once — only the king can move.',
+    // Ne4→Nd6+ discovers Re1-e8+ double check
+    fen: '4k3/8/8/8/4N3/8/8/4RK2 w - - 0 1',
+    highlights: { e4: accent(), e1: info(), e8: danger() },
   },
   {
     theme: 'deflection',
@@ -60,8 +76,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Forcing a defending piece away from a critical square or duty. Once the defender is deflected, the position it was guarding collapses.',
     example:
-      'A queen sacrifice forces the opponent\'s rook to leave the back rank, allowing checkmate with your own rook.',
-    fen: '3r1rk1/pp3ppp/8/8/8/8/PP3PPP/3RR1K1 w - - 0 1',
+      'The black rook on d8 guards against Re8#. White plays Qa8!, forcing Rxa8 — but now Re8# is unstoppable.',
+    // Rd8 guards back rank, Qa8 deflects it
+    fen: '3r2k1/5ppp/8/8/8/8/Q4PPP/4R1K1 w - - 0 1',
+    highlights: { a2: accent(), d8: danger(), e1: info() },
   },
   {
     theme: 'decoy',
@@ -69,8 +87,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Luring an enemy piece to a specific square where it becomes vulnerable — the opposite side of deflection. You\'re pulling a piece toward danger rather than away from its duty.',
     example:
-      'Sacrificing a rook on a square forces the king to capture, walking into a knight fork that wins the queen.',
-    fen: 'r1b1k2r/ppppqppp/2n5/4N3/2B5/8/PPPP1PPP/R1BQK2R w KQkq - 0 1',
+      'White plays Bxf7+!, decoying the king to f7. After Kxf7, the queen on d7 is left undefended and falls to Qxd7.',
+    // Bxf7+ decoys Kg8 to f7, exposing Qd7
+    fen: 'r4rk1/pppq1ppp/8/8/2B5/8/PPP2PPP/R2Q1RK1 w - - 0 1',
+    highlights: { c4: accent(), f7: danger(), d7: danger() },
   },
   {
     theme: 'overloading',
@@ -78,8 +98,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Exploiting a piece that\'s defending too many things at once. When one defender has multiple responsibilities, you attack one of them and something else falls.',
     example:
-      'A queen defends both a rook and a back-rank mate threat. By capturing the rook, you force the queen to recapture, leaving the back rank unguarded.',
-    fen: '3r2k1/5ppp/8/8/8/2q5/5PPP/3RR1K1 w - - 0 1',
+      'The black queen on e6 must defend both the rook on d7 and guard against Re8#. White plays Qxd7! — if Qxd7, then Re8# is mate.',
+    // Qe6 overloaded guarding d7 rook + back rank
+    fen: '4r1k1/3r1ppp/4q3/8/8/5Q2/5PPP/4R1K1 w - - 0 1',
+    highlights: { f3: accent(), e6: danger(), d7: danger(), e8: info() },
   },
   {
     theme: 'removing-the-defender',
@@ -87,8 +109,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Capturing or driving away a piece that protects something important. Once the guardian is gone, the thing it was protecting becomes vulnerable.',
     example:
-      'A knight protects a critical pawn. You exchange your bishop for the knight, and now the pawn falls freely.',
-    fen: 'r1bqkb1r/ppp2ppp/2np1n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1',
+      'The knight on f6 is the only piece defending h7. White plays Bxf6, removing the defender, and now Qxh7# is checkmate.',
+    // Nf6 defends h7, bishop removes it
+    fen: 'r1bq1rk1/pppp1ppp/2n2n2/2b1p1B1/4P3/3P1N2/PPP2PPP/RN1QKB1R w KQ - 0 1',
+    highlights: { g5: accent(), f6: danger(), h7: info() },
   },
   {
     theme: 'zwischenzug',
@@ -96,8 +120,9 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Instead of making the expected move (like a recapture), you insert an unexpected intermediate move — often a check or threat — that improves your position before continuing the sequence.',
     example:
-      'After a piece exchange, instead of recapturing immediately, you play a check first. Your opponent deals with the check, and then you recapture with a better position.',
+      'Black just captured on c3 with the bishop. Instead of recapturing immediately, White plays Ng5! threatening Qxh7#. Black must deal with the mate threat first, and then White recaptures on c3 with a better position.',
     fen: 'rn3rk1/2qn1ppp/ppb1p3/4P3/P4B2/2b2N2/2Q1BPPP/R2R2K1 w - - 0 1',
+    highlights: { f3: accent(), c3: danger(), h7: info() },
   },
   {
     theme: 'trapped-piece',
@@ -105,8 +130,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'A piece has no safe squares to retreat to. Even if it\'s a powerful piece like a queen or rook, it can be captured because it has nowhere to escape.',
     example:
-      'A bishop ventures deep into enemy territory to grab a pawn but finds all retreat squares controlled. It\'s won for the opponent despite being a bishop.',
-    fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1pB2/4P3/3P4/PPP2PPP/RN1QK1NR b KQkq - 0 1',
+      'The white bishop ventured to b6 to grab a pawn, but after ...c5 and ...Qb8, all retreat squares are blocked. The bishop is trapped and will be captured.',
+    // Bishop trapped on a7 after a6, b8 controlled
+    fen: 'rq2kb1r/B1pp1ppp/p1n1pn2/8/4P3/5N2/PPPP1PPP/RN1QKB1R b KQkq - 0 1',
+    highlights: { a7: danger() },
   },
   {
     theme: 'back-rank-checkmate',
@@ -114,8 +141,9 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'A rook or queen delivers checkmate on the first or eighth rank because the enemy king is trapped behind its own pawns with no escape squares.',
     example:
-      'The king sits on g8 with pawns on f7, g7, h7. A rook slides to e8, and it\'s checkmate — nowhere to run.',
+      'The king on g8 is boxed in by its own pawns on f7, g7, h7. White slides the rook to e8 — checkmate, nowhere to run.',
     fen: '6k1/5ppp/8/8/8/8/8/4R1K1 w - - 0 1',
+    highlights: { e1: accent(), e8: info(), g8: danger() },
   },
   {
     theme: 'smothered-mate',
@@ -123,8 +151,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'A knight delivers checkmate to a king that is completely surrounded by its own pieces and cannot move. One of the most elegant patterns in chess.',
     example:
-      'After a queen sacrifice on g8, the rook recaptures, and the knight delivers mate from f7 — the king is boxed in by its own army.',
-    fen: '6rk/6pp/8/8/8/8/5N2/6K1 w - - 0 1', // Nf2-g4-f6-...-f7#
+      'After the queen sacrifice Qg8+! Rxg8, the knight delivers Nf7# — the king on h8 is completely hemmed in by its own rook on g8 and pawns on g7, h7.',
+    // Final position of Philidor's smothered mate: Nf7# with Kh8, Rg8, pawns g7 h7
+    fen: '6rk/5Npp/8/8/8/8/8/6K1 b - - 0 1',
+    highlights: { f7: accent(), h8: danger(), g8: info(), g7: info(), h7: info() },
   },
   {
     theme: 'checkmate',
@@ -132,8 +162,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'The ultimate goal — the king is in check and has no legal move to escape. Recognizing checkmate patterns helps you spot winning opportunities faster.',
     example:
-      'Two rooks coordinate to deliver a ladder mate, driving the king to the edge rank by rank.',
-    fen: '6k1/8/8/8/8/8/8/R3R1K1 w - - 0 1', // two rooks ready for ladder mate
+      'The two rooks work together in a "ladder mate" — one rook cuts off ranks while the other delivers check, driving the king to the edge step by step.',
+    // Two rooks ready for ladder mate
+    fen: '6k1/8/8/8/8/8/1R6/R5K1 w - - 0 1',
+    highlights: { a1: accent(), b2: accent() },
   },
   {
     theme: 'sacrifice',
@@ -141,8 +173,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Deliberately giving up material (a pawn, piece, or even the queen) to gain a greater advantage — whether it\'s checkmate, a winning attack, or a decisive positional edge.',
     example:
-      'Sacrificing a bishop to open up the king\'s pawn shield, creating an unstoppable attack with your remaining pieces.',
-    fen: 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQ - 0 1',
+      'White sacrifices the bishop with Bxh7+! The king\'s pawn shield is ripped open, and the remaining pieces (queen, knight) swarm in for a decisive attack.',
+    // Classic Bxh7+ Greek Gift sacrifice position
+    fen: 'r1bq1rk1/pppnnppp/4p3/3pP3/1b1P4/2NB1N2/PPP2PPP/R1BQ1RK1 w - - 0 1',
+    highlights: { d3: accent(), h7: danger() },
   },
   {
     theme: 'hanging-piece',
@@ -150,8 +184,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'An undefended piece that can be captured for free. Spotting hanging pieces — both yours and your opponent\'s — is one of the most important skills at every level.',
     example:
-      'After a sequence of moves, a knight is left unprotected on d4. A simple capture wins a piece with no compensation.',
-    fen: '4k3/8/8/8/3n4/8/8/4K2R w - - 0 1',
+      'The black knight on d5 is completely undefended — no pawn, piece, or other support protects it. White simply captures it for free.',
+    // Undefended knight on d5
+    fen: 'r1bqkb1r/pppp1ppp/2n5/3np3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1',
+    highlights: { d5: danger() },
   },
   {
     theme: 'x-ray',
@@ -159,8 +195,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'A piece exerts influence through another piece to a square behind it. It\'s like having X-ray vision — your piece \'sees through\' an obstacle to attack or defend a distant square.',
     example:
-      'A rook on e1 defends e8 through the opponent\'s rook on e5. If the e5 rook moves, your rook controls the whole file.',
+      'White\'s rook on e1 "sees through" the black rook on e5 to defend e8. If the e5 rook moves off the file, White\'s rook controls the entire e-file.',
+    // Re1 x-rays through Re5 to control e8
     fen: '4k3/8/8/4r3/8/8/8/4R1K1 w - - 0 1',
+    highlights: { e1: accent(), e5: info(), e8: info() },
   },
   {
     theme: 'promotion',
@@ -168,8 +206,9 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Advancing a pawn to the eighth rank to transform it into a queen (or another piece). Promotion threats often decide endgames and can create unstoppable tactical sequences.',
     example:
-      'A passed pawn on the seventh rank forces the opponent\'s rook into a passive defensive position, and the pawn promotes next move.',
+      'The white pawn on d7 is one step from promotion. The black king can\'t stop it — d8=Q creates a new queen and wins the game.',
     fen: '4k3/3P4/8/8/8/8/8/4K3 w - - 0 1',
+    highlights: { d7: accent(), d8: info() },
   },
   {
     theme: 'endgame',
@@ -177,8 +216,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Positions with few pieces remaining where king activity, pawn structure, and precise technique become critical. Endgame knowledge separates intermediate players from strong ones.',
     example:
-      'With king and rook vs. king and rook, understanding the Lucena and Philidor positions determines whether you win or draw.',
-    fen: '8/5k2/8/8/8/8/3KR3/8 w - - 0 1',
+      'King and pawn vs. king — the most fundamental endgame. White must use "opposition" (kings facing each other with one square between) to escort the pawn to promotion.',
+    // K+P vs K, classic opposition endgame
+    fen: '8/8/4k3/4p3/4K3/8/8/8 w - - 0 1',
+    highlights: { e4: accent(), e6: danger(), e5: info() },
   },
   {
     theme: 'battery',
@@ -186,8 +227,10 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Lining up two or more pieces of the same type (or queen + bishop/rook) along a file, rank, or diagonal to multiply their attacking power. The front piece attacks while the back piece supports.',
     example:
-      'Doubling rooks on an open file creates enormous pressure. The front rook attacks while the back rook provides support, making infiltration nearly unstoppable.',
-    fen: '3rk3/8/8/8/8/8/8/3RR1K1 w - - 0 1', // doubled rooks
+      'White\'s doubled rooks on the d-file create enormous pressure. The front rook attacks while the back rook supports it — any piece on the d-file will face double firepower.',
+    // Doubled rooks on d-file aiming at Black's position
+    fen: 'r2qk2r/ppp2ppp/2n1bn2/3pp3/8/8/PPP2PPP/1R1R2K1 w kq - 0 1',
+    highlights: { b1: accent(), d1: accent() },
   },
   {
     theme: 'quiet-move',
@@ -195,7 +238,8 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'A subtle, non-forcing move that doesn\'t capture or give check but creates an unstoppable threat. Quiet moves are often the hardest to find because they lack the drama of tactics.',
     example:
-      'Instead of a flashy sacrifice, a simple bishop retreat to a diagonal creates simultaneous threats of checkmate and piece capture that can\'t both be stopped.',
-    fen: 'r1bq1rk1/pp2bppp/2n1pn2/2pp4/3P4/2PBPN2/PP1N1PPP/R1BQ1RK1 w - - 0 1',
+      'Instead of a flashy sacrifice, White plays the calm Qd3 — a quiet move that simultaneously threatens Qxh7# and Qxa6, and both can\'t be stopped.',
+    fen: 'r1b2rk1/pp3ppp/2p1pn2/q2p4/3P4/P1NBPN2/1PQ2PPP/R4RK1 w - - 0 1',
+    highlights: { c2: accent(), h7: info() },
   },
 ];
