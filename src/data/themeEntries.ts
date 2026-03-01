@@ -34,7 +34,7 @@ export const themeEntries: ThemeEntry[] = [
     example:
       'The white bishop on b5 pins the knight on c6 to the king on e8. The knight cannot move because it would leave the king in check.',
     // Bb5 pins Nc6 to Ke8
-    fen: 'r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1',
+    fen: 'r1bqkb1r/ppp2ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1',
     highlights: { b5: accent(), c6: danger(), e8: danger() },
   },
   {
