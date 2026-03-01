@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Send, Loader2 } from 'lucide-react';
 
@@ -11,6 +11,15 @@ interface ThinkingInputProps {
 
 export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, moveSelected = false }: ThinkingInputProps) {
   const [thinking, setThinking] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (moveSelected && textareaRef.current) {
+      containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => textareaRef.current?.focus(), 400);
+    }
+  }, [moveSelected]);
 
   const handleSubmit = () => {
     if (thinking.trim() && moveSelected) {
@@ -27,7 +36,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
   };
 
   return (
-    <div className="space-y-4 animate-slide-up">
+    <div ref={containerRef} className="space-y-4 animate-slide-up">
       {!moveSelected && (
         <div className="p-4 rounded-lg border border-dashed border-primary/40 bg-primary/5 text-center">
           <p className="text-sm text-muted-foreground">
@@ -36,11 +45,19 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
         </div>
       )}
 
+      {moveSelected && !thinking && (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-primary/10 border border-primary/30">
+          <span className="inline-block w-0.5 h-5 bg-primary animate-blink rounded-full" />
+          <span className="text-sm font-medium text-primary">Start typing your analysis...</span>
+        </div>
+      )}
+
       <div className="space-y-2">
         <label className="block text-sm font-medium text-foreground">
           Explain your thinking process
         </label>
         <textarea
+          ref={textareaRef}
           value={thinking}
           onChange={(e) => setThinking(e.target.value)}
           onKeyDown={handleKeyDown}
