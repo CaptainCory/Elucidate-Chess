@@ -57,7 +57,7 @@ export default function ThemesPage() {
                 <div className="flex flex-col sm:flex-row gap-4 items-start">
                   {/* Mini board */}
                   <div className="shrink-0">
-                    <MiniChessBoard fen={entry.fen} size={200} />
+                    <MiniChessBoard fen={entry.fen} size={200} highlightSquares={entry.highlights} />
                   </div>
 
                   {/* Example */}
