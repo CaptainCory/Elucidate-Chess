@@ -37,14 +37,6 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
 
   return (
     <div ref={containerRef} className="space-y-4 animate-slide-up">
-      {!moveSelected && (
-        <div className="p-4 rounded-lg border border-dashed border-primary/40 bg-primary/5 text-center">
-          <p className="text-sm text-muted-foreground">
-            👆 Drag and drop a piece on the board to make your move
-          </p>
-        </div>
-      )}
-
       {moveSelected && !thinking && (
         <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-primary/10 border border-primary/30">
           <span className="inline-block w-0.5 h-5 bg-primary animate-blink rounded-full" />
@@ -61,7 +53,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
           value={thinking}
           onChange={(e) => setThinking(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="What do you see in this position? What are the threats? Why did you choose this move?"
+          placeholder={moveSelected ? "What do you see in this position? What are the threats? Why did you choose this move?" : "👆 Drag and drop a piece on the board to make your move first"}
           className="thinking-area"
           rows={5}
           disabled={disabled || isLoading || !moveSelected}
