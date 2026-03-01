@@ -37,27 +37,28 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
 
   return (
     <div ref={containerRef} className="space-y-4 animate-slide-up">
-      {moveSelected && !thinking && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-primary/10 border border-primary/30">
-          <span className="inline-block w-0.5 h-5 bg-primary animate-blink rounded-full" />
-          <span className="text-sm font-medium text-primary">Start typing your analysis...</span>
-        </div>
-      )}
-
-      <div className="space-y-2">
+      <div className="space-y-2 relative">
         <label className="block text-sm font-medium text-foreground">
-          Explain your thinking process
+          {moveSelected ? 'Explain your thinking process' : 'Make your move first'}
         </label>
-        <textarea
-          ref={textareaRef}
-          value={thinking}
-          onChange={(e) => setThinking(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={moveSelected ? "What do you see in this position? What are the threats? Why did you choose this move?" : "👆 Drag and drop a piece on the board to make your move first"}
-          className="thinking-area"
-          rows={5}
-          disabled={disabled || isLoading || !moveSelected}
-        />
+        <div className="relative">
+          <textarea
+            ref={textareaRef}
+            value={thinking}
+            onChange={(e) => setThinking(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={moveSelected ? "What do you see in this position? What are the threats? Why did you choose this move?" : "👆 Drag and drop a piece on the board to make your move first"}
+            className="thinking-area"
+            rows={5}
+            disabled={disabled || isLoading || !moveSelected}
+          />
+          {moveSelected && !thinking && (
+            <div className="absolute top-3 left-4 flex items-center gap-2 pointer-events-none">
+              <span className="inline-block w-0.5 h-5 bg-primary animate-blink rounded-full" />
+              <span className="text-sm font-medium text-primary">Start typing your analysis...</span>
+            </div>
+          )}
+        </div>
         <p className="text-xs text-muted-foreground">
           Tip: Describe the position, identify threats, and justify your choice.
         </p>
