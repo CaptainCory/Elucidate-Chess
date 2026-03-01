@@ -47,7 +47,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             value={thinking}
             onChange={(e) => setThinking(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={moveSelected ? "What do you see in this position? What are the threats? Why did you choose this move?" : "👆 Drag and drop a piece on the board to make your move first"}
+            placeholder={moveSelected ? '' : "👆 Drag and drop a piece on the board to make your move first"}
             className="thinking-area"
             rows={5}
             disabled={disabled || isLoading || !moveSelected}
