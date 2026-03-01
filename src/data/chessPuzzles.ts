@@ -14,7 +14,7 @@ export type ChessTheme =
   | 'removing-the-defender'
   | 'zwischenzug'
   | 'trapped-piece'
-  | 'back-rank-mate'
+  | 'back-rank-checkmate'
   | 'smothered-mate'
   | 'checkmate'
   | 'sacrifice'
@@ -22,6 +22,7 @@ export type ChessTheme =
   | 'x-ray'
   | 'promotion'
   | 'endgame'
+  | 'battery'
   | 'quiet-move';
 
 export interface ChessPuzzle {
@@ -44,7 +45,7 @@ export const chessPuzzles: ChessPuzzle[] = [
     bestMove: 'Re8#',
     difficulty: 'beginner',
     explanation: 'White has a simple back rank mate. The black king is trapped on the 8th rank by its own pawns, and the rook delivers checkmate by moving to e8.',
-    themes: ['back-rank-mate', 'checkmate'],
+    themes: ['back-rank-checkmate', 'checkmate'],
   },
   {
     id: '2',
