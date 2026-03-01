@@ -164,7 +164,7 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
             )}
 
             {!game.isLimited && game.gameState === 'thinking' && (
-              <ThinkingInput onSubmit={game.handleSubmit} isLoading={false} moveSelected={!!game.selectedMove} />
+              <ThinkingInput onSubmit={game.handleSubmit} isLoading={false} moveSelected={!!game.selectedMove} themes={puzzle.themes} />
             )}
 
             {game.gameState === 'analyzing' && (
