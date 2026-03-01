@@ -59,9 +59,17 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             </div>
           )}
         </div>
-        <p className="text-xs text-muted-foreground">
-          Tip: Checks, Captures, Attacks, Material Count, Loose Pieces, Evaluate King Safety, Where are Pawn Breaks?
-        </p>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-xs font-medium text-muted-foreground">Tip:</span>
+          {['Checks', 'Captures', 'Attacks', 'Material Count', 'Loose Pieces', 'King Safety', 'Pawn Breaks'].map((tip) => (
+            <span
+              key={tip}
+              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20"
+            >
+              {tip}
+            </span>
+          ))}
+        </div>
       </div>
 
       <Button
