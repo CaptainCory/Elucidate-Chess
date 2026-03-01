@@ -14,7 +14,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle } from 'lucide-react';
+import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords } from 'lucide-react';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -56,6 +56,13 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
               >
                 <HelpCircle className="w-4 h-4 text-primary" />
                 How It Works
+              </Link>
+              <Link
+                to="/themes"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
+              >
+                <Swords className="w-4 h-4 text-primary" />
+                Themes
               </Link>
             </div>
             <div className="flex items-center gap-3">
