@@ -206,9 +206,9 @@ export const themeEntries: ThemeEntry[] = [
     description:
       'Advancing a pawn to the eighth rank to transform it into a queen (or another piece). Promotion threats often decide endgames and can create unstoppable tactical sequences.',
     example:
-      'The white pawn on d7 is one step from promotion. The black king can\'t stop it — d8=Q creates a new queen and wins the game.',
-    fen: '4k3/3P4/8/8/8/8/8/4K3 w - - 0 1',
-    highlights: { d7: accent(), d8: info() },
+      'The white pawn on d7 is one step from promotion. The black king on b8 is too far to stop it — d8=Q creates a new queen and wins the game.',
+    fen: '1k6/3P4/8/8/8/8/8/4K3 w - - 0 1',
+    highlights: { d7: accent(), d8: info(), b8: danger() },
   },
   {
     theme: 'endgame',
