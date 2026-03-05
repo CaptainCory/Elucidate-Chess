@@ -12,6 +12,7 @@ import { MobileNav } from '@/components/MobileNav';
 import { UserMenu } from '@/components/UserMenu';
 import { AuthModal } from '@/components/AuthModal';
 import { PlanBadge } from '@/components/PlanBadge';
+import { chessPuzzles } from '@/data/chessPuzzles';
 import type { ChessTheme, ChessPuzzle } from '@/data/chessPuzzles';
 
 const ACCESS_CODE = 'PAULMORPHY';
