@@ -29,7 +29,7 @@ const Membership = () => {
       const { data, error } = await supabase.functions.invoke('customer-portal');
       if (error) throw error;
       if (data?.url) {
-        window.open(data.url, '_blank');
+        window.location.href = data.url;
       }
     } catch (e) {
       console.error('Portal error:', e);
@@ -193,7 +193,7 @@ const Membership = () => {
                 try {
                   const { data, error } = await supabase.functions.invoke('create-checkout');
                   if (error) throw error;
-                  if (data?.url) window.open(data.url, '_blank');
+                  if (data?.url) window.location.href = data.url;
                 } catch {
                   toast.error('Failed to start checkout.');
                 }
