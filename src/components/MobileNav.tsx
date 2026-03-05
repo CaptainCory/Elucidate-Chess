@@ -22,8 +22,8 @@ export function MobileNav({ user, onSignIn }: MobileNavProps) {
         {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
-      {open && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-2 mx-4 p-4 rounded-xl bg-card border border-border shadow-lg animate-scale-in space-y-2">
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm" onClick={() => setOpen(false)} />
+        <div className="fixed top-16 left-4 right-4 z-50 p-4 rounded-xl bg-card border border-border shadow-lg animate-scale-in space-y-2">
           <Link
             to="/how-it-works"
             onClick={() => setOpen(false)}
