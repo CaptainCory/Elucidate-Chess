@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChessPuzzle, getNextDifficulty, getRandomPuzzle } from '@/data/chessPuzzles';
+import { ChessPuzzle, getNextDifficulty } from '@/data/chessPuzzles';
 import { AnalysisData } from '@/components/AnalysisResult';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -75,7 +75,6 @@ export function useChessGame(puzzle: ChessPuzzle) {
 
       if (error) throw error;
 
-      // Server-side limit enforcement — analyze-chess returns 403
       if (data?.error && !data.score && data.error.includes('limit')) {
         setIsLimited(true);
         setShowUpgradeOverlay(true);
@@ -110,7 +109,6 @@ export function useChessGame(puzzle: ChessPuzzle) {
         setStreak(0);
       }
 
-      // Update daily count from server after successful analysis
       setDailySolved(prev => prev + 1);
       if (!isPremium && dailySolved + 1 >= DAILY_PUZZLE_LIMIT) {
         setIsLimited(true);
@@ -140,7 +138,7 @@ export function useChessGame(puzzle: ChessPuzzle) {
     }
   }, [puzzle, selectedMove, scores, streak, solvedPuzzles, user, isPremium, dailySolved]);
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(async () => {
     const newDifficulty = analysis ? getNextDifficulty(currentDifficulty, analysis.score) : currentDifficulty;
     setCurrentDifficulty(newDifficulty);
 
@@ -153,8 +151,29 @@ export function useChessGame(puzzle: ChessPuzzle) {
       return;
     }
 
-    const nextPuzzle = getRandomPuzzle(newSolvedPuzzles, newDifficulty);
-    navigate(`/position/${nextPuzzle.id}`);
+    // Fetch next puzzle from DB, filtering by difficulty and excluding solved ones
+    let query = supabase.from('puzzles').select('id');
+
+    // Try with difficulty filter first
+    const { data } = await query.eq('difficulty', newDifficulty).limit(100);
+    let candidates = (data || []).filter(p => !newSolvedPuzzles.includes(p.id));
+
+    // If no candidates with that difficulty, try any difficulty
+    if (candidates.length === 0) {
+      const { data: allData } = await supabase.from('puzzles').select('id').limit(100);
+      candidates = (allData || []).filter(p => !newSolvedPuzzles.includes(p.id));
+    }
+
+    // If still empty, allow repeats
+    if (candidates.length === 0) {
+      const { data: allData } = await supabase.from('puzzles').select('id').limit(100);
+      candidates = allData || [];
+    }
+
+    if (candidates.length > 0) {
+      const next = candidates[Math.floor(Math.random() * candidates.length)];
+      navigate(`/position/${next.id}`);
+    }
   }, [analysis, currentDifficulty, puzzle.id, solvedPuzzles, isPremium, navigate, dailySolved]);
 
   return {
