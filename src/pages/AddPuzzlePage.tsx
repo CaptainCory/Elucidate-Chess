@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Lock, Crown, ArrowLeft, Plus, Eye, EyeOff, Check } from 'lucide-react';
+import { Brain, Lock, Crown, ArrowLeft, Plus, Eye, EyeOff, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,7 +12,8 @@ import { MobileNav } from '@/components/MobileNav';
 import { UserMenu } from '@/components/UserMenu';
 import { AuthModal } from '@/components/AuthModal';
 import { PlanBadge } from '@/components/PlanBadge';
-import { chessPuzzles } from '@/data/chessPuzzles';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 import type { ChessTheme, ChessPuzzle } from '@/data/chessPuzzles';
 
 const ACCESS_CODE = 'PAULMORPHY';
