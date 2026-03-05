@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import type { ChessPuzzle } from '@/data/chessPuzzles';
 import { mapDbPuzzle } from '@/data/chessPuzzles';
 import { supabase } from '@/integrations/supabase/client';
