@@ -189,7 +189,12 @@ Respond with a JSON object:
   "improvement": "<one concise tip>"
 }
 
-Scoring: 90-100 best move + strong reasoning; 70-89 best move + partial reasoning or strong alternative; 50-69 decent ideas but missed best move; 30-49 significant gaps; 0-29 missed key elements.
+Scoring guidelines (reasoning is weighted ~60%, move choice ~40% — a correct move with poor reasoning should score lower than a wrong move with excellent reasoning):
+- 90-100: Best move AND deep, accurate reasoning that identifies the key tactical/positional ideas
+- 75-89: Best move with partial reasoning, OR a strong alternative move with excellent reasoning
+- 55-74: Good reasoning that shows real understanding but missed the best move, OR correct move but reasoning suggests it was a lucky guess
+- 35-54: Some valid ideas but significant gaps in understanding
+- 0-34: Missed key elements with weak or no reasoning
 
 Be honest and helpful. Keep it brief.`;
 
