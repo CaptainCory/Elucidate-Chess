@@ -48,7 +48,6 @@ export function useChessGame(puzzle: ChessPuzzle) {
       } catch (e) {
         console.error('Access check failed:', e);
       }
-      setServerChecked(true);
     };
     checkAccess();
   }, [user]);
