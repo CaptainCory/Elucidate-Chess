@@ -144,13 +144,60 @@ const verifyPosition = (fen: string, bestMove: string, userMove: string): Positi
   };
 };
 
+const DAILY_LIMIT = 3;
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   try {
-    const { fen, userThinking, userMove, bestMove, puzzleExplanation, puzzleDifficulty }: AnalysisRequest = await req.json();
+    const { fen, userThinking, userMove, bestMove, puzzleExplanation, puzzleDifficulty, puzzleId }: AnalysisRequest & { puzzleId?: string } = await req.json();
+
+    // --- SERVER-SIDE ACCESS ENFORCEMENT ---
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
+    const authHeader = req.headers.get("Authorization");
+    let userId: string | null = null;
+    let isPremium = false;
+
+    if (authHeader) {
+      const token = authHeader.replace("Bearer ", "");
+      const { data: userData } = await supabase.auth.getUser(token);
+      if (userData?.user) {
+        userId = userData.user.id;
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("is_premium")
+          .eq("user_id", userId)
+          .maybeSingle();
+        isPremium = profile?.is_premium === true;
+      }
+    }
+
+    if (!isPremium && userId) {
+      const { data: countResult } = await supabase.rpc("get_daily_attempt_count", { p_user_id: userId });
+      const dailyCount = countResult ?? 0;
+      if (dailyCount >= DAILY_LIMIT) {
+        return new Response(JSON.stringify({ error: "Daily puzzle limit reached. Upgrade to Premium for unlimited access." }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
+    // Record the attempt server-side
+    if (userId) {
+      await supabase.from("puzzle_attempts").insert({
+        user_id: userId,
+        puzzle_id: puzzleId || "unknown",
+      });
+    }
+    // --- END ACCESS ENFORCEMENT ---
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
