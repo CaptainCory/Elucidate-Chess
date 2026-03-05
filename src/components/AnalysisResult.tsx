@@ -42,6 +42,16 @@ interface AnalysisResultProps {
 }
 
 export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        onNext();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onNext]);
   const formatPieceList = (pieces: PositionPiece[]) =>
     pieces.map((piece) => `${piece.piece}@${piece.square}`).join(', ');
 
