@@ -53,12 +53,36 @@ export type Database = {
         }
         Relationships: []
       }
+      puzzle_attempts: {
+        Row: {
+          attempted_at: string
+          id: string
+          ip_hash: string | null
+          puzzle_id: string
+          user_id: string
+        }
+        Insert: {
+          attempted_at?: string
+          id?: string
+          ip_hash?: string | null
+          puzzle_id: string
+          user_id: string
+        }
+        Update: {
+          attempted_at?: string
+          id?: string
+          ip_hash?: string | null
+          puzzle_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_daily_attempt_count: { Args: { p_user_id: string }; Returns: number }
     }
     Enums: {
       [_ in never]: never

@@ -2,3 +2,6 @@ project_id = "drwjkekivcxoiidxutit"
 
 [functions.analyze-chess]
 verify_jwt = false
+
+[functions.validate-puzzle-access]
+verify_jwt = false
