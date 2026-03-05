@@ -229,11 +229,6 @@ export default function AddPuzzlePage() {
         <div className="grid gap-6 md:grid-cols-2">
           {/* Left column */}
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="id">Puzzle ID</Label>
-              <Input id="id" value={form.id} disabled className="font-mono bg-muted" />
-              <p className="text-xs text-muted-foreground">Auto-generated</p>
-            </div>
 
             <div className="space-y-2">
               <Label htmlFor="name">Puzzle Name</Label>
