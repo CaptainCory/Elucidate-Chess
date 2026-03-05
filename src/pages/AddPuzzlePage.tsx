@@ -38,7 +38,7 @@ export default function AddPuzzlePage() {
 
   // Form state
   const [form, setForm] = useState({
-    id: '',
+    id: String(Math.max(...chessPuzzles.map(p => Number(p.id))) + 1),
     name: '',
     fen: '',
     previousFen: '',
