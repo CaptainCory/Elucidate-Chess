@@ -11,6 +11,7 @@ import Membership from "./pages/Membership";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import HowItWorks from "./pages/HowItWorks";
 import ThemesPage from "./pages/ThemesPage";
+import AddPuzzlePage from "./pages/AddPuzzlePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
