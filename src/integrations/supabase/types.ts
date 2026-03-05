@@ -77,6 +77,45 @@ export type Database = {
         }
         Relationships: []
       }
+      puzzles: {
+        Row: {
+          best_move: string
+          created_at: string
+          created_by: string | null
+          difficulty: string
+          explanation: string
+          fen: string
+          id: string
+          name: string
+          previous_fen: string
+          themes: string[]
+        }
+        Insert: {
+          best_move: string
+          created_at?: string
+          created_by?: string | null
+          difficulty: string
+          explanation: string
+          fen: string
+          id: string
+          name: string
+          previous_fen: string
+          themes?: string[]
+        }
+        Update: {
+          best_move?: string
+          created_at?: string
+          created_by?: string | null
+          difficulty?: string
+          explanation?: string
+          fen?: string
+          id?: string
+          name?: string
+          previous_fen?: string
+          themes?: string[]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

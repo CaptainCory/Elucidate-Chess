@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { chessPuzzles } from '@/data/chessPuzzles';
+import type { ChessPuzzle } from '@/data/chessPuzzles';
+import { supabase } from '@/integrations/supabase/client';
 import { ChessBoard } from '@/components/ChessBoard';
 import { TurnIndicator } from '@/components/TurnIndicator';
 import { ThinkingInput } from '@/components/ThinkingInput';
@@ -14,16 +16,53 @@ import { AuthModal } from '@/components/AuthModal';
 import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords, Plus } from 'lucide-react';
+import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords, Plus, Loader2 } from 'lucide-react';
 import { MobileNav } from '@/components/MobileNav';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const [dbPuzzle, setDbPuzzle] = useState<ChessPuzzle | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
-  const puzzle = chessPuzzles.find((p) => p.id === id);
+  // First check static puzzles
+  const staticPuzzle = chessPuzzles.find((p) => p.id === id);
 
-  if (!puzzle) {
+  useEffect(() => {
+    if (staticPuzzle || !id) return;
+    // Try loading from DB
+    setLoading(true);
+    supabase.from('puzzles').select('*').eq('id', id).maybeSingle().then(({ data, error }) => {
+      if (error || !data) {
+        setNotFound(true);
+      } else {
+        setDbPuzzle({
+          id: data.id,
+          name: data.name,
+          fen: data.fen,
+          previousFen: data.previous_fen,
+          bestMove: data.best_move,
+          difficulty: data.difficulty as ChessPuzzle['difficulty'],
+          explanation: data.explanation,
+          themes: (data.themes || []) as ChessPuzzle['themes'],
+        });
+      }
+      setLoading(false);
+    });
+  }, [id, staticPuzzle]);
+
+  const puzzle = staticPuzzle || dbPuzzle;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!puzzle || notFound) {
     return <Navigate to="/" replace />;
   }
 

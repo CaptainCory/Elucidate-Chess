@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Lock, Crown, ArrowLeft, Plus, Eye, EyeOff, Check } from 'lucide-react';
+import { Brain, Lock, Crown, ArrowLeft, Plus, Eye, EyeOff, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,7 +12,8 @@ import { MobileNav } from '@/components/MobileNav';
 import { UserMenu } from '@/components/UserMenu';
 import { AuthModal } from '@/components/AuthModal';
 import { PlanBadge } from '@/components/PlanBadge';
-import { chessPuzzles } from '@/data/chessPuzzles';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 import type { ChessTheme, ChessPuzzle } from '@/data/chessPuzzles';
 
 const ACCESS_CODE = 'PAULMORPHY';
@@ -28,7 +29,9 @@ const DIFFICULTIES: ChessPuzzle['difficulty'][] = ['beginner', 'intermediate', '
 
 export default function AddPuzzlePage() {
   const { user, loading, isPremium } = useAuth();
+  const navigate = useNavigate();
   const [showSignIn, setShowSignIn] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // Gate states
   const [codeInput, setCodeInput] = useState('');
@@ -38,7 +41,6 @@ export default function AddPuzzlePage() {
 
   // Form state
   const [form, setForm] = useState({
-    id: String(Math.max(...chessPuzzles.map(p => Number(p.id))) + 1),
     name: '',
     fen: '',
     previousFen: '',
@@ -47,7 +49,6 @@ export default function AddPuzzlePage() {
     explanation: '',
   });
   const [selectedThemes, setSelectedThemes] = useState<ChessTheme[]>([]);
-  const [output, setOutput] = useState('');
 
   if (loading) {
     return (
@@ -157,39 +158,38 @@ export default function AddPuzzlePage() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const generateOutput = () => {
-    if (!form.id || !form.name || !form.fen || !form.previousFen || !form.bestMove || !form.difficulty || !form.explanation || selectedThemes.length === 0) {
-      setOutput('// ❌ Please fill in all fields and select at least one theme.');
+  const handleSavePuzzle = async () => {
+    if (!form.name || !form.fen || !form.previousFen || !form.bestMove || !form.difficulty || !form.explanation || selectedThemes.length === 0) {
+      toast({ title: 'Missing fields', description: 'Please fill in all fields and select at least one theme.', variant: 'destructive' });
       return;
     }
 
-    const puzzle = {
-      id: `'${form.id}'`,
-      name: `'${form.name.replace(/'/g, "\\'")}'`,
-      fen: `'${form.fen}'`,
-      previousFen: `'${form.previousFen}'`,
-      bestMove: `'${form.bestMove}'`,
-      difficulty: `'${form.difficulty}'` as string,
-      explanation: `'${form.explanation.replace(/'/g, "\\'")}'`,
-      themes: `[${selectedThemes.map((t) => `'${t}'`).join(', ')}]`,
-    };
+    setSaving(true);
+    try {
+      // Generate a unique ID using crypto
+      const puzzleId = crypto.randomUUID().slice(0, 8);
 
-    const code = `{
-  id: ${puzzle.id},
-  name: ${puzzle.name},
-  fen: ${puzzle.fen},
-  previousFen: ${puzzle.previousFen},
-  bestMove: ${puzzle.bestMove},
-  difficulty: ${puzzle.difficulty},
-  explanation: ${puzzle.explanation},
-  themes: ${puzzle.themes},
-},`;
+      const { error } = await supabase.from('puzzles').insert({
+        id: puzzleId,
+        name: form.name,
+        fen: form.fen,
+        previous_fen: form.previousFen,
+        best_move: form.bestMove,
+        difficulty: form.difficulty,
+        explanation: form.explanation,
+        themes: selectedThemes,
+        created_by: user!.id,
+      });
 
-    setOutput(code);
-  };
+      if (error) throw error;
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(output);
+      toast({ title: 'Puzzle saved!', description: 'Redirecting to your new puzzle...' });
+      navigate(`/position/${puzzleId}`);
+    } catch (err: any) {
+      toast({ title: 'Error saving puzzle', description: err.message, variant: 'destructive' });
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -217,7 +217,7 @@ export default function AddPuzzlePage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Add New Puzzle</h1>
-            <p className="text-sm text-muted-foreground mt-1">Fill out the form to generate a puzzle entry for chessPuzzles.ts</p>
+            <p className="text-sm text-muted-foreground mt-1">Fill out the form to add a new puzzle to the database</p>
           </div>
           <Link to="/">
             <Button variant="outline" size="sm">
@@ -305,30 +305,12 @@ export default function AddPuzzlePage() {
           </div>
         </div>
 
-        {/* Generate */}
+        {/* Save */}
         <div className="space-y-4">
-          <Button onClick={generateOutput} className="bg-primary text-primary-foreground">
-            <Plus className="w-4 h-4 mr-2" />
-            Generate Puzzle Entry
+          <Button onClick={handleSavePuzzle} disabled={saving} className="bg-primary text-primary-foreground">
+            {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
+            {saving ? 'Saving...' : 'Add Puzzle'}
           </Button>
-
-          {output && (
-            <div className="relative">
-              <pre className="bg-card border border-border rounded-lg p-4 text-sm font-mono text-foreground overflow-x-auto whitespace-pre-wrap">
-                {output}
-              </pre>
-              {!output.startsWith('//') && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={copyToClipboard}
-                  className="absolute top-2 right-2"
-                >
-                  Copy
-                </Button>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>
