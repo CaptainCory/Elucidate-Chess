@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { Menu, X, HelpCircle, Swords, Trophy, LogIn } from 'lucide-react';
+import { Menu, X, HelpCircle, Swords, Trophy, LogIn, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserMenu } from '@/components/UserMenu';
 
@@ -50,6 +50,14 @@ export function MobileNav({ user, onSignIn }: MobileNavProps) {
             >
               <Trophy className="w-4 h-4 text-primary" />
               Leaderboard
+            </Link>
+            <Link
+              to="/add-puzzle"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-secondary transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              <Plus className="w-4 h-4 text-primary" />
+              Add Puzzle
             </Link>
             <div className="border-t border-border pt-2 mt-2">
               {user ? (

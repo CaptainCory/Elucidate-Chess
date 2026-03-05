@@ -14,7 +14,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords } from 'lucide-react';
+import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords, Plus } from 'lucide-react';
 import { MobileNav } from '@/components/MobileNav';
 
 const PositionPage = () => {
@@ -87,6 +87,13 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
               >
                 <Trophy className="w-4 h-4 text-primary" />
                 Leaderboard
+              </Link>
+              <Link
+                to="/add-puzzle"
+                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
+              >
+                <Plus className="w-4 h-4 text-primary" />
+                Add Puzzle
               </Link>
               <div className="hidden lg:block">
                 {user ? (
