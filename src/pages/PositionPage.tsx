@@ -75,7 +75,6 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
     },
     enabled: !!user,
   });
-  const [showSignIn, setShowSignIn] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
