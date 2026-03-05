@@ -128,7 +128,7 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
         </div>
 
         {/* Main Content */}
-        <div className="grid lg:grid-cols-2 gap-8 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 items-start relative z-0">
           {/* Chess Board */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
