@@ -42,6 +42,8 @@ const Membership = () => {
   const handleRestoreMembership = async () => {
     setRestoreLoading(true);
     try {
+      // Force token refresh before checking subscription
+      await supabase.auth.refreshSession();
       const { data, error } = await supabase.functions.invoke('check-subscription');
       if (error) throw error;
 

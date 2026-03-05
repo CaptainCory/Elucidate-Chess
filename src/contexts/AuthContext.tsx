@@ -64,6 +64,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     lastStripeCheck.current = now;
 
     try {
+      // Force a token refresh before calling the edge function
+      const { error: refreshError } = await supabase.auth.refreshSession();
+      if (refreshError) {
+        console.warn('[Auth] Token refresh failed, proceeding anyway:', refreshError.message);
+      }
+
       const { data, error } = await supabase.functions.invoke('check-subscription');
       if (!error && data) {
         setIsPremium(data.subscribed === true);
