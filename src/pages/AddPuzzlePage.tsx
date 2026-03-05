@@ -305,30 +305,12 @@ export default function AddPuzzlePage() {
           </div>
         </div>
 
-        {/* Generate */}
+        {/* Save */}
         <div className="space-y-4">
-          <Button onClick={generateOutput} className="bg-primary text-primary-foreground">
-            <Plus className="w-4 h-4 mr-2" />
-            Generate Puzzle Entry
+          <Button onClick={handleSavePuzzle} disabled={saving} className="bg-primary text-primary-foreground">
+            {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
+            {saving ? 'Saving...' : 'Add Puzzle'}
           </Button>
-
-          {output && (
-            <div className="relative">
-              <pre className="bg-card border border-border rounded-lg p-4 text-sm font-mono text-foreground overflow-x-auto whitespace-pre-wrap">
-                {output}
-              </pre>
-              {!output.startsWith('//') && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={copyToClipboard}
-                  className="absolute top-2 right-2"
-                >
-                  Copy
-                </Button>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>
