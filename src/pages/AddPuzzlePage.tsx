@@ -154,8 +154,22 @@ export default function AddPuzzlePage() {
     );
   };
 
+  const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 ]/g, '');
+  const sanitizeFen = (value: string) => value.replace(/[^a-zA-Z0-9 /\-]/g, '');
+  const sanitizeMove = (value: string) => value.replace(/[^a-zA-Z0-9#+=x\-]/g, '');
+
   const updateField = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    let sanitized = value;
+    if (field === 'name') {
+      sanitized = sanitizeAlphanumeric(value);
+    } else if (field === 'explanation') {
+      sanitized = sanitizeAlphanumeric(value);
+    } else if (field === 'fen' || field === 'previousFen') {
+      sanitized = sanitizeFen(value);
+    } else if (field === 'bestMove') {
+      sanitized = sanitizeMove(value);
+    }
+    setForm((prev) => ({ ...prev, [field]: sanitized }));
   };
 
   const handleSavePuzzle = async () => {
