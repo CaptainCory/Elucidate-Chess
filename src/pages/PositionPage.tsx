@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
 import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords } from 'lucide-react';
+import { MobileNav } from '@/components/MobileNav';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -44,53 +45,59 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
         }}
       />
 
-      <div className="relative container max-w-6xl mx-auto px-4 py-8">
+      <div className="relative container max-w-6xl mx-auto px-3 py-4 lg:px-4 lg:py-8">
         {/* Header */}
-        <header className="text-center mb-8 animate-fade-in">
+        <header className="text-center mb-4 lg:mb-8 animate-fade-in relative">
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-3">
+            {/* Mobile: hamburger + plan badge */}
+            <div className="flex items-center gap-2 lg:gap-3">
+              <MobileNav user={user} onSignIn={() => setShowSignIn(true)} />
               <PlanBadge />
               <Link
                 to="/how-it-works"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
+                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
               >
                 <HelpCircle className="w-4 h-4 text-primary" />
                 How It Works
               </Link>
               <Link
                 to="/themes"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
+                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
               >
                 <Swords className="w-4 h-4 text-primary" />
                 Themes
               </Link>
             </div>
-            <div className="flex items-center gap-3">
-              <Crown className="w-10 h-10 text-primary" />
+            {/* Title - compact on mobile */}
+            <div className="flex items-center gap-2 lg:gap-3">
+              <Crown className="w-7 h-7 lg:w-10 lg:h-10 text-primary" />
               <Link
                 to="/"
-                className="text-4xl md:text-5xl font-bold font-display text-foreground hover:text-primary transition-colors cursor-pointer"
+                className="text-xl md:text-3xl lg:text-5xl font-bold font-display text-foreground hover:text-primary transition-colors cursor-pointer"
               >
                 Elucidate Chess
               </Link>
-              <Sparkles className="w-8 h-8 text-accent" />
+              <Sparkles className="w-5 h-5 lg:w-8 lg:h-8 text-accent hidden sm:block" />
             </div>
+            {/* Desktop nav links + auth */}
             <div className="flex items-center gap-3">
               <Link
                 to="/leaderboard"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
+                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
               >
                 <Trophy className="w-4 h-4 text-primary" />
                 Leaderboard
               </Link>
-              {user ? (
-                <UserMenu />
-              ) : (
-                <Button variant="outline" size="sm" onClick={() => setShowSignIn(true)}>
-                  <LogIn className="w-4 h-4 mr-1" />
-                  Sign In
-                </Button>
-              )}
+              <div className="hidden lg:block">
+                {user ? (
+                  <UserMenu />
+                ) : (
+                  <Button variant="outline" size="sm" onClick={() => setShowSignIn(true)}>
+                    <LogIn className="w-4 h-4 mr-1" />
+                    Sign In
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -115,8 +122,8 @@ function PositionView({ puzzle, user }: { puzzle: (typeof chessPuzzles)[number];
           )}
         </header>
 
-        {/* Progress Stats */}
-        <div className="mb-8 max-w-md mx-auto">
+        {/* Progress Stats - hidden on mobile */}
+        <div className="mb-4 lg:mb-8 max-w-md mx-auto hidden md:block">
           <ProgressStats puzzlesSolved={game.solvedPuzzles.length} averageScore={game.averageScore} streak={game.streak} />
         </div>
 
