@@ -23,7 +23,6 @@ export function useChessGame(puzzle: ChessPuzzle) {
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [dailySolved, setDailySolved] = useState(0);
   const [isLimited, setIsLimited] = useState(false);
-  const [isLimited, setIsLimited] = useState(false);
 
   const averageScore = scores.length > 0
     ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
