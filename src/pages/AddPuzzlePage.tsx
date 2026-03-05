@@ -231,7 +231,8 @@ export default function AddPuzzlePage() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="id">Puzzle ID</Label>
-              <Input id="id" placeholder="e.g. 13" value={form.id} onChange={(e) => updateField('id', e.target.value)} />
+              <Input id="id" value={form.id} disabled className="font-mono bg-muted" />
+              <p className="text-xs text-muted-foreground">Auto-generated</p>
             </div>
 
             <div className="space-y-2">
