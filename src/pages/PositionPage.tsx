@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
-import { chessPuzzles } from '@/data/chessPuzzles';
 import type { ChessPuzzle } from '@/data/chessPuzzles';
+import { mapDbPuzzle } from '@/data/chessPuzzles';
 import { supabase } from '@/integrations/supabase/client';
 import { ChessBoard } from '@/components/ChessBoard';
 import { TurnIndicator } from '@/components/TurnIndicator';
@@ -22,37 +22,24 @@ import { MobileNav } from '@/components/MobileNav';
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
-  const [dbPuzzle, setDbPuzzle] = useState<ChessPuzzle | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [puzzle, setPuzzle] = useState<ChessPuzzle | null>(null);
+  const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
-  // First check static puzzles
-  const staticPuzzle = chessPuzzles.find((p) => p.id === id);
-
   useEffect(() => {
-    if (staticPuzzle || !id) return;
-    // Try loading from DB
+    if (!id) return;
     setLoading(true);
+    setNotFound(false);
+    setPuzzle(null);
     supabase.from('puzzles').select('*').eq('id', id).maybeSingle().then(({ data, error }) => {
       if (error || !data) {
         setNotFound(true);
       } else {
-        setDbPuzzle({
-          id: data.id,
-          name: data.name,
-          fen: data.fen,
-          previousFen: data.previous_fen,
-          bestMove: data.best_move,
-          difficulty: data.difficulty as ChessPuzzle['difficulty'],
-          explanation: data.explanation,
-          themes: (data.themes || []) as ChessPuzzle['themes'],
-        });
+        setPuzzle(mapDbPuzzle(data));
       }
       setLoading(false);
     });
-  }, [id, staticPuzzle]);
-
-  const puzzle = staticPuzzle || dbPuzzle;
+  }, [id]);
 
   if (loading) {
     return (
