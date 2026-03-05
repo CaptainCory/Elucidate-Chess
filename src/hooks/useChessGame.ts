@@ -22,7 +22,7 @@ export function useChessGame(puzzle: ChessPuzzle) {
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [dailySolved, setDailySolved] = useState(0);
-  const [serverChecked, setServerChecked] = useState(false);
+  const [isLimited, setIsLimited] = useState(false);
   const [isLimited, setIsLimited] = useState(false);
 
   const averageScore = scores.length > 0
