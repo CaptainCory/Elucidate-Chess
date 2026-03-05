@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Menu, X, HelpCircle, Swords, Trophy, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,10 +23,10 @@ export function MobileNav({ user, onSignIn }: MobileNavProps) {
         {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
-      {open && (
+      {open && createPortal(
         <>
-          <div className="fixed inset-0 z-[55] bg-background/80 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <div className="fixed top-14 left-4 right-4 z-[60] p-3 rounded-xl bg-card border border-border shadow-lg animate-scale-in space-y-1">
+          <div className="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm" onClick={() => setOpen(false)} />
+          <div className="fixed top-14 left-4 right-4 z-[101] p-3 rounded-xl bg-card border border-border shadow-lg animate-scale-in space-y-1">
             <Link
               to="/how-it-works"
               onClick={() => setOpen(false)}
@@ -61,7 +62,8 @@ export function MobileNav({ user, onSignIn }: MobileNavProps) {
               )}
             </div>
           </div>
-        </>
+        </>,
+        document.body
       )}
     </div>
   );
