@@ -22,7 +22,6 @@ export function useChessGame(puzzle: ChessPuzzle) {
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [dailySolved, setDailySolved] = useState(0);
-  const [serverChecked, setServerChecked] = useState(false);
   const [isLimited, setIsLimited] = useState(false);
 
   const averageScore = scores.length > 0
@@ -49,7 +48,6 @@ export function useChessGame(puzzle: ChessPuzzle) {
       } catch (e) {
         console.error('Access check failed:', e);
       }
-      setServerChecked(true);
     };
     checkAccess();
   }, [user]);
