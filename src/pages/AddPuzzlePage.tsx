@@ -29,7 +29,9 @@ const DIFFICULTIES: ChessPuzzle['difficulty'][] = ['beginner', 'intermediate', '
 
 export default function AddPuzzlePage() {
   const { user, loading, isPremium } = useAuth();
+  const navigate = useNavigate();
   const [showSignIn, setShowSignIn] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // Gate states
   const [codeInput, setCodeInput] = useState('');
@@ -39,7 +41,6 @@ export default function AddPuzzlePage() {
 
   // Form state
   const [form, setForm] = useState({
-    id: String(Math.max(...chessPuzzles.map(p => Number(p.id))) + 1),
     name: '',
     fen: '',
     previousFen: '',
@@ -48,7 +49,6 @@ export default function AddPuzzlePage() {
     explanation: '',
   });
   const [selectedThemes, setSelectedThemes] = useState<ChessTheme[]>([]);
-  const [output, setOutput] = useState('');
 
   if (loading) {
     return (
