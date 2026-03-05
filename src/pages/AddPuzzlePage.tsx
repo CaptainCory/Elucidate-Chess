@@ -217,7 +217,7 @@ export default function AddPuzzlePage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Add New Puzzle</h1>
-            <p className="text-sm text-muted-foreground mt-1">Fill out the form to generate a puzzle entry for chessPuzzles.ts</p>
+            <p className="text-sm text-muted-foreground mt-1">Fill out the form to add a new puzzle to the database</p>
           </div>
           <Link to="/">
             <Button variant="outline" size="sm">
