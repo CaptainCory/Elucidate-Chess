@@ -154,16 +154,25 @@ export default function AddPuzzlePage() {
     );
   };
 
-  const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 ]/g, '');
-  const sanitizeFen = (value: string) => value.replace(/[^a-zA-Z0-9 /\-]/g, '');
-  const sanitizeMove = (value: string) => value.replace(/[^a-zA-Z0-9#+=x\-]/g, '');
+  const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 200);
+  // FEN only: letters for pieces/color, digits for squares/counters, / for ranks, - for castling/en passant, space as delimiter
+  const sanitizeFen = (value: string) => value.replace(/[^rnbqkpRNBQKP1-8wbKQa-h0-9 /\-]/g, '').slice(0, 100);
+  const sanitizeMove = (value: string) => value.replace(/[^a-zA-Z0-9#+=x\-]/g, '').slice(0, 10);
+
+  const isValidFen = (fen: string): boolean => {
+    const parts = fen.trim().split(' ');
+    if (parts.length < 4) return false;
+    const ranks = parts[0].split('/');
+    if (ranks.length !== 8) return false;
+    return /^[rnbqkpRNBQKP1-8/]+$/.test(parts[0]);
+  };
 
   const updateField = (field: string, value: string) => {
     let sanitized = value;
     if (field === 'name') {
       sanitized = sanitizeAlphanumeric(value);
     } else if (field === 'explanation') {
-      sanitized = sanitizeAlphanumeric(value);
+      sanitized = sanitizeAlphanumeric(value).slice(0, 1000);
     } else if (field === 'fen' || field === 'previousFen') {
       sanitized = sanitizeFen(value);
     } else if (field === 'bestMove') {
@@ -175,6 +184,11 @@ export default function AddPuzzlePage() {
   const handleSavePuzzle = async () => {
     if (!form.name || !form.fen || !form.previousFen || !form.bestMove || !form.difficulty || !form.explanation || selectedThemes.length === 0) {
       toast({ title: 'Missing fields', description: 'Please fill in all fields and select at least one theme.', variant: 'destructive' });
+      return;
+    }
+
+    if (!isValidFen(form.fen) || !isValidFen(form.previousFen)) {
+      toast({ title: 'Invalid FEN', description: 'FEN must have 8 ranks separated by / with at least 4 space-separated fields.', variant: 'destructive' });
       return;
     }
 
