@@ -62,6 +62,21 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
   const game = useChessGame(puzzle);
   const [showSignIn, setShowSignIn] = useState(false);
 
+  // Fetch persisted profile stats from DB
+  const { data: profile } = useQuery({
+    queryKey: ['profile-stats', user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('puzzles_solved, average_score, best_streak')
+        .eq('user_id', user!.id)
+        .maybeSingle();
+      return data;
+    },
+    enabled: !!user,
+  });
+  const [showSignIn, setShowSignIn] = useState(false);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Ambient glow */}
