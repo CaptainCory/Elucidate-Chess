@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import type { ChessPuzzle } from '@/data/chessPuzzles';
 import { mapDbPuzzle } from '@/data/chessPuzzles';
 import { supabase } from '@/integrations/supabase/client';
@@ -60,6 +61,20 @@ const PositionPage = () => {
 function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
   const game = useChessGame(puzzle);
   const [showSignIn, setShowSignIn] = useState(false);
+
+  // Fetch persisted profile stats from DB
+  const { data: profile } = useQuery({
+    queryKey: ['profile-stats', user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('puzzles_solved, average_score, best_streak')
+        .eq('user_id', user!.id)
+        .maybeSingle();
+      return data;
+    },
+    enabled: !!user,
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -157,7 +172,7 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
 
         {/* Progress Stats - hidden on mobile */}
         <div className="mb-4 lg:mb-8 max-w-md mx-auto hidden md:block">
-          <ProgressStats puzzlesSolved={game.solvedPuzzles.length} averageScore={game.averageScore} streak={game.streak} />
+          <ProgressStats puzzlesSolved={(profile?.puzzles_solved ?? 0) + game.solvedPuzzles.length} averageScore={profile?.average_score ?? game.averageScore} streak={Math.max(profile?.best_streak ?? 0, game.streak)} />
         </div>
 
         {/* Main Content */}
