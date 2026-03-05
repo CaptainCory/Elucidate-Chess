@@ -25,8 +25,8 @@ export function MobileNav({ user, onSignIn }: MobileNavProps) {
 
       {open && createPortal(
         <>
-          <div className="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <div className="fixed top-14 left-4 right-4 z-[101] p-3 rounded-xl bg-card border border-border shadow-lg animate-scale-in space-y-1">
+          <div className="fixed inset-0 z-[9998] bg-background/80 backdrop-blur-sm" onClick={() => setOpen(false)} />
+          <div className="fixed top-14 left-4 right-4 z-[9999] p-3 rounded-xl bg-card border border-border shadow-lg animate-scale-in space-y-1">
             <Link
               to="/how-it-works"
               onClick={() => setOpen(false)}
