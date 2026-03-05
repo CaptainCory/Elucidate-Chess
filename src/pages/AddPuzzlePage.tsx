@@ -158,39 +158,38 @@ export default function AddPuzzlePage() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const generateOutput = () => {
-    if (!form.id || !form.name || !form.fen || !form.previousFen || !form.bestMove || !form.difficulty || !form.explanation || selectedThemes.length === 0) {
-      setOutput('// ❌ Please fill in all fields and select at least one theme.');
+  const handleSavePuzzle = async () => {
+    if (!form.name || !form.fen || !form.previousFen || !form.bestMove || !form.difficulty || !form.explanation || selectedThemes.length === 0) {
+      toast({ title: 'Missing fields', description: 'Please fill in all fields and select at least one theme.', variant: 'destructive' });
       return;
     }
 
-    const puzzle = {
-      id: `'${form.id}'`,
-      name: `'${form.name.replace(/'/g, "\\'")}'`,
-      fen: `'${form.fen}'`,
-      previousFen: `'${form.previousFen}'`,
-      bestMove: `'${form.bestMove}'`,
-      difficulty: `'${form.difficulty}'` as string,
-      explanation: `'${form.explanation.replace(/'/g, "\\'")}'`,
-      themes: `[${selectedThemes.map((t) => `'${t}'`).join(', ')}]`,
-    };
+    setSaving(true);
+    try {
+      // Generate a unique ID using crypto
+      const puzzleId = crypto.randomUUID().slice(0, 8);
 
-    const code = `{
-  id: ${puzzle.id},
-  name: ${puzzle.name},
-  fen: ${puzzle.fen},
-  previousFen: ${puzzle.previousFen},
-  bestMove: ${puzzle.bestMove},
-  difficulty: ${puzzle.difficulty},
-  explanation: ${puzzle.explanation},
-  themes: ${puzzle.themes},
-},`;
+      const { error } = await supabase.from('puzzles').insert({
+        id: puzzleId,
+        name: form.name,
+        fen: form.fen,
+        previous_fen: form.previousFen,
+        best_move: form.bestMove,
+        difficulty: form.difficulty,
+        explanation: form.explanation,
+        themes: selectedThemes,
+        created_by: user!.id,
+      });
 
-    setOutput(code);
-  };
+      if (error) throw error;
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(output);
+      toast({ title: 'Puzzle saved!', description: 'Redirecting to your new puzzle...' });
+      navigate(`/position/${puzzleId}`);
+    } catch (err: any) {
+      toast({ title: 'Error saving puzzle', description: err.message, variant: 'destructive' });
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
