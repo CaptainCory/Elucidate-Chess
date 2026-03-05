@@ -187,6 +187,11 @@ export default function AddPuzzlePage() {
       return;
     }
 
+    if (!isValidFen(form.fen) || !isValidFen(form.previousFen)) {
+      toast({ title: 'Invalid FEN', description: 'FEN must have 8 ranks separated by / with at least 4 space-separated fields.', variant: 'destructive' });
+      return;
+    }
+
     setSaving(true);
     try {
       // Generate a unique ID using crypto
