@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
 import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords } from 'lucide-react';
+import { MobileNav } from '@/components/MobileNav';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
