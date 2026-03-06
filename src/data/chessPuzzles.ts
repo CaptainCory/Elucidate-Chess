@@ -27,7 +27,9 @@ export type ChessTheme =
   | 'rook-on-open-file'
   | 'developed'
   | 'undeveloped'
-  | 'check';
+  | 'check'
+  | 'captures'
+  | 'attacks';
 
 export interface ChessPuzzle {
   id: string;
