@@ -121,7 +121,7 @@
 @layer components {
   .chess-card {
     @apply bg-card rounded-xl border border-border;
-    background: linear-gradient(180deg, hsl(30 12% 14%), hsl(30 15% 10%));
+    background: linear-gradient(180deg, hsl(160 20% 12%), hsl(160 25% 8%));
     box-shadow: var(--shadow-soft);
   }
 
