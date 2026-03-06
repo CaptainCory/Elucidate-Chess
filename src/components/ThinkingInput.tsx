@@ -90,7 +90,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
     <div ref={containerRef} className="space-y-4 animate-slide-up">
       <div className="space-y-2 relative">
         <label className="block text-sm font-medium text-foreground">
-          {moveSelected ? 'Explain your thinking process' : 'Make your move first'}
+          {moveSelected ? 'Explain your thinking process' : 'Describe the Position and Justify Your Reasoning'}
         </label>
         <div className="relative">
           <textarea
