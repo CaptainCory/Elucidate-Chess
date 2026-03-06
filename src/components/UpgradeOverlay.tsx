@@ -37,7 +37,7 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={onClose} />
 
-        <div className="relative z-10 w-full max-w-md mx-4 rounded-2xl border border-primary/20 bg-card p-8 shadow-2xl animate-fade-in">
+        <div className="relative z-10 w-full max-w-xl mx-4 rounded-2xl border border-primary/20 bg-card p-10 shadow-2xl animate-fade-in">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
