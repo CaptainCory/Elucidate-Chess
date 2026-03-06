@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Lightbulb } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { FollowUpChat } from '@/components/FollowUpChat';
 
 export interface PositionPiece {
   square: string;
