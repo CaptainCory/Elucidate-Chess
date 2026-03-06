@@ -47,7 +47,7 @@ interface AnalysisResultProps {
   };
 }
 
-export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
+export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResultProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter' && !e.shiftKey && !e.metaKey && !e.ctrlKey) {
