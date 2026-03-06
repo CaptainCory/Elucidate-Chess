@@ -50,6 +50,9 @@ interface AnalysisResultProps {
 export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResultProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger next if typing in the follow-up chat
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') return;
       if (e.key === 'Enter' && !e.shiftKey && !e.metaKey && !e.ctrlKey) {
         e.preventDefault();
         onNext();
