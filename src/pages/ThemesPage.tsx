@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Swords } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -28,7 +28,7 @@ export default function ThemesPage() {
       {/* Hero */}
       <section className="max-w-3xl mx-auto px-6 pt-20 pb-14 text-center">
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 mb-6">
-          <Swords className="h-7 w-7 text-primary" />
+          <BookOpen className="h-7 w-7 text-primary" />
         </div>
         <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
           Chess Themes Explained
