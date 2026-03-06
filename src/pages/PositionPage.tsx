@@ -18,7 +18,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords, Plus, Loader2, Share2 } from 'lucide-react';
+import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords, Plus, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { MobileNav } from '@/components/MobileNav';
 
