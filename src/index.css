@@ -110,12 +110,12 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-background text-foreground font-mono antialiased;
+    font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
   }
 }
 
