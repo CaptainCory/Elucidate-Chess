@@ -1,7 +1,15 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, Swords } from 'lucide-react';
 import type { ChessTheme } from '@/data/chessPuzzles';
+
+const ALL_THEMES: ChessTheme[] = [
+  'fork', 'pin', 'skewer', 'discovered-attack', 'double-check',
+  'deflection', 'decoy', 'overloading', 'removing-the-defender',
+  'zwischenzug', 'trapped-piece', 'back-rank-checkmate', 'smothered-mate',
+  'checkmate', 'sacrifice', 'hanging-piece', 'x-ray', 'promotion',
+  'endgame', 'battery', 'quiet-move',
+];
 
 interface ThinkingInputProps {
   onSubmit: (thinking: string) => void;
@@ -18,10 +26,27 @@ function formatTheme(theme: ChessTheme): string {
     .join(' ');
 }
 
+/** Pick random decoy themes that aren't in the correct set */
+function pickDecoys(correct: ChessTheme[], count = 3): ChessTheme[] {
+  const pool = ALL_THEMES.filter((t) => !correct.includes(t));
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
 export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, moveSelected = false, themes = [] }: ThinkingInputProps) {
   const [thinking, setThinking] = useState('');
+  const [selectedThemes, setSelectedThemes] = useState<Set<ChessTheme>>(new Set());
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Build a stable set of 5 choices: 2 correct + 3 decoys, shuffled
+  const themeChoices = useMemo(() => {
+    if (themes.length === 0) return [];
+    const correct = themes.slice(0, 2);
+    const decoys = pickDecoys(themes, 3);
+    return [...correct, ...decoys].sort(() => Math.random() - 0.5);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [themes.join(',')]);
 
   useEffect(() => {
     if (moveSelected && textareaRef.current) {
@@ -30,24 +55,27 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
     }
   }, [moveSelected]);
 
-  const matchedThemes = useMemo(() => {
-    if (!thinking.trim()) return new Set<ChessTheme>();
-    const lower = thinking.toLowerCase();
-    const matched = new Set<ChessTheme>();
-    for (const theme of themes) {
-      // Match against the readable form (e.g. "closed center") and hyphenated form
-      const readable = theme.replace(/-/g, ' ');
-      if (lower.includes(readable) || lower.includes(theme)) {
-        matched.add(theme);
+  const toggleTheme = (theme: ChessTheme) => {
+    setSelectedThemes((prev) => {
+      const next = new Set(prev);
+      if (next.has(theme)) {
+        next.delete(theme);
+        const readable = formatTheme(theme);
+        setThinking((t) => t.replace(new RegExp(`\\s*\\[${readable}\\]`, 'g'), '').trim());
+      } else {
+        next.add(theme);
+        const readable = formatTheme(theme);
+        setThinking((t) => (t ? `${t} [${readable}]` : `[${readable}]`));
       }
-    }
-    return matched;
-  }, [thinking, themes]);
+      return next;
+    });
+  };
 
   const handleSubmit = () => {
     if (thinking.trim() && moveSelected) {
       onSubmit(thinking.trim());
       setThinking('');
+      setSelectedThemes(new Set());
     }
   };
 
@@ -75,31 +103,39 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             rows={5}
             disabled={disabled || isLoading || !moveSelected}
           />
-          {moveSelected && !thinking && (
+          {moveSelected && !thinking && selectedThemes.size === 0 && (
             <div className="absolute top-3 left-4 flex items-center gap-2 pointer-events-none">
               <span className="inline-block w-0.5 h-5 bg-primary animate-blink rounded-full" />
               <span className="text-sm font-medium text-primary">Start typing your analysis...</span>
             </div>
           )}
         </div>
-        {themes.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-medium text-muted-foreground">Themes:</span>
-            {themes.map((theme) => {
-              const isMatched = matchedThemes.has(theme);
-              return (
-                <span
-                  key={theme}
-                  className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border transition-all duration-300 ${
-                    isMatched
-                      ? 'bg-primary text-primary-foreground border-primary shadow-sm scale-105'
-                      : 'bg-primary/10 text-primary/60 border-primary/20'
-                  }`}
-                >
-                  {formatTheme(theme)}
-                </span>
-              );
-            })}
+        {themeChoices.length > 0 && (
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5">
+              <Swords className="w-3.5 h-3.5 text-muted-foreground" />
+              <span className="text-xs font-medium text-muted-foreground">Identify the themes:</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {themeChoices.map((theme) => {
+                const isSelected = selectedThemes.has(theme);
+                return (
+                  <button
+                    key={theme}
+                    type="button"
+                    onClick={() => toggleTheme(theme)}
+                    disabled={disabled || isLoading || !moveSelected}
+                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                      isSelected
+                        ? 'bg-primary text-primary-foreground border-primary shadow-sm scale-105'
+                        : 'bg-secondary text-secondary-foreground border-border hover:bg-accent hover:text-accent-foreground'
+                    }`}
+                  >
+                    {formatTheme(theme)}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
