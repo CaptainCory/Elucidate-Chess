@@ -18,9 +18,9 @@ import { AuthModal } from '@/components/AuthModal';
 import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords, Plus, Loader2, Share2 } from 'lucide-react';
-import { toast } from 'sonner';
+import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords, Plus, Loader2 } from 'lucide-react';
 import { MobileNav } from '@/components/MobileNav';
+import { ShareButton } from '@/components/ShareButton';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -203,22 +203,7 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
                 <DifficultyBadge difficulty={puzzle.difficulty} />
               </div>
               <span className="text-sm text-muted-foreground">Position #{puzzle.id}</span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5"
-                onClick={() => {
-                  const url = `${window.location.origin}/position/${puzzle.id}`;
-                  navigator.clipboard.writeText(url).then(() => {
-                    toast.success('Link copied to clipboard!');
-                  }).catch(() => {
-                    toast.error('Failed to copy link');
-                  });
-                }}
-              >
-                <Share2 className="w-4 h-4" />
-                <span className="hidden sm:inline">Share</span>
-              </Button>
+              <ShareButton puzzleId={puzzle.id} puzzleName={puzzle.name} />
             </div>
 
             <ChessBoard
