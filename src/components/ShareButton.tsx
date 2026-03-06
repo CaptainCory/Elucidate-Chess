@@ -87,7 +87,7 @@ export function ShareButton({ puzzleId, puzzleName }: ShareButtonProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem onClick={copyLink} className="gap-2 cursor-pointer">
-          {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+          {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
           Copy Link
         </DropdownMenuItem>
         <DropdownMenuItem onClick={shareEmail} className="gap-2 cursor-pointer">
