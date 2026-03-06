@@ -5,6 +5,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 interface UpgradeOverlayProps {
   open: boolean;
@@ -14,6 +15,7 @@ interface UpgradeOverlayProps {
 export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
   const { user } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [plan, setPlan] = useState<'monthly' | 'annual'>('annual');
 
   if (!open) return null;
 
@@ -24,7 +26,9 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
     }
 
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout');
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { plan },
+      });
       if (error) throw error;
       if (data?.url) window.location.href = data.url;
     } catch {
@@ -59,6 +63,37 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
               </p>
             </div>
 
+            {/* Plan toggle */}
+            <div className="w-full flex gap-3">
+              <button
+                onClick={() => setPlan('monthly')}
+                className={cn(
+                  'flex-1 rounded-xl border p-4 text-left transition-all',
+                  plan === 'monthly'
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border bg-card hover:border-muted-foreground/40'
+                )}
+              >
+                <p className="text-sm font-semibold text-foreground">Monthly</p>
+                <p className="text-lg font-bold text-foreground">$9<span className="text-xs font-normal text-muted-foreground">/mo</span></p>
+              </button>
+              <button
+                onClick={() => setPlan('annual')}
+                className={cn(
+                  'flex-1 rounded-xl border p-4 text-left transition-all relative',
+                  plan === 'annual'
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border bg-card hover:border-muted-foreground/40'
+                )}
+              >
+                <span className="absolute -top-2.5 right-3 text-[10px] font-bold uppercase tracking-wide bg-primary text-primary-foreground px-2 py-0.5 rounded-full">
+                  Save 18%
+                </span>
+                <p className="text-sm font-semibold text-foreground">Annual</p>
+                <p className="text-lg font-bold text-foreground">$89<span className="text-xs font-normal text-muted-foreground">/yr</span></p>
+              </button>
+            </div>
+
             <div className="w-full space-y-3 text-left">
               <div className="flex items-center gap-3 text-sm text-foreground">
                 <Zap className="w-4 h-4 text-primary shrink-0" />
@@ -77,7 +112,13 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
             <div className="w-full space-y-3">
               <Button onClick={handleUpgrade} className="w-full gap-2" size="lg">
                 <Crown className="w-4 h-4" />
-                {user ? 'Upgrade for $9/month' : 'Sign in & Upgrade for $9/month'}
+                {user
+                  ? plan === 'monthly'
+                    ? 'Upgrade for $9/month'
+                    : 'Upgrade for $89/year'
+                  : plan === 'monthly'
+                    ? 'Sign in & Upgrade for $9/month'
+                    : 'Sign in & Upgrade for $89/year'}
               </Button>
               <button
                 onClick={onClose}

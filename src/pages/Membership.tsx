@@ -6,12 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { Crown, ArrowLeft, CreditCard, Calendar, ExternalLink, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 const Membership = () => {
   const { user, isPremium, subscriptionEnd, loading, checkSubscription } = useAuth();
   const navigate = useNavigate();
   const [portalLoading, setPortalLoading] = useState(false);
   const [restoreLoading, setRestoreLoading] = useState(false);
+  const [plan, setPlan] = useState<'monthly' | 'annual'>('annual');
 
   useEffect(() => {
     if (!loading && !user) {
@@ -42,7 +44,6 @@ const Membership = () => {
   const handleRestoreMembership = async () => {
     setRestoreLoading(true);
     try {
-      // Force token refresh before checking subscription
       await supabase.auth.refreshSession();
       const { data, error } = await supabase.functions.invoke('check-subscription');
       if (error) throw error;
@@ -60,6 +61,18 @@ const Membership = () => {
       toast.error('Could not restore membership right now.');
     } finally {
       setRestoreLoading(false);
+    }
+  };
+
+  const handleUpgrade = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { plan },
+      });
+      if (error) throw error;
+      if (data?.url) window.location.href = data.url;
+    } catch {
+      toast.error('Failed to start checkout.');
     }
   };
 
@@ -88,7 +101,6 @@ const Membership = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Ambient glow */}
       <div
         className="fixed inset-0 pointer-events-none opacity-30"
         style={{
@@ -97,7 +109,6 @@ const Membership = () => {
       />
 
       <div className="relative container max-w-2xl mx-auto px-4 py-8">
-        {/* Back button */}
         <button
           onClick={() => navigate('/')}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
@@ -106,7 +117,6 @@ const Membership = () => {
           <span className="text-sm font-medium">Back to puzzles</span>
         </button>
 
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold font-display text-foreground mb-1">Membership</h1>
           <p className="text-muted-foreground">Manage your plan and subscription</p>
@@ -135,7 +145,7 @@ const Membership = () => {
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {isPremium
-                    ? '$9/month · Unlimited daily puzzles with AI analysis'
+                    ? 'Unlimited daily puzzles with AI analysis'
                     : '3 puzzles per day · Upgrade for unlimited access'}
                 </p>
               </div>
@@ -188,22 +198,43 @@ const Membership = () => {
           <div className="chess-card p-6">
             <h2 className="text-lg font-semibold text-foreground mb-2">Upgrade to Premium</h2>
             <p className="text-sm text-muted-foreground mb-4">
-              Get unlimited puzzles every day with full AI-powered analysis for $9/month.
+              Get unlimited puzzles every day with full AI-powered analysis.
             </p>
-            <Button
-              onClick={async () => {
-                try {
-                  const { data, error } = await supabase.functions.invoke('create-checkout');
-                  if (error) throw error;
-                  if (data?.url) window.location.href = data.url;
-                } catch {
-                  toast.error('Failed to start checkout.');
-                }
-              }}
-              className="gap-2 w-full"
-            >
+
+            {/* Plan toggle */}
+            <div className="flex gap-3 mb-4">
+              <button
+                onClick={() => setPlan('monthly')}
+                className={cn(
+                  'flex-1 rounded-xl border p-4 text-left transition-all',
+                  plan === 'monthly'
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border bg-card hover:border-muted-foreground/40'
+                )}
+              >
+                <p className="text-sm font-semibold text-foreground">Monthly</p>
+                <p className="text-lg font-bold text-foreground">$9<span className="text-xs font-normal text-muted-foreground">/mo</span></p>
+              </button>
+              <button
+                onClick={() => setPlan('annual')}
+                className={cn(
+                  'flex-1 rounded-xl border p-4 text-left transition-all relative',
+                  plan === 'annual'
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border bg-card hover:border-muted-foreground/40'
+                )}
+              >
+                <span className="absolute -top-2.5 right-3 text-[10px] font-bold uppercase tracking-wide bg-primary text-primary-foreground px-2 py-0.5 rounded-full">
+                  Save 18%
+                </span>
+                <p className="text-sm font-semibold text-foreground">Annual</p>
+                <p className="text-lg font-bold text-foreground">$89<span className="text-xs font-normal text-muted-foreground">/yr</span></p>
+              </button>
+            </div>
+
+            <Button onClick={handleUpgrade} className="gap-2 w-full">
               <Crown className="w-4 h-4" />
-              Upgrade to Premium
+              {plan === 'monthly' ? 'Upgrade for $9/month' : 'Upgrade for $89/year'}
             </Button>
             <Button
               variant="outline"
