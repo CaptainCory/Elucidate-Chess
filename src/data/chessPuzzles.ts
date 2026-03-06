@@ -21,7 +21,12 @@ export type ChessTheme =
   | 'promotion'
   | 'endgame'
   | 'battery'
-  | 'quiet-move';
+  | 'quiet-move'
+  | 'open-position'
+  | 'closed-position'
+  | 'rook-on-open-file'
+  | 'developed'
+  | 'undeveloped';
 
 export interface ChessPuzzle {
   id: string;

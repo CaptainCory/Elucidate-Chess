@@ -242,4 +242,54 @@ export const themeEntries: ThemeEntry[] = [
     fen: 'r1b2rk1/pp3ppp/2p1pn2/q2p4/3P4/P1NBPN2/1PQ2PPP/R4RK1 w - - 0 1',
     highlights: { c2: accent(), h7: info() },
   },
+  {
+    theme: 'open-position',
+    title: 'Open Position',
+    description:
+      'A position with few pawns in the centre, open files, and long diagonals. Bishops and rooks thrive here because they can exploit the unobstructed lines. Piece activity matters more than pawn structure.',
+    example:
+      'After mutual pawn exchanges the centre is wide open. White\'s bishops rake both diagonals while the rooks are ready to seize the open files.',
+    fen: 'r1bq1rk1/pp3ppp/2n2n2/4p3/2B5/2N2N2/PPP2PPP/R1BQ1RK1 w - - 0 1',
+    highlights: { c4: accent(), f3: accent(), c3: info() },
+  },
+  {
+    theme: 'closed-position',
+    title: 'Closed Position',
+    description:
+      'A position where interlocking pawn chains block the centre. Knights excel because they can hop over the wall of pawns, while bishops and rooks struggle to find open lines.',
+    example:
+      'The locked pawn chain d4–e5 vs d5–e6 seals the centre. Knights can manoeuvre to outposts on c5 or f5, but bishops have no open diagonals to work with.',
+    fen: 'r1bqkb1r/pp3ppp/2n1pn2/2ppP3/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 1',
+    highlights: { d4: info(), e5: info(), d5: danger(), e6: danger() },
+  },
+  {
+    theme: 'rook-on-open-file',
+    title: 'Rook on Open File',
+    description:
+      'Placing a rook on a file with no pawns (or only enemy pawns) gives it maximum influence. The rook can penetrate to the seventh rank, attack backward pawns, or support a kingside invasion.',
+    example:
+      'White\'s rook occupies the completely open d-file and is ready to infiltrate to d7, putting enormous pressure on Black\'s position.',
+    fen: 'r1bq1rk1/ppp2ppp/2n1bn2/4p3/4P3/5N2/PPPP1PPP/RNBQR1K1 w - - 0 1',
+    highlights: { e1: accent(), e4: info() },
+  },
+  {
+    theme: 'developed',
+    title: 'Developed',
+    description:
+      'A well-developed position has all minor pieces (knights and bishops) off their starting squares and the king castled to safety. Development leads to faster piece coordination and stronger attacks.',
+    example:
+      'White has castled and developed every minor piece. All four pieces are active and the rooks are almost connected — a textbook opening result.',
+    fen: 'r1bq1rk1/ppppbppp/2n2n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 w - - 0 1',
+    highlights: { c4: accent(), c3: accent(), f3: accent(), g1: info() },
+  },
+  {
+    theme: 'undeveloped',
+    title: 'Undeveloped',
+    description:
+      'A poorly developed position still has pieces on their starting squares while the opponent is fully mobilised. Falling behind in development can lead to swift tactical punishment — the unused pieces are as good as absent.',
+    example:
+      'Black has moved the queen out early but the minor pieces sit at home. White can exploit the lead in development with an aggressive central break.',
+    fen: 'rnb1kb1r/pppp1ppp/5n2/4p1q1/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 1',
+    highlights: { c8: danger(), b8: danger(), f8: danger(), g5: danger() },
+  },
 ];
