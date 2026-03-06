@@ -83,7 +83,7 @@ export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
       {/* Score Badge */}
       <div className="text-center space-y-2">
         <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-card border-4 border-primary animate-pulse-glow">
-          <span className={`text-4xl font-bold font-display ${getScoreColor(analysis.score)}`}>
+          <span className={`text-4xl font-bold font-mono ${getScoreColor(analysis.score)}`}>
             {analysis.score}
           </span>
         </div>

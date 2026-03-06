@@ -21,7 +21,7 @@ export function ProgressStats({ puzzlesSolved, averageScore, streak }: ProgressS
       </div>
       <div className="chess-card p-3 text-center">
         <TrendingUp className="w-5 h-5 mx-auto mb-1 text-success" />
-        <p className="text-2xl font-bold font-display text-foreground">{streak}</p>
+        <p className="text-2xl font-bold font-mono text-foreground">{streak}</p>
         <p className="text-xs text-muted-foreground">Streak</p>
       </div>
     </div>
