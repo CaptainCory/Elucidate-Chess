@@ -166,6 +166,17 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
         </div>
       )}
 
+      {/* Follow-up Chat */}
+      {puzzleContext && (
+        <FollowUpChat
+          fen={puzzleContext.fen}
+          userMove={analysis.userMove}
+          bestMove={puzzleContext.bestMove}
+          puzzleExplanation={puzzleContext.explanation}
+          analysisScore={analysis.score}
+          analysisFeedback={analysis.reasoningFeedback}
+        />
+      )}
 
       {/* Next Button */}
       <Button
