@@ -19,8 +19,8 @@ import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
 import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords, Plus, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
 import { MobileNav } from '@/components/MobileNav';
+import { ShareButton } from '@/components/ShareButton';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
