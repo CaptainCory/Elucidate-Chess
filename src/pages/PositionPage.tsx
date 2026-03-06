@@ -94,20 +94,28 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
             <div className="flex items-center gap-2 lg:gap-3">
               <MobileNav user={user} onSignIn={() => setShowSignIn(true)} />
               <PlanBadge />
-              <Link
-                to="/how-it-works"
-                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                <HelpCircle className="w-4 h-4 text-primary" />
-                How It Works
-              </Link>
-              <Link
-                to="/themes"
-                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                <Swords className="w-4 h-4 text-primary" />
-                Themes
-              </Link>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/how-it-works"
+                    className="hidden lg:flex items-center justify-center w-9 h-9 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    <HelpCircle className="w-4 h-4" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>How It Works</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/themes"
+                    className="hidden lg:flex items-center justify-center w-9 h-9 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    <Swords className="w-4 h-4" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Themes</TooltipContent>
+              </Tooltip>
             </div>
             {/* Title - compact on mobile */}
             <div className="flex items-center gap-2 lg:gap-3">
