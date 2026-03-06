@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Swords } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
