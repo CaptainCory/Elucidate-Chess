@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        mono: ['IBM Plex Mono', 'JetBrains Mono', 'monospace'],
-        display: ['JetBrains Mono', 'IBM Plex Mono', 'monospace'],
+        serif: ['EB Garamond', 'Georgia', 'serif'],
+        display: ['Cormorant Garamond', 'Georgia', 'serif'],
+        mono: ['IBM Plex Mono', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
