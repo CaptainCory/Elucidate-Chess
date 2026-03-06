@@ -130,20 +130,28 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
             </div>
             {/* Desktop nav links + auth */}
             <div className="flex items-center gap-3">
-              <Link
-                to="/leaderboard"
-                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                <Trophy className="w-4 h-4 text-primary" />
-                Leaderboard
-              </Link>
-              <Link
-                to="/add-puzzle"
-                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                <Plus className="w-4 h-4 text-primary" />
-                Add Puzzle
-              </Link>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/leaderboard"
+                    className="hidden lg:flex items-center justify-center w-9 h-9 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    <Trophy className="w-4 h-4" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Leaderboard</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/add-puzzle"
+                    className="hidden lg:flex items-center justify-center w-9 h-9 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Add Puzzle</TooltipContent>
+              </Tooltip>
               <div className="hidden lg:block">
                 {user ? (
                   <UserMenu />
