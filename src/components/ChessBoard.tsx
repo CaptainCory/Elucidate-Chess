@@ -90,7 +90,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
 
       // Keep the destination highlight persistent
       setIsAnimatingIntro(false);
-    }, 600);
+    }, 720);
 
     return () => clearTimeout(timer);
   }, [isAnimatingIntro, previousFen, fen]);
