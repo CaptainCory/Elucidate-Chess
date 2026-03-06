@@ -213,10 +213,10 @@
 
   @keyframes pulseGlow {
     0%, 100% { 
-      box-shadow: 0 0 20px -5px hsl(38 92% 50% / 0.3);
+      box-shadow: 0 0 20px -5px hsl(42 75% 50% / 0.3);
     }
     50% { 
-      box-shadow: 0 0 30px -5px hsl(38 92% 50% / 0.5);
+      box-shadow: 0 0 30px -5px hsl(42 75% 50% / 0.5);
     }
   }
 
