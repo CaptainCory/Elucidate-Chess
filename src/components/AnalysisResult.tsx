@@ -40,6 +40,11 @@ export interface AnalysisData {
 interface AnalysisResultProps {
   analysis: AnalysisData;
   onNext: () => void;
+  puzzleContext?: {
+    fen: string;
+    bestMove: string;
+    explanation: string;
+  };
 }
 
 export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
