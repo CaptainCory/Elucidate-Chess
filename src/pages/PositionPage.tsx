@@ -270,7 +270,15 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
             )}
 
             {game.gameState === 'result' && game.analysis && (
-              <AnalysisResult analysis={game.analysis} onNext={game.handleNext} />
+              <AnalysisResult
+                analysis={game.analysis}
+                onNext={game.handleNext}
+                puzzleContext={{
+                  fen: puzzle.fen,
+                  bestMove: puzzle.bestMove,
+                  explanation: puzzle.explanation,
+                }}
+              />
             )}
           </div>
         </div>
