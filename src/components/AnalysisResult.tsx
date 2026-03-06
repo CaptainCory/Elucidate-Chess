@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Lightbulb } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { FollowUpChat } from '@/components/FollowUpChat';
 
 export interface PositionPiece {
   square: string;
@@ -39,11 +40,19 @@ export interface AnalysisData {
 interface AnalysisResultProps {
   analysis: AnalysisData;
   onNext: () => void;
+  puzzleContext?: {
+    fen: string;
+    bestMove: string;
+    explanation: string;
+  };
 }
 
-export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
+export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResultProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger next if typing in the follow-up chat
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') return;
       if (e.key === 'Enter' && !e.shiftKey && !e.metaKey && !e.ctrlKey) {
         e.preventDefault();
         onNext();
@@ -160,6 +169,17 @@ export function AnalysisResult({ analysis, onNext }: AnalysisResultProps) {
         </div>
       )}
 
+      {/* Follow-up Chat */}
+      {puzzleContext && (
+        <FollowUpChat
+          fen={puzzleContext.fen}
+          userMove={analysis.userMove}
+          bestMove={puzzleContext.bestMove}
+          puzzleExplanation={puzzleContext.explanation}
+          analysisScore={analysis.score}
+          analysisFeedback={analysis.reasoningFeedback}
+        />
+      )}
 
       {/* Next Button */}
       <Button
