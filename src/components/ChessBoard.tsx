@@ -30,6 +30,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
   const [highlightSquares, setHighlightSquares] = useState<Record<string, React.CSSProperties>>({});
   const [displayFen, setDisplayFen] = useState(previousFen || fen);
   const [isAnimatingIntro, setIsAnimatingIntro] = useState(!!previousFen);
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
 
   // Reset when fen prop changes (new puzzle)
   const [prevFen, setPrevFen] = useState(fen);
@@ -39,6 +40,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
     setUserMove(null);
     setHighlightSquares({});
     setIsAnimatingIntro(!!previousFen);
+    setSelectedSquare(null);
   }
 
   // Animate from previousFen to current fen after a short delay
@@ -125,8 +127,8 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
     } catch {}
   }, []);
 
-  const handleDrop = useCallback(({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string }) => {
-    if (!interactive || userMove || isAnimatingIntro) return;
+  const makeMove = useCallback((sourceSquare: string, targetSquare: string) => {
+    if (!interactive || userMove || isAnimatingIntro) return false;
 
     const game = new Chess(fen);
     try {
@@ -141,16 +143,67 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
         const moveNotation = move.san;
         setUserMove(moveNotation);
         setDisplayFen(game.fen());
+        setSelectedSquare(null);
         setHighlightSquares({
           [sourceSquare]: { backgroundColor: 'hsla(38, 92%, 50%, 0.4)' },
           [targetSquare]: { backgroundColor: 'hsla(38, 92%, 50%, 0.6)' },
         });
         onMove?.(moveNotation);
+        return true;
       }
     } catch {
-      // Invalid move, ignore
+      // Invalid move
     }
+    return false;
   }, [fen, interactive, userMove, isAnimatingIntro, onMove, playClickSound]);
+
+  const handleDrop = useCallback(({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string }) => {
+    makeMove(sourceSquare, targetSquare);
+  }, [makeMove]);
+
+  const handleSquareClick = useCallback((square: string) => {
+    if (!interactive || userMove || isAnimatingIntro) return;
+
+    const game = new Chess(fen);
+    const piece = game.get(square as Square);
+
+    if (selectedSquare) {
+      // Second tap – try to move
+      const moved = makeMove(selectedSquare, square);
+      if (!moved) {
+        // If clicked a friendly piece, re-select it instead
+        const turn = game.turn(); // 'w' or 'b'
+        if (piece && piece.color === turn) {
+          setSelectedSquare(square);
+          const moves = game.moves({ square: square as Square, verbose: true });
+          const highlights: Record<string, React.CSSProperties> = {
+            [square]: { backgroundColor: 'hsla(38, 92%, 50%, 0.5)' },
+          };
+          moves.forEach(m => {
+            highlights[m.to] = { backgroundColor: 'hsla(120, 50%, 50%, 0.3)' };
+          });
+          setHighlightSquares(highlights);
+        } else {
+          setSelectedSquare(null);
+          setHighlightSquares({});
+        }
+      }
+    } else {
+      // First tap – select a piece
+      const turn = game.turn();
+      if (piece && piece.color === turn) {
+        setSelectedSquare(square);
+        const moves = game.moves({ square: square as Square, verbose: true });
+        const highlights: Record<string, React.CSSProperties> = {
+          [square]: { backgroundColor: 'hsla(38, 92%, 50%, 0.5)' },
+        };
+        moves.forEach(m => {
+          highlights[m.to] = { backgroundColor: 'hsla(120, 50%, 50%, 0.3)' };
+        });
+        setHighlightSquares(highlights);
+      }
+    }
+  }, [fen, interactive, userMove, isAnimatingIntro, selectedSquare, makeMove]);
 
   return (
     <div className="w-full max-w-[500px] mx-auto">
@@ -165,6 +218,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
           orientation={orientation}
           draggable={interactive && !userMove && !isAnimatingIntro}
           onDrop={handleDrop}
+          onSquareClick={handleSquareClick}
           transitionDuration={isAnimatingIntro ? 600 : 300}
           boardStyle={{
             borderRadius: '0.75rem',
