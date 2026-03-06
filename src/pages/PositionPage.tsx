@@ -237,7 +237,7 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
               <Brain className="w-6 h-6 text-primary" />
               <h2 className="text-xl font-semibold font-display">
                 {game.isLimited && 'Daily limit reached'}
-                {!game.isLimited && game.gameState === 'thinking' && "What's the best move?"}
+                {!game.isLimited && game.gameState === 'thinking' && 'Elucidation'}
                 {game.gameState === 'analyzing' && 'Analyzing your response...'}
                 {game.gameState === 'result' && 'Analysis Complete'}
               </h2>
