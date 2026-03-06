@@ -292,4 +292,34 @@ export const themeEntries: ThemeEntry[] = [
     fen: 'rnb1kb1r/pppp1ppp/5n2/4p1q1/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 1',
     highlights: { c8: danger(), b8: danger(), f8: danger(), g5: danger() },
   },
+  {
+    theme: 'check',
+    title: 'Check',
+    description:
+      'An attack on the enemy king that must be answered immediately — by moving the king, blocking, or capturing the checking piece. Delivering check can win tempo, force the king into a worse position, or set up tactical combinations.',
+    example:
+      'The white queen slides to h5, delivering check to the king on e8. Black must respond to the check before doing anything else, giving White a free tempo.',
+    fen: 'rnbqkbnr/pppp1ppp/8/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 0 1',
+    highlights: { h5: accent(), e8: danger() },
+  },
+  {
+    theme: 'captures',
+    title: 'Captures',
+    description:
+      'Taking an enemy piece off the board. While simple in concept, knowing when and what to capture is crucial — every capture changes the material balance and pawn structure. The best captures win material or improve your position; the worst ones help your opponent.',
+    example:
+      'White\'s knight captures the undefended pawn on e5, winning a pawn and occupying a strong central square. A clean material gain with positional benefits.',
+    fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1',
+    highlights: { f3: accent(), e5: danger() },
+  },
+  {
+    theme: 'attacks',
+    title: 'Attacks',
+    description:
+      'Threatening an enemy piece or square with the possibility of capture or checkmate. Strong attacks coordinate multiple pieces toward a target — usually the enemy king. Recognising when you have enough firepower to launch an attack is a key skill.',
+    example:
+      'White\'s pieces are zeroing in on the kingside: the bishop eyes h7, the knight is ready to jump to g5, and the queen can swing to h5. A classic setup for a kingside attack.',
+    fen: 'r1bq1rk1/ppppbppp/2n2n2/4p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 1',
+    highlights: { c4: accent(), f3: accent(), d1: info(), h7: danger() },
+  },
 ];
