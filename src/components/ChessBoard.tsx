@@ -90,7 +90,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
 
       // Keep the destination highlight persistent
       setIsAnimatingIntro(false);
-    }, 600);
+    }, 720);
 
     return () => clearTimeout(timer);
   }, [isAnimatingIntro, previousFen, fen]);
@@ -219,7 +219,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
           draggable={interactive && !userMove && !isAnimatingIntro}
           onDrop={handleDrop}
           onSquareClick={handleSquareClick}
-          transitionDuration={isAnimatingIntro ? 600 : 300}
+          transitionDuration={isAnimatingIntro ? 720 : 300}
           boardStyle={{
             borderRadius: '0.75rem',
           }}
