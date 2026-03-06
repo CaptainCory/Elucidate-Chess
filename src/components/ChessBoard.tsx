@@ -30,6 +30,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
   const [highlightSquares, setHighlightSquares] = useState<Record<string, React.CSSProperties>>({});
   const [displayFen, setDisplayFen] = useState(previousFen || fen);
   const [isAnimatingIntro, setIsAnimatingIntro] = useState(!!previousFen);
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
 
   // Reset when fen prop changes (new puzzle)
   const [prevFen, setPrevFen] = useState(fen);
@@ -39,6 +40,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
     setUserMove(null);
     setHighlightSquares({});
     setIsAnimatingIntro(!!previousFen);
+    setSelectedSquare(null);
   }
 
   // Animate from previousFen to current fen after a short delay
