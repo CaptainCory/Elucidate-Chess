@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import type { ChessPuzzle } from '@/data/chessPuzzles';
