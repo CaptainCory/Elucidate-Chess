@@ -90,7 +90,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
     <div ref={containerRef} className="space-y-4 animate-slide-up">
       <div className="space-y-2 relative">
         <label className="block text-sm font-medium text-foreground">
-          {moveSelected ? 'Explain your thinking process' : 'Make your move first'}
+          {moveSelected ? 'Explain your thinking process' : 'Describe the Position and Justify Your Reasoning'}
         </label>
         <div className="relative">
           <textarea
@@ -98,7 +98,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             value={thinking}
             onChange={(e) => setThinking(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={moveSelected ? '' : "👆 Drag and drop a piece on the board to make your move first"}
+            placeholder={moveSelected ? '' : "👆 Drag and drop a piece on the board, then describe the position and justify your reasoning"}
             className="thinking-area"
             rows={5}
             disabled={disabled || isLoading || !moveSelected}
