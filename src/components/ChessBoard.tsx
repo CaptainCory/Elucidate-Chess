@@ -218,6 +218,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
           orientation={orientation}
           draggable={interactive && !userMove && !isAnimatingIntro}
           onDrop={handleDrop}
+          onSquareClick={handleSquareClick}
           transitionDuration={isAnimatingIntro ? 600 : 300}
           boardStyle={{
             borderRadius: '0.75rem',
