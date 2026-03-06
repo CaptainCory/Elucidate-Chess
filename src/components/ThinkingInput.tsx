@@ -8,7 +8,7 @@ const ALL_THEMES: ChessTheme[] = [
   'deflection', 'decoy', 'overloading', 'removing-the-defender',
   'zwischenzug', 'trapped-piece', 'back-rank-checkmate', 'smothered-mate',
   'checkmate', 'sacrifice', 'hanging-piece', 'x-ray', 'promotion',
-  'endgame', 'battery', 'quiet-move',
+  'endgame', 'battery', 'quiet-move', 'check',
 ];
 
 interface ThinkingInputProps {
