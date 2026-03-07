@@ -1,0 +1,1 @@
+UPDATE puzzles SET themes = array_append(themes, 'check') WHERE id = '1' AND NOT ('check' = ANY(themes))
