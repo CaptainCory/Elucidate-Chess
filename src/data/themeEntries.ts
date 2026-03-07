@@ -136,10 +136,10 @@ export const themeEntries: ThemeEntry[] = [
     highlights: { a7: danger() },
   },
   {
-    theme: 'back-rank-checkmate',
-    title: 'Back-Rank Checkmate',
+    theme: 'back-rank',
+    title: 'Back-Rank',
     description:
-      'A rook or queen delivers checkmate on the first or eighth rank because the enemy king is trapped behind its own pawns with no escape squares.',
+      'A tactic exploiting the vulnerability of the first or eighth rank, where the enemy king is trapped behind its own pawns with no escape squares. Often leads to checkmate with a rook or queen.',
     example:
       'The king on g8 is boxed in by its own pawns on f7, g7, h7. White slides the rook to e8 — checkmate, nowhere to run.',
     fen: '6k1/5ppp/8/8/8/8/8/4R1K1 w - - 0 1',

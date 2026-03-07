@@ -21,7 +21,7 @@ const ACCESS_CODE = 'PAULMORPHY';
 const ALL_THEMES: ChessTheme[] = [
   'fork', 'pin', 'skewer', 'discovered-attack', 'double-check', 'deflection',
   'decoy', 'overloading', 'removing-the-defender', 'zwischenzug', 'trapped-piece',
-  'back-rank-checkmate', 'smothered-mate', 'checkmate', 'sacrifice', 'hanging-piece',
+  'back-rank', 'smothered-mate', 'checkmate', 'sacrifice', 'hanging-piece',
   'x-ray', 'promotion', 'endgame', 'battery', 'quiet-move', 'check', 'captures', 'attacks',
 ];
 
