@@ -12,7 +12,7 @@ export type ChessTheme =
   | 'removing-the-defender'
   | 'zwischenzug'
   | 'trapped-piece'
-  | 'back-rank-checkmate'
+  | 'back-rank'
   | 'smothered-mate'
   | 'checkmate'
   | 'sacrifice'
