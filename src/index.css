@@ -234,15 +234,15 @@
 
   @keyframes focusGuide {
     0%, 100% {
-      box-shadow: 0 0 0 2px hsl(42 75% 50% / 0.15), 0 0 20px -4px hsl(42 75% 50% / 0.1);
+      box-shadow: 0 0 0 2px hsl(42 75% 50% / 0.5), 0 0 24px -2px hsl(42 75% 50% / 0.25), inset 0 0 12px -4px hsl(42 75% 50% / 0.1);
     }
     50% {
-      box-shadow: 0 0 0 2px hsl(42 75% 50% / 0.4), 0 0 28px -4px hsl(42 75% 50% / 0.25);
+      box-shadow: 0 0 0 2px hsl(42 75% 50% / 0.8), 0 0 40px -2px hsl(42 75% 50% / 0.4), inset 0 0 20px -4px hsl(42 75% 50% / 0.15);
     }
   }
 
   .focus-guide {
-    animation: focusGuide 2.4s ease-in-out infinite;
+    animation: focusGuide 2s ease-in-out infinite;
     border-radius: var(--radius);
   }
 }
