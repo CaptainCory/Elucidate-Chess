@@ -194,94 +194,103 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
         </div>
 
         {/* Main Content */}
-        <div className="grid lg:grid-cols-2 gap-8 items-start relative z-0">
-          {/* Chess Board */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <TurnIndicator fen={puzzle.fen} />
-                <DifficultyBadge difficulty={puzzle.difficulty} />
-              </div>
-              <span className="text-sm text-muted-foreground">Position #{puzzle.id}</span>
-              <ShareButton puzzleId={puzzle.id} puzzleName={puzzle.name} />
-            </div>
+        {(() => {
+          // Determine which section should have the attention guide
+          const boardFocused = game.gameState === 'thinking' && !game.selectedMove && !game.isLimited;
+          const inputFocused = game.gameState === 'thinking' && !!game.selectedMove && !game.isLimited;
+          const resultFocused = game.gameState === 'result';
 
-            <ChessBoard
-              fen={puzzle.fen}
-              previousFen={puzzle.previousFen}
-              orientation="white"
-              interactive={game.gameState === 'thinking' && !game.isLimited}
-              onMove={game.handleMove}
-            />
-
-            {/* Theme Tags */}
-            {puzzle.themes && puzzle.themes.length > 0 && (
-              <div className="flex flex-wrap gap-2 pt-1">
-                {puzzle.themes.map((theme) => (
-                  <Link
-                    key={theme}
-                    to="/themes"
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium hover:bg-primary/20 transition-colors"
-                  >
-                    <Swords className="w-3 h-3" />
-                    {theme.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Interaction Section */}
-          <div className="chess-card p-6 space-y-6">
-            <div className="flex items-center gap-2 text-foreground">
-              <Brain className="w-6 h-6 text-primary" />
-              <h2 className="text-xl font-semibold font-display">
-                {game.isLimited && 'Daily limit reached'}
-                {!game.isLimited && game.gameState === 'thinking' && 'Elucidation'}
-                {game.gameState === 'analyzing' && 'Analyzing your response...'}
-                {game.gameState === 'result' && 'Analysis Complete'}
-              </h2>
-            </div>
-
-            {game.isLimited && (
-              <div className="flex flex-col items-center justify-center py-8 space-y-4 text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
-                  <Crown className="w-8 h-8 text-primary" />
+          return (
+            <div className="grid lg:grid-cols-2 gap-8 items-start relative z-0">
+              {/* Chess Board */}
+              <div className={`space-y-4 rounded-xl transition-shadow duration-500 ${boardFocused ? 'focus-guide p-2 -m-2' : ''}`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <TurnIndicator fen={puzzle.fen} />
+                    <DifficultyBadge difficulty={puzzle.difficulty} />
+                  </div>
+                  <span className="text-sm text-muted-foreground">Position #{puzzle.id}</span>
+                  <ShareButton puzzleId={puzzle.id} puzzleName={puzzle.name} />
                 </div>
-                <p className="text-muted-foreground">You've reached your daily limit of {game.DAILY_PUZZLE_LIMIT} positions.</p>
-                <button
-                  onClick={() => game.setShowUpgradeOverlay(true)}
-                  className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
-                >
-                  Upgrade to Premium
-                </button>
+
+                <ChessBoard
+                  fen={puzzle.fen}
+                  previousFen={puzzle.previousFen}
+                  orientation="white"
+                  interactive={game.gameState === 'thinking' && !game.isLimited}
+                  onMove={game.handleMove}
+                />
+
+                {/* Theme Tags */}
+                {puzzle.themes && puzzle.themes.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {puzzle.themes.map((theme) => (
+                      <Link
+                        key={theme}
+                        to="/themes"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium hover:bg-primary/20 transition-colors"
+                      >
+                        <Swords className="w-3 h-3" />
+                        {theme.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
 
-            {!game.isLimited && game.gameState === 'thinking' && (
-              <ThinkingInput onSubmit={game.handleSubmit} isLoading={false} moveSelected={!!game.selectedMove} themes={puzzle.themes} />
-            )}
+              {/* Interaction Section */}
+              <div className={`chess-card p-6 space-y-6 transition-shadow duration-500 ${inputFocused || resultFocused ? 'focus-guide' : ''}`}>
+                <div className="flex items-center gap-2 text-foreground">
+                  <Brain className="w-6 h-6 text-primary" />
+                  <h2 className="text-xl font-semibold font-display">
+                    {game.isLimited && 'Daily limit reached'}
+                    {!game.isLimited && game.gameState === 'thinking' && 'Elucidation'}
+                    {game.gameState === 'analyzing' && 'Analyzing your response...'}
+                    {game.gameState === 'result' && 'Analysis Complete'}
+                  </h2>
+                </div>
 
-            {game.gameState === 'analyzing' && (
-              <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                <div className="w-16 h-16 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-                <p className="text-muted-foreground">Analyzing your chess thinking...</p>
+                {game.isLimited && (
+                  <div className="flex flex-col items-center justify-center py-8 space-y-4 text-center">
+                    <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
+                      <Crown className="w-8 h-8 text-primary" />
+                    </div>
+                    <p className="text-muted-foreground">You've reached your daily limit of {game.DAILY_PUZZLE_LIMIT} positions.</p>
+                    <button
+                      onClick={() => game.setShowUpgradeOverlay(true)}
+                      className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+                    >
+                      Upgrade to Premium
+                    </button>
+                  </div>
+                )}
+
+                {!game.isLimited && game.gameState === 'thinking' && (
+                  <ThinkingInput onSubmit={game.handleSubmit} isLoading={false} moveSelected={!!game.selectedMove} themes={puzzle.themes} />
+                )}
+
+                {game.gameState === 'analyzing' && (
+                  <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                    <div className="w-16 h-16 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+                    <p className="text-muted-foreground">Analyzing your chess thinking...</p>
+                  </div>
+                )}
+
+                {game.gameState === 'result' && game.analysis && (
+                  <AnalysisResult
+                    analysis={game.analysis}
+                    onNext={game.handleNext}
+                    puzzleContext={{
+                      fen: puzzle.fen,
+                      bestMove: puzzle.bestMove,
+                      explanation: puzzle.explanation,
+                    }}
+                  />
+                )}
               </div>
-            )}
-
-            {game.gameState === 'result' && game.analysis && (
-              <AnalysisResult
-                analysis={game.analysis}
-                onNext={game.handleNext}
-                puzzleContext={{
-                  fen: puzzle.fen,
-                  bestMove: puzzle.bestMove,
-                  explanation: puzzle.explanation,
-                }}
-              />
-            )}
-          </div>
-        </div>
+            </div>
+          );
+        })()}
 
         {/* Footer */}
         <footer className="mt-12 text-center text-muted-foreground">
