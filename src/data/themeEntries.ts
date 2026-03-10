@@ -322,4 +322,14 @@ export const themeEntries: ThemeEntry[] = [
     fen: 'r1bq1rk1/ppppbppp/2n2n2/4p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 1',
     highlights: { c4: accent(), f3: accent(), d1: info(), h7: danger() },
   },
+  {
+    theme: 'double-attack',
+    title: 'Double Attack',
+    description:
+      'A move that creates two threats at the same time, forcing the opponent to deal with one while you execute the other. Unlike a fork (which uses one piece to attack two targets), a double attack can involve any combination of threats — a capture threat plus a mating threat, a discovered attack paired with a direct attack, and so on.',
+    example:
+      'White plays Qd5, simultaneously threatening checkmate on f7 and attacking the undefended rook on a8. Black cannot defend both threats, so White wins material.',
+    fen: 'r1b1kb1r/pppp1ppp/2n2n2/3Qq3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 1',
+    highlights: { d5: accent(), f7: danger(), a8: danger() },
+  },
 ];

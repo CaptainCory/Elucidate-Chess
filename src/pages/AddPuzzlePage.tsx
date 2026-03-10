@@ -309,7 +309,9 @@ export default function AddPuzzlePage() {
                 value={form.explanation}
                 onChange={(e) => updateField('explanation', e.target.value)}
                 rows={6}
+                maxLength={350}
               />
+              <p className="text-xs text-muted-foreground text-right">{form.explanation.length}/350</p>
             </div>
 
             <div className="space-y-2">
