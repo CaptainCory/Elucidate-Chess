@@ -174,7 +174,7 @@ export default function AddPuzzlePage() {
     if (field === 'name') {
       sanitized = sanitizeAlphanumeric(value);
     } else if (field === 'explanation') {
-      sanitized = sanitizeAlphanumeric(value).slice(0, 1000);
+      sanitized = sanitizeAlphanumeric(value).slice(0, 350);
     } else if (field === 'fen' || field === 'previousFen') {
       sanitized = sanitizeFen(value);
     } else if (field === 'bestMove') {
