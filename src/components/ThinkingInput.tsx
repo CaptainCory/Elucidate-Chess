@@ -134,6 +134,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             </span>
           </div>
         )}
+        {themeChoices.length > 0 && (
           <div className="space-y-1.5">
             <div className="flex items-center gap-1.5">
               <Swords className="w-3.5 h-3.5 text-muted-foreground" />
@@ -165,7 +166,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
 
       <Button
         onClick={handleSubmit}
-        disabled={!thinking.trim() || !moveSelected || isLoading || disabled}
+        disabled={!isValid || !moveSelected || isLoading || disabled}
         className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all"
         size="lg"
       >
