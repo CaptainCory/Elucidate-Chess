@@ -160,16 +160,7 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
         </div>
       )}
 
-      {/* Improvement Suggestion */}
-      {analysis.improvement && (
-        <div className="chess-card p-4 border-primary/30 bg-primary/5">
-          <p className="text-sm text-secondary-foreground">
-            <span className="font-semibold text-primary">💡 To improve:</span> {analysis.improvement}
-          </p>
-        </div>
-      )}
-
-      {/* Follow-up Chat */}
+      {/* Follow-up Chat — always visible after key insights */}
       {puzzleContext && (
         <FollowUpChat
           fen={puzzleContext.fen}
@@ -179,6 +170,15 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
           analysisScore={analysis.score}
           analysisFeedback={analysis.reasoningFeedback}
         />
+      )}
+
+      {/* Improvement Suggestion */}
+      {analysis.improvement && (
+        <div className="chess-card p-4 border-primary/30 bg-primary/5">
+          <p className="text-sm text-secondary-foreground">
+            <span className="font-semibold text-primary">💡 To improve:</span> {analysis.improvement}
+          </p>
+        </div>
       )}
 
       {/* Next Button */}
