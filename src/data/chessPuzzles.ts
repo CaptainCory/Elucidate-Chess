@@ -29,7 +29,8 @@ export type ChessTheme =
   | 'undeveloped'
   | 'check'
   | 'captures'
-  | 'attacks';
+  | 'attacks'
+  | 'double-attack';
 
 export interface ChessPuzzle {
   id: string;

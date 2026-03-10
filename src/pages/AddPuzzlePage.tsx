@@ -24,7 +24,7 @@ const ALL_THEMES: ChessTheme[] = [
   'back-rank', 'smothered-mate', 'checkmate', 'sacrifice', 'hanging-piece',
   'x-ray', 'promotion', 'endgame', 'battery', 'quiet-move', 'open-position',
   'closed-position', 'rook-on-open-file', 'developed', 'undeveloped',
-  'check', 'captures', 'attacks',
+  'check', 'captures', 'attacks', 'double-attack',
 ];
 
 const DIFFICULTIES: ChessPuzzle['difficulty'][] = ['beginner', 'intermediate', 'advanced', 'master'];
@@ -174,7 +174,7 @@ export default function AddPuzzlePage() {
     if (field === 'name') {
       sanitized = sanitizeAlphanumeric(value);
     } else if (field === 'explanation') {
-      sanitized = sanitizeAlphanumeric(value).slice(0, 1000);
+      sanitized = sanitizeAlphanumeric(value).slice(0, 350);
     } else if (field === 'fen' || field === 'previousFen') {
       sanitized = sanitizeFen(value);
     } else if (field === 'bestMove') {
@@ -309,7 +309,9 @@ export default function AddPuzzlePage() {
                 value={form.explanation}
                 onChange={(e) => updateField('explanation', e.target.value)}
                 rows={6}
+                maxLength={350}
               />
+              <p className="text-xs text-muted-foreground text-right">{form.explanation.length}/350</p>
             </div>
 
             <div className="space-y-2">
