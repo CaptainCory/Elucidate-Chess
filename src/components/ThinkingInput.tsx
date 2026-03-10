@@ -71,8 +71,14 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
     });
   };
 
+  const charCount = thinking.trim().length;
+  const MIN_CHARS = 15;
+  const MAX_CHARS = 300;
+  const needsMore = moveSelected && charCount > 0 && charCount < MIN_CHARS;
+  const isValid = charCount >= MIN_CHARS && charCount <= MAX_CHARS;
+
   const handleSubmit = () => {
-    if (thinking.trim() && moveSelected) {
+    if (isValid && moveSelected) {
       onSubmit(thinking.trim());
       setThinking('');
       setSelectedThemes(new Set());
