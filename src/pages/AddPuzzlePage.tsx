@@ -24,7 +24,7 @@ const ALL_THEMES: ChessTheme[] = [
   'back-rank', 'smothered-mate', 'checkmate', 'sacrifice', 'hanging-piece',
   'x-ray', 'promotion', 'endgame', 'battery', 'quiet-move', 'open-position',
   'closed-position', 'rook-on-open-file', 'developed', 'undeveloped',
-  'check', 'captures', 'attacks',
+  'check', 'captures', 'attacks', 'double-attack',
 ];
 
 const DIFFICULTIES: ChessPuzzle['difficulty'][] = ['beginner', 'intermediate', 'advanced', 'master'];
