@@ -71,8 +71,14 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
     });
   };
 
+  const charCount = thinking.trim().length;
+  const MIN_CHARS = 15;
+  const MAX_CHARS = 300;
+  const needsMore = moveSelected && charCount > 0 && charCount < MIN_CHARS;
+  const isValid = charCount >= MIN_CHARS && charCount <= MAX_CHARS;
+
   const handleSubmit = () => {
-    if (thinking.trim() && moveSelected) {
+    if (isValid && moveSelected) {
       onSubmit(thinking.trim());
       setThinking('');
       setSelectedThemes(new Set());
@@ -96,11 +102,14 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
           <textarea
             ref={textareaRef}
             value={thinking}
-            onChange={(e) => setThinking(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length <= MAX_CHARS) setThinking(e.target.value);
+            }}
             onKeyDown={handleKeyDown}
             placeholder={moveSelected ? '' : "👆 Drag and drop a piece on the board, then describe the position and justify your reasoning"}
             className="thinking-area"
             rows={5}
+            maxLength={MAX_CHARS}
             disabled={disabled || isLoading || !moveSelected}
           />
           {moveSelected && !thinking && selectedThemes.size === 0 && (
@@ -110,6 +119,21 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             </div>
           )}
         </div>
+        {/* Character status */}
+        {moveSelected && charCount > 0 && (
+          <div className="flex items-center justify-between">
+            {needsMore ? (
+              <span className="text-xs font-semibold text-accent animate-pulse">
+                Needs more ELUCIDATION
+              </span>
+            ) : (
+              <span />
+            )}
+            <span className={`text-xs ${charCount >= MAX_CHARS ? 'text-destructive' : 'text-muted-foreground'}`}>
+              {charCount}/{MAX_CHARS}
+            </span>
+          </div>
+        )}
         {themeChoices.length > 0 && (
           <div className="space-y-1.5">
             <div className="flex items-center gap-1.5">
@@ -142,7 +166,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
 
       <Button
         onClick={handleSubmit}
-        disabled={!thinking.trim() || !moveSelected || isLoading || disabled}
+        disabled={!isValid || !moveSelected || isLoading || disabled}
         className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all"
         size="lg"
       >
