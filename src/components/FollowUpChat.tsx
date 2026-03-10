@@ -155,36 +155,12 @@ export function FollowUpChat({
     }
   };
 
-  const suggestions = [
-    'Why was my move bad?',
-    'Why is that the best move?',
-    'What should I look for?',
-  ];
-
   return (
     <div className="chess-card p-4 space-y-3">
       <div className="flex items-center gap-2 text-foreground">
         <MessageCircle className="w-5 h-5 text-primary" />
         <h3 className="font-semibold font-display text-sm">Ask about this position</h3>
       </div>
-
-      {/* Suggestions when no messages yet */}
-      {messages.length === 0 && (
-        <div className="flex flex-wrap gap-2">
-          {suggestions.map((s) => (
-            <button
-              key={s}
-              onClick={() => {
-                setInput(s);
-                setTimeout(() => inputRef.current?.focus(), 0);
-              }}
-              className="text-xs px-3 py-1.5 rounded-full border border-border bg-card hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-      )}
 
       {/* Messages */}
       {messages.length > 0 && (
