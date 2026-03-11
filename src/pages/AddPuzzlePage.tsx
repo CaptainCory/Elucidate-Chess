@@ -345,6 +345,7 @@ export default function AddPuzzlePage() {
           </Button>
         </div>
       </div>
+      <ChessQuoteFooter />
     </div>
   );
 }
