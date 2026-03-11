@@ -157,6 +157,7 @@ const ProfilePage = () => {
           Sign Out
         </Button>
       </div>
+      <ChessQuoteFooter />
     </div>
   );
 };
