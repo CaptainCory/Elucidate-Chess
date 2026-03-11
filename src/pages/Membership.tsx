@@ -7,6 +7,7 @@ import { Crown, ArrowLeft, CreditCard, Calendar, ExternalLink, Loader2 } from 'l
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 
 const Membership = () => {
   const { user, isPremium, subscriptionEnd, loading, checkSubscription } = useAuth();
@@ -247,6 +248,7 @@ const Membership = () => {
           </div>
         )}
       </div>
+      <ChessQuoteFooter />
     </div>
   );
 };

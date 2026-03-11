@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { MiniChessBoard } from "@/components/MiniChessBoard";
 import { themeEntries } from "@/data/themeEntries";
+import { ChessQuoteFooter } from "@/components/ChessQuoteFooter";
 
 export default function ThemesPage() {
   return (
@@ -75,6 +76,7 @@ export default function ThemesPage() {
           ))}
         </Accordion>
       </section>
+      <ChessQuoteFooter />
     </div>
   );
 }

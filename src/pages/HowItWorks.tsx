@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Lightbulb } from "lucide-react";
+import { ChessQuoteFooter } from "@/components/ChessQuoteFooter";
 import {
   Accordion,
   AccordionContent,
@@ -101,6 +102,7 @@ export default function HowItWorks() {
           ))}
         </Accordion>
       </section>
+      <ChessQuoteFooter />
     </div>
   );
 }
