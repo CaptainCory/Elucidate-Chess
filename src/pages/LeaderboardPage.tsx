@@ -34,6 +34,7 @@ const LeaderboardPage = () => {
         </header>
 
         <Leaderboard />
+        <ChessQuoteFooter />
       </div>
     </div>
   );
