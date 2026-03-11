@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Crown, LogOut, Trophy, Target, TrendingUp, ArrowLeft, Loader2, Mail, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 import { useQuery } from '@tanstack/react-query';
 
 const ProfilePage = () => {

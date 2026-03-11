@@ -4,6 +4,7 @@ import { PlanBadge } from '@/components/PlanBadge';
 import { UserMenu } from '@/components/UserMenu';
 import { useAuth } from '@/contexts/AuthContext';
 import { Crown, Sparkles, ArrowLeft } from 'lucide-react';
+import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 
 const LeaderboardPage = () => {
   const { user } = useAuth();

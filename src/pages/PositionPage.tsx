@@ -21,6 +21,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Swords, Plus, Loader2 } from 'lucide-react';
 import { MobileNav } from '@/components/MobileNav';
 import { ShareButton } from '@/components/ShareButton';
+import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
