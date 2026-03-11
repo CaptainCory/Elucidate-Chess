@@ -247,6 +247,7 @@ const Membership = () => {
           </div>
         )}
       </div>
+      <ChessQuoteFooter />
     </div>
   );
 };
