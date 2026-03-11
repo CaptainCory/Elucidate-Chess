@@ -75,6 +75,7 @@ export default function ThemesPage() {
           ))}
         </Accordion>
       </section>
+      <ChessQuoteFooter />
     </div>
   );
 }
