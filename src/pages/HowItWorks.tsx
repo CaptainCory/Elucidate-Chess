@@ -101,6 +101,7 @@ export default function HowItWorks() {
           ))}
         </Accordion>
       </section>
+      <ChessQuoteFooter />
     </div>
   );
 }
