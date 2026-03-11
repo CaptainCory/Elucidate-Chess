@@ -292,13 +292,7 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
           );
         })()}
 
-        {/* Footer */}
-        <footer className="mt-12 text-center text-muted-foreground">
-          <p className="text-lg max-w-xl mx-auto mb-2">
-            Sharpen your chess thinking. Drag pieces to make your move, explain your reasoning, and receive AI-powered feedback.
-          </p>
-          <p className="text-sm">Powered by AI • Practice Makes Progress</p>
-        </footer>
+        <ChessQuoteFooter />
       </div>
 
       <UpgradeOverlay open={game.showUpgradeOverlay} onClose={() => game.setShowUpgradeOverlay(false)} />
