@@ -139,9 +139,6 @@ export function useChessGame(puzzle: ChessPuzzle) {
   }, [puzzle, selectedMove, scores, streak, solvedPuzzles, user, isPremium, dailySolved]);
 
   const handleNext = useCallback(async () => {
-    const newDifficulty = analysis ? getNextDifficulty(currentDifficulty, analysis.score) : currentDifficulty;
-    setCurrentDifficulty(newDifficulty);
-
     const newSolvedPuzzles = [...solvedPuzzles, puzzle.id];
     setSolvedPuzzles(newSolvedPuzzles);
 
@@ -151,20 +148,33 @@ export function useChessGame(puzzle: ChessPuzzle) {
       return;
     }
 
-    // Fetch next puzzle from DB, filtering by difficulty and excluding solved ones
-    let query = supabase.from('puzzles').select('id');
-
-    // Try with difficulty filter first
-    const { data } = await query.eq('difficulty', newDifficulty).limit(100);
-    let candidates = (data || []).filter(p => !newSolvedPuzzles.includes(p.id));
-
-    // If no candidates with that difficulty, try any difficulty
-    if (candidates.length === 0) {
-      const { data: allData } = await supabase.from('puzzles').select('id').limit(100);
-      candidates = (allData || []).filter(p => !newSolvedPuzzles.includes(p.id));
+    // Get user's current difficulty level from DB
+    let userDifficulty = 'beginner';
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('current_difficulty')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (profile?.current_difficulty) {
+        userDifficulty = profile.current_difficulty;
+      }
     }
 
-    // If still empty, allow repeats
+    // Fetch next puzzle at user's level, excluding already solved
+    const { data } = await supabase
+      .from('puzzles')
+      .select('id')
+      .eq('difficulty', userDifficulty)
+      .limit(100);
+    let candidates = (data || []).filter(p => !newSolvedPuzzles.includes(p.id));
+
+    // Fallback: any puzzle at user's level (allow repeats)
+    if (candidates.length === 0) {
+      candidates = data || [];
+    }
+
+    // Fallback: any puzzle at all
     if (candidates.length === 0) {
       const { data: allData } = await supabase.from('puzzles').select('id').limit(100);
       candidates = allData || [];
@@ -174,7 +184,7 @@ export function useChessGame(puzzle: ChessPuzzle) {
       const next = candidates[Math.floor(Math.random() * candidates.length)];
       navigate(`/position/${next.id}`);
     }
-  }, [analysis, currentDifficulty, puzzle.id, solvedPuzzles, isPremium, navigate, dailySolved]);
+  }, [analysis, puzzle.id, solvedPuzzles, isPremium, navigate, dailySolved, user]);
 
   return {
     gameState,
