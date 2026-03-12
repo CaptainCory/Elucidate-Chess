@@ -115,15 +115,19 @@ export function useChessGame(puzzle: ChessPuzzle) {
       }
 
       if (user) {
-        supabase
+        const { data: rpcResult, error: rpcError } = await supabase
           .rpc('increment_puzzle_stats', {
             p_user_id: user.id,
             p_score: analysisResult.score,
             p_streak: newStreak,
-          })
-          .then(({ error }) => {
-            if (error) console.error('Failed to update stats:', error);
+            p_difficulty: puzzle.difficulty,
           });
+
+        if (rpcError) {
+          console.error('Failed to update stats:', rpcError);
+        } else if (rpcResult?.graduated) {
+          toast.success(`🎓 Congratulations! You've graduated to ${rpcResult.current_difficulty} positions!`);
+        }
       }
 
       setGameState('result');
