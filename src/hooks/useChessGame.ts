@@ -18,7 +18,7 @@ export function useChessGame(puzzle: ChessPuzzle) {
   const [solvedPuzzles, setSolvedPuzzles] = useState<string[]>([]);
   const [scores, setScores] = useState<number[]>([]);
   const [streak, setStreak] = useState(0);
-  const [currentDifficulty, setCurrentDifficulty] = useState<ChessPuzzle['difficulty']>('beginner');
+  const [streak, setStreak] = useState(0);
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [dailySolved, setDailySolved] = useState(0);
