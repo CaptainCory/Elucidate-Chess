@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { ChessBoard } from '@/components/ChessBoard';
 import { TurnIndicator } from '@/components/TurnIndicator';
 import { ThinkingInput } from '@/components/ThinkingInput';
+import { HintTimer } from '@/components/HintTimer';
 import { AnalysisResult } from '@/components/AnalysisResult';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { ProgressStats } from '@/components/ProgressStats';
