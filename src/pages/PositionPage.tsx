@@ -181,7 +181,7 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
 
         {/* Progress Stats - hidden on mobile */}
         <div className="mb-4 lg:mb-8 max-w-md mx-auto hidden md:block">
-          <ProgressStats puzzlesSolved={(profile?.puzzles_solved ?? 0) + game.solvedPuzzles.length} averageScore={profile?.average_score ?? game.averageScore} streak={Math.max(profile?.best_streak ?? 0, game.streak)} />
+          <ProgressStats puzzlesSolved={profile?.puzzles_solved ?? 0} averageScore={profile?.average_score ?? game.averageScore} streak={Math.max(profile?.best_streak ?? 0, game.streak)} />
         </div>
 
         {/* Main Content */}
