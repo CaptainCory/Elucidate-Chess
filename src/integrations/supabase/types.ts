@@ -122,6 +122,10 @@ export type Database = {
     }
     Functions: {
       get_daily_attempt_count: { Args: { p_user_id: string }; Returns: number }
+      increment_puzzle_stats: {
+        Args: { p_score: number; p_streak: number; p_user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
