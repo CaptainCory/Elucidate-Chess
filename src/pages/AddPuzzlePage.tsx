@@ -295,34 +295,13 @@ export default function AddPuzzlePage() {
               <Label htmlFor="explanation">Explanation</Label>
               <Textarea
                 id="explanation"
-                placeholder="Explain why this is the best move, what tactical themes are at play..."
+                placeholder="Explain why this is the best move and the strategic concepts involved..."
                 value={form.explanation}
                 onChange={(e) => updateField('explanation', e.target.value)}
-                rows={6}
+                rows={12}
                 maxLength={350}
               />
               <p className="text-xs text-muted-foreground text-right">{form.explanation.length}/350</p>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Themes <span className="text-muted-foreground font-normal">(select all that apply)</span></Label>
-              <div className="flex flex-wrap gap-2">
-                {ALL_THEMES.map((theme) => (
-                  <Badge
-                    key={theme}
-                    variant={selectedThemes.includes(theme) ? 'default' : 'outline'}
-                    className={`cursor-pointer transition-colors ${
-                      selectedThemes.includes(theme)
-                        ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                        : 'hover:bg-secondary'
-                    }`}
-                    onClick={() => toggleTheme(theme)}
-                  >
-                    {selectedThemes.includes(theme) && <Check className="w-3 h-3 mr-1" />}
-                    {theme}
-                  </Badge>
-                ))}
-              </div>
             </div>
           </div>
         </div>
