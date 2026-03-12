@@ -1,52 +1,18 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Send, Loader2, Swords } from 'lucide-react';
-import type { ChessTheme } from '@/data/chessPuzzles';
-
-const ALL_THEMES: ChessTheme[] = [
-  'fork', 'pin', 'skewer', 'discovered-attack', 'double-check',
-  'deflection', 'decoy', 'overloading', 'removing-the-defender',
-  'zwischenzug', 'trapped-piece', 'back-rank', 'smothered-mate',
-  'checkmate', 'sacrifice', 'hanging-piece', 'x-ray', 'promotion',
-  'endgame', 'battery', 'quiet-move', 'check', 'captures', 'attacks', 'double-attack',
-];
+import { Send, Loader2 } from 'lucide-react';
 
 interface ThinkingInputProps {
   onSubmit: (thinking: string) => void;
   isLoading?: boolean;
   disabled?: boolean;
   moveSelected?: boolean;
-  themes?: ChessTheme[];
 }
 
-function formatTheme(theme: ChessTheme): string {
-  return theme
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
-
-/** Pick random decoy themes that aren't in the correct set */
-function pickDecoys(correct: ChessTheme[], count = 3): ChessTheme[] {
-  const pool = ALL_THEMES.filter((t) => !correct.includes(t));
-  const shuffled = [...pool].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
-}
-
-export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, moveSelected = false, themes = [] }: ThinkingInputProps) {
+export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, moveSelected = false }: ThinkingInputProps) {
   const [thinking, setThinking] = useState('');
-  const [selectedThemes, setSelectedThemes] = useState<Set<ChessTheme>>(new Set());
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Build a stable set of 5 choices: 2 correct + 3 decoys, shuffled
-  const themeChoices = useMemo(() => {
-    if (themes.length === 0) return [];
-    const correct = themes.slice(0, 2);
-    const decoys = pickDecoys(themes, 3);
-    return [...correct, ...decoys].sort(() => Math.random() - 0.5);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [themes.join(',')]);
 
   useEffect(() => {
     if (moveSelected && textareaRef.current) {
@@ -54,22 +20,6 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
       setTimeout(() => textareaRef.current?.focus(), 400);
     }
   }, [moveSelected]);
-
-  const toggleTheme = (theme: ChessTheme) => {
-    setSelectedThemes((prev) => {
-      const next = new Set(prev);
-      if (next.has(theme)) {
-        next.delete(theme);
-        const readable = formatTheme(theme);
-        setThinking((t) => t.replace(new RegExp(`\\s*\\[${readable}\\]`, 'g'), '').trim());
-      } else {
-        next.add(theme);
-        const readable = formatTheme(theme);
-        setThinking((t) => (t ? `${t} [${readable}]` : `[${readable}]`));
-      }
-      return next;
-    });
-  };
 
   const charCount = thinking.trim().length;
   const MIN_CHARS = 15;
@@ -81,7 +31,6 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
     if (isValid && moveSelected) {
       onSubmit(thinking.trim());
       setThinking('');
-      setSelectedThemes(new Set());
     }
   };
 
@@ -112,7 +61,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             maxLength={MAX_CHARS}
             disabled={disabled || isLoading || !moveSelected}
           />
-          {moveSelected && !thinking && selectedThemes.size === 0 && (
+          {moveSelected && !thinking && (
             <div className="absolute top-3 left-4 flex items-center gap-2 pointer-events-none">
               <span className="inline-block w-0.5 h-5 bg-primary animate-blink rounded-full" />
               <span className="text-sm font-medium text-primary">Start typing your analysis...</span>
@@ -132,34 +81,6 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             <span className={`text-xs ${charCount >= MAX_CHARS ? 'text-destructive' : 'text-muted-foreground'}`}>
               {charCount}/{MAX_CHARS}
             </span>
-          </div>
-        )}
-        {themeChoices.length > 0 && (
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5">
-              <Swords className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="text-xs font-medium text-muted-foreground">Identify the themes:</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {themeChoices.map((theme) => {
-                const isSelected = selectedThemes.has(theme);
-                return (
-                  <button
-                    key={theme}
-                    type="button"
-                    onClick={() => toggleTheme(theme)}
-                    disabled={disabled || isLoading || !moveSelected}
-                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                      isSelected
-                        ? 'bg-primary text-primary-foreground border-primary shadow-sm scale-105'
-                        : 'bg-secondary text-secondary-foreground border-border hover:bg-accent hover:text-accent-foreground'
-                    }`}
-                  >
-                    {formatTheme(theme)}
-                  </button>
-                );
-              })}
-            </div>
           </div>
         )}
       </div>
