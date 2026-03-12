@@ -5,6 +5,7 @@ import { AnalysisData } from '@/components/AnalysisResult';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 
 const DAILY_PUZZLE_LIMIT = 3;
 
@@ -13,6 +14,7 @@ export type GameState = 'thinking' | 'analyzing' | 'result';
 export function useChessGame(puzzle: ChessPuzzle) {
   const { user, isPremium } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [gameState, setGameState] = useState<GameState>('thinking');
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
   const [solvedPuzzles, setSolvedPuzzles] = useState<string[]>([]);
@@ -130,6 +132,9 @@ export function useChessGame(puzzle: ChessPuzzle) {
             toast.success(`🎓 Congratulations! You've graduated to ${result.current_difficulty} positions!`);
           }
         }
+
+        void queryClient.invalidateQueries({ queryKey: ['profile-stats', user.id] });
+        void queryClient.invalidateQueries({ queryKey: ['profile', user.id] });
       }
 
       setGameState('result');
@@ -138,7 +143,7 @@ export function useChessGame(puzzle: ChessPuzzle) {
       toast.error('Failed to analyze your response. Please try again.');
       setGameState('thinking');
     }
-  }, [puzzle, selectedMove, scores, streak, solvedPuzzles, user, isPremium, dailySolved]);
+  }, [puzzle, selectedMove, scores, streak, user, isPremium, dailySolved, queryClient]);
 
   const handleNext = useCallback(async () => {
     const newSolvedPuzzles = [...solvedPuzzles, puzzle.id];
@@ -208,3 +213,4 @@ export function useChessGame(puzzle: ChessPuzzle) {
     isPremium,
   };
 }
+
