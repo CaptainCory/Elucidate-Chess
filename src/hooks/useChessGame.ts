@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChessPuzzle, getNextDifficulty } from '@/data/chessPuzzles';
+import { ChessPuzzle } from '@/data/chessPuzzles';
 import { AnalysisData } from '@/components/AnalysisResult';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -18,7 +18,6 @@ export function useChessGame(puzzle: ChessPuzzle) {
   const [solvedPuzzles, setSolvedPuzzles] = useState<string[]>([]);
   const [scores, setScores] = useState<number[]>([]);
   const [streak, setStreak] = useState(0);
-  const [currentDifficulty, setCurrentDifficulty] = useState<ChessPuzzle['difficulty']>('beginner');
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [dailySolved, setDailySolved] = useState(0);
@@ -115,15 +114,22 @@ export function useChessGame(puzzle: ChessPuzzle) {
       }
 
       if (user) {
-        supabase
+        const { data: rpcResult, error: rpcError } = await supabase
           .rpc('increment_puzzle_stats', {
             p_user_id: user.id,
             p_score: analysisResult.score,
             p_streak: newStreak,
-          })
-          .then(({ error }) => {
-            if (error) console.error('Failed to update stats:', error);
+            p_difficulty: puzzle.difficulty,
           });
+
+        if (rpcError) {
+          console.error('Failed to update stats:', rpcError);
+        } else if (rpcResult && typeof rpcResult === 'object' && !Array.isArray(rpcResult)) {
+          const result = rpcResult as Record<string, unknown>;
+          if (result.graduated) {
+            toast.success(`🎓 Congratulations! You've graduated to ${result.current_difficulty} positions!`);
+          }
+        }
       }
 
       setGameState('result');
@@ -135,9 +141,6 @@ export function useChessGame(puzzle: ChessPuzzle) {
   }, [puzzle, selectedMove, scores, streak, solvedPuzzles, user, isPremium, dailySolved]);
 
   const handleNext = useCallback(async () => {
-    const newDifficulty = analysis ? getNextDifficulty(currentDifficulty, analysis.score) : currentDifficulty;
-    setCurrentDifficulty(newDifficulty);
-
     const newSolvedPuzzles = [...solvedPuzzles, puzzle.id];
     setSolvedPuzzles(newSolvedPuzzles);
 
@@ -147,20 +150,33 @@ export function useChessGame(puzzle: ChessPuzzle) {
       return;
     }
 
-    // Fetch next puzzle from DB, filtering by difficulty and excluding solved ones
-    let query = supabase.from('puzzles').select('id');
-
-    // Try with difficulty filter first
-    const { data } = await query.eq('difficulty', newDifficulty).limit(100);
-    let candidates = (data || []).filter(p => !newSolvedPuzzles.includes(p.id));
-
-    // If no candidates with that difficulty, try any difficulty
-    if (candidates.length === 0) {
-      const { data: allData } = await supabase.from('puzzles').select('id').limit(100);
-      candidates = (allData || []).filter(p => !newSolvedPuzzles.includes(p.id));
+    // Get user's current difficulty level from DB
+    let userDifficulty = 'beginner';
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('current_difficulty')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (profile?.current_difficulty) {
+        userDifficulty = profile.current_difficulty;
+      }
     }
 
-    // If still empty, allow repeats
+    // Fetch next puzzle at user's level, excluding already solved
+    const { data } = await supabase
+      .from('puzzles')
+      .select('id')
+      .eq('difficulty', userDifficulty)
+      .limit(100);
+    let candidates = (data || []).filter(p => !newSolvedPuzzles.includes(p.id));
+
+    // Fallback: any puzzle at user's level (allow repeats)
+    if (candidates.length === 0) {
+      candidates = data || [];
+    }
+
+    // Fallback: any puzzle at all
     if (candidates.length === 0) {
       const { data: allData } = await supabase.from('puzzles').select('id').limit(100);
       candidates = allData || [];
@@ -170,7 +186,7 @@ export function useChessGame(puzzle: ChessPuzzle) {
       const next = candidates[Math.floor(Math.random() * candidates.length)];
       navigate(`/position/${next.id}`);
     }
-  }, [analysis, currentDifficulty, puzzle.id, solvedPuzzles, isPremium, navigate, dailySolved]);
+  }, [analysis, puzzle.id, solvedPuzzles, isPremium, navigate, dailySolved, user]);
 
   return {
     gameState,

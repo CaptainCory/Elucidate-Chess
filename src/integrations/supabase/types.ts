@@ -16,36 +16,57 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          advanced_avg_score: number
+          advanced_solved: number
           avatar_url: string | null
           average_score: number
+          beginner_avg_score: number
+          beginner_solved: number
           best_streak: number
           created_at: string
+          current_difficulty: string
           display_name: string | null
           id: string
+          intermediate_avg_score: number
+          intermediate_solved: number
           is_premium: boolean
           puzzles_solved: number
           updated_at: string
           user_id: string
         }
         Insert: {
+          advanced_avg_score?: number
+          advanced_solved?: number
           avatar_url?: string | null
           average_score?: number
+          beginner_avg_score?: number
+          beginner_solved?: number
           best_streak?: number
           created_at?: string
+          current_difficulty?: string
           display_name?: string | null
           id?: string
+          intermediate_avg_score?: number
+          intermediate_solved?: number
           is_premium?: boolean
           puzzles_solved?: number
           updated_at?: string
           user_id: string
         }
         Update: {
+          advanced_avg_score?: number
+          advanced_solved?: number
           avatar_url?: string | null
           average_score?: number
+          beginner_avg_score?: number
+          beginner_solved?: number
           best_streak?: number
           created_at?: string
+          current_difficulty?: string
           display_name?: string | null
           id?: string
+          intermediate_avg_score?: number
+          intermediate_solved?: number
           is_premium?: boolean
           puzzles_solved?: number
           updated_at?: string
@@ -122,10 +143,20 @@ export type Database = {
     }
     Functions: {
       get_daily_attempt_count: { Args: { p_user_id: string }; Returns: number }
-      increment_puzzle_stats: {
-        Args: { p_score: number; p_streak: number; p_user_id: string }
-        Returns: undefined
-      }
+      increment_puzzle_stats:
+        | {
+            Args: { p_score: number; p_streak: number; p_user_id: string }
+            Returns: undefined
+          }
+        | {
+            Args: {
+              p_difficulty?: string
+              p_score: number
+              p_streak: number
+              p_user_id: string
+            }
+            Returns: Json
+          }
     }
     Enums: {
       [_ in never]: never
