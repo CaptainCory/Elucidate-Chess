@@ -115,16 +115,12 @@ export function useChessGame(puzzle: ChessPuzzle) {
       }
 
       if (user) {
-        const avgScore = Math.round(newScores.reduce((a, b) => a + b, 0) / newScores.length);
-        const newSolvedCount = solvedPuzzles.length + 1;
         supabase
-          .from('profiles')
-          .update({
-            puzzles_solved: newSolvedCount,
-            average_score: avgScore,
-            best_streak: Math.max(newStreak, streak),
+          .rpc('increment_puzzle_stats', {
+            p_user_id: user.id,
+            p_score: analysisResult.score,
+            p_streak: newStreak,
           })
-          .eq('user_id', user.id)
           .then(({ error }) => {
             if (error) console.error('Failed to update stats:', error);
           });
