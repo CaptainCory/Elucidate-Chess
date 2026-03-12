@@ -212,6 +212,14 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
                   onMove={game.handleMove}
                 />
 
+                <HintTimer
+                  active={
+                    puzzle.difficulty === 'beginner' &&
+                    game.gameState === 'thinking' &&
+                    !game.selectedMove &&
+                    !game.isLimited
+                  }
+                />
               </div>
 
               {/* Interaction Section */}
