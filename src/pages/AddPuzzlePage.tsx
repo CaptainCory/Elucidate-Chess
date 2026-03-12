@@ -174,8 +174,8 @@ export default function AddPuzzlePage() {
   };
 
   const handleSavePuzzle = async () => {
-    if (!form.name || !form.fen || !form.previousFen || !form.bestMove || !form.difficulty || !form.explanation || selectedThemes.length < 2) {
-      toast({ title: 'Missing fields', description: 'Please fill in all fields and select at least two themes.', variant: 'destructive' });
+    if (!form.name || !form.fen || !form.previousFen || !form.bestMove || !form.difficulty || !form.explanation) {
+      toast({ title: 'Missing fields', description: 'Please fill in all fields.', variant: 'destructive' });
       return;
     }
 
@@ -197,7 +197,7 @@ export default function AddPuzzlePage() {
         best_move: form.bestMove,
         difficulty: form.difficulty,
         explanation: form.explanation,
-        themes: selectedThemes,
+        themes: [],
         created_by: user!.id,
       });
 
