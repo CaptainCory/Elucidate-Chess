@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 import { MobileNav } from '@/components/MobileNav';
 import { UserMenu } from '@/components/UserMenu';
@@ -15,18 +14,9 @@ import { AuthModal } from '@/components/AuthModal';
 import { PlanBadge } from '@/components/PlanBadge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import type { ChessTheme, ChessPuzzle } from '@/data/chessPuzzles';
+import type { ChessPuzzle } from '@/data/chessPuzzles';
 
 const ACCESS_CODE = 'PAULMORPHY';
-
-const ALL_THEMES: ChessTheme[] = [
-  'fork', 'pin', 'skewer', 'discovered-attack', 'double-check', 'deflection',
-  'decoy', 'overloading', 'removing-the-defender', 'zwischenzug', 'trapped-piece',
-  'back-rank', 'smothered-mate', 'checkmate', 'sacrifice', 'hanging-piece',
-  'x-ray', 'promotion', 'endgame', 'battery', 'quiet-move', 'open-position',
-  'closed-position', 'rook-on-open-file', 'developed', 'undeveloped',
-  'check', 'captures', 'attacks', 'double-attack',
-];
 
 const DIFFICULTIES: ChessPuzzle['difficulty'][] = ['beginner', 'intermediate', 'advanced', 'master'];
 
@@ -51,7 +41,6 @@ export default function AddPuzzlePage() {
     difficulty: '' as ChessPuzzle['difficulty'] | '',
     explanation: '',
   });
-  const [selectedThemes, setSelectedThemes] = useState<ChessTheme[]>([]);
 
   if (loading) {
     return (
@@ -151,11 +140,6 @@ export default function AddPuzzlePage() {
     );
   }
 
-  const toggleTheme = (theme: ChessTheme) => {
-    setSelectedThemes((prev) =>
-      prev.includes(theme) ? prev.filter((t) => t !== theme) : [...prev, theme]
-    );
-  };
 
   const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 200);
   // FEN only: letters for pieces/color, digits for squares/counters, / for ranks, - for castling/en passant, space as delimiter
@@ -185,8 +169,8 @@ export default function AddPuzzlePage() {
   };
 
   const handleSavePuzzle = async () => {
-    if (!form.name || !form.fen || !form.previousFen || !form.bestMove || !form.difficulty || !form.explanation || selectedThemes.length < 2) {
-      toast({ title: 'Missing fields', description: 'Please fill in all fields and select at least two themes.', variant: 'destructive' });
+    if (!form.name || !form.fen || !form.previousFen || !form.bestMove || !form.difficulty || !form.explanation) {
+      toast({ title: 'Missing fields', description: 'Please fill in all fields.', variant: 'destructive' });
       return;
     }
 
@@ -208,7 +192,7 @@ export default function AddPuzzlePage() {
         best_move: form.bestMove,
         difficulty: form.difficulty,
         explanation: form.explanation,
-        themes: selectedThemes,
+        themes: [],
         created_by: user!.id,
       });
 
@@ -306,34 +290,13 @@ export default function AddPuzzlePage() {
               <Label htmlFor="explanation">Explanation</Label>
               <Textarea
                 id="explanation"
-                placeholder="Explain why this is the best move, what tactical themes are at play..."
+                placeholder="Explain why this is the best move and the strategic concepts involved..."
                 value={form.explanation}
                 onChange={(e) => updateField('explanation', e.target.value)}
-                rows={6}
+                rows={12}
                 maxLength={350}
               />
               <p className="text-xs text-muted-foreground text-right">{form.explanation.length}/350</p>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Themes <span className="text-muted-foreground font-normal">(select all that apply)</span></Label>
-              <div className="flex flex-wrap gap-2">
-                {ALL_THEMES.map((theme) => (
-                  <Badge
-                    key={theme}
-                    variant={selectedThemes.includes(theme) ? 'default' : 'outline'}
-                    className={`cursor-pointer transition-colors ${
-                      selectedThemes.includes(theme)
-                        ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                        : 'hover:bg-secondary'
-                    }`}
-                    onClick={() => toggleTheme(theme)}
-                  >
-                    {selectedThemes.includes(theme) && <Check className="w-3 h-3 mr-1" />}
-                    {theme}
-                  </Badge>
-                ))}
-              </div>
             </div>
           </div>
         </div>
