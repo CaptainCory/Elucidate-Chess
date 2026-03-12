@@ -211,21 +211,6 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
                   onMove={game.handleMove}
                 />
 
-                {/* Theme Tags */}
-                {puzzle.themes && puzzle.themes.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    {puzzle.themes.map((theme) => (
-                      <Link
-                        key={theme}
-                        to="/themes"
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium hover:bg-primary/20 transition-colors"
-                      >
-                        <Swords className="w-3 h-3" />
-                        {theme.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
-                      </Link>
-                    ))}
-                  </div>
-                )}
               </div>
 
               {/* Interaction Section */}
