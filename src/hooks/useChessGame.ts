@@ -125,8 +125,11 @@ export function useChessGame(puzzle: ChessPuzzle) {
 
         if (rpcError) {
           console.error('Failed to update stats:', rpcError);
-        } else if (rpcResult?.graduated) {
-          toast.success(`🎓 Congratulations! You've graduated to ${rpcResult.current_difficulty} positions!`);
+        } else if (rpcResult && typeof rpcResult === 'object' && !Array.isArray(rpcResult)) {
+          const result = rpcResult as Record<string, unknown>;
+          if (result.graduated) {
+            toast.success(`🎓 Congratulations! You've graduated to ${result.current_difficulty} positions!`);
+          }
         }
       }
 
