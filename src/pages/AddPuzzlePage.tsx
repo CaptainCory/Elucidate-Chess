@@ -140,11 +140,6 @@ export default function AddPuzzlePage() {
     );
   }
 
-  const toggleTheme = (theme: ChessTheme) => {
-    setSelectedThemes((prev) =>
-      prev.includes(theme) ? prev.filter((t) => t !== theme) : [...prev, theme]
-    );
-  };
 
   const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 200);
   // FEN only: letters for pieces/color, digits for squares/counters, / for ranks, - for castling/en passant, space as delimiter
