@@ -6,20 +6,40 @@ import { Loader2 } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { loading } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     if (loading) return;
 
-    // Fetch a random puzzle from the database
     const fetchRandom = async () => {
-      const { data, error } = await supabase
+      // Determine user's current difficulty level
+      let difficulty = 'beginner';
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('current_difficulty')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (profile?.current_difficulty) {
+          difficulty = profile.current_difficulty;
+        }
+      }
+
+      // Try to find a puzzle at the user's level
+      let { data } = await supabase
         .from('puzzles')
         .select('id')
+        .eq('difficulty', difficulty)
         .limit(100);
 
-      if (error || !data || data.length === 0) {
-        console.error('Failed to load puzzles:', error);
+      // Fallback to any puzzle if none at that level
+      if (!data || data.length === 0) {
+        const result = await supabase.from('puzzles').select('id').limit(100);
+        data = result.data;
+      }
+
+      if (!data || data.length === 0) {
+        console.error('No puzzles available');
         return;
       }
 
@@ -28,7 +48,7 @@ const Index = () => {
     };
 
     fetchRandom();
-  }, [loading, navigate]);
+  }, [loading, user, navigate]);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
