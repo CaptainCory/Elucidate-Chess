@@ -16,36 +16,57 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          advanced_avg_score: number
+          advanced_solved: number
           avatar_url: string | null
           average_score: number
+          beginner_avg_score: number
+          beginner_solved: number
           best_streak: number
           created_at: string
+          current_difficulty: string
           display_name: string | null
           id: string
+          intermediate_avg_score: number
+          intermediate_solved: number
           is_premium: boolean
           puzzles_solved: number
           updated_at: string
           user_id: string
         }
         Insert: {
+          advanced_avg_score?: number
+          advanced_solved?: number
           avatar_url?: string | null
           average_score?: number
+          beginner_avg_score?: number
+          beginner_solved?: number
           best_streak?: number
           created_at?: string
+          current_difficulty?: string
           display_name?: string | null
           id?: string
+          intermediate_avg_score?: number
+          intermediate_solved?: number
           is_premium?: boolean
           puzzles_solved?: number
           updated_at?: string
           user_id: string
         }
         Update: {
+          advanced_avg_score?: number
+          advanced_solved?: number
           avatar_url?: string | null
           average_score?: number
+          beginner_avg_score?: number
+          beginner_solved?: number
           best_streak?: number
           created_at?: string
+          current_difficulty?: string
           display_name?: string | null
           id?: string
+          intermediate_avg_score?: number
+          intermediate_solved?: number
           is_premium?: boolean
           puzzles_solved?: number
           updated_at?: string
