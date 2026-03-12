@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 import { MobileNav } from '@/components/MobileNav';
 import { UserMenu } from '@/components/UserMenu';
@@ -15,18 +14,9 @@ import { AuthModal } from '@/components/AuthModal';
 import { PlanBadge } from '@/components/PlanBadge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import type { ChessTheme, ChessPuzzle } from '@/data/chessPuzzles';
+import type { ChessPuzzle } from '@/data/chessPuzzles';
 
 const ACCESS_CODE = 'PAULMORPHY';
-
-const ALL_THEMES: ChessTheme[] = [
-  'fork', 'pin', 'skewer', 'discovered-attack', 'double-check', 'deflection',
-  'decoy', 'overloading', 'removing-the-defender', 'zwischenzug', 'trapped-piece',
-  'back-rank', 'smothered-mate', 'checkmate', 'sacrifice', 'hanging-piece',
-  'x-ray', 'promotion', 'endgame', 'battery', 'quiet-move', 'open-position',
-  'closed-position', 'rook-on-open-file', 'developed', 'undeveloped',
-  'check', 'captures', 'attacks', 'double-attack',
-];
 
 const DIFFICULTIES: ChessPuzzle['difficulty'][] = ['beginner', 'intermediate', 'advanced', 'master'];
 
