@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChessPuzzle, getNextDifficulty } from '@/data/chessPuzzles';
+import { ChessPuzzle } from '@/data/chessPuzzles';
 import { AnalysisData } from '@/components/AnalysisResult';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
