@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { ChessBoard } from '@/components/ChessBoard';
 import { TurnIndicator } from '@/components/TurnIndicator';
 import { ThinkingInput } from '@/components/ThinkingInput';
+import { HintTimer } from '@/components/HintTimer';
 import { AnalysisResult } from '@/components/AnalysisResult';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { ProgressStats } from '@/components/ProgressStats';
@@ -211,6 +212,14 @@ function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
                   onMove={game.handleMove}
                 />
 
+                <HintTimer
+                  active={
+                    puzzle.difficulty === 'beginner' &&
+                    game.gameState === 'thinking' &&
+                    !game.selectedMove &&
+                    !game.isLimited
+                  }
+                />
               </div>
 
               {/* Interaction Section */}
