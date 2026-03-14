@@ -11,7 +11,7 @@ const DAILY_PUZZLE_LIMIT = 3;
 
 export type GameState = 'thinking' | 'analyzing' | 'result';
 
-export function useChessGame(puzzle: ChessPuzzle) {
+export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const { user, isPremium } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
