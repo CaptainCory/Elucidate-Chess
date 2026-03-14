@@ -189,7 +189,12 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
 
     if (candidates.length > 0) {
       const next = candidates[Math.floor(Math.random() * candidates.length)];
-      navigate(`/position/${next.id}`);
+      if (next.id === puzzle.id) {
+        // Same puzzle — force remount via reset key
+        onReset?.();
+      } else {
+        navigate(`/position/${next.id}`);
+      }
     }
   }, [analysis, puzzle.id, solvedPuzzles, isPremium, navigate, dailySolved, user]);
 
