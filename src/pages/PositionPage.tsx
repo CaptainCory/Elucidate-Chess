@@ -59,7 +59,7 @@ const PositionPage = () => {
     return <Navigate to="/" replace />;
   }
 
-  return <PositionView key={puzzle.id} puzzle={puzzle} user={user} />;
+  return <PositionView key={`${puzzle.id}-${resetKey}`} puzzle={puzzle} user={user} onReset={() => setResetKey(k => k + 1)} />;
 };
 
 // Separate component so the hook resets when puzzle changes via key prop
