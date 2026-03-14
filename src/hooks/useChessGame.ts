@@ -11,7 +11,7 @@ const DAILY_PUZZLE_LIMIT = 3;
 
 export type GameState = 'thinking' | 'analyzing' | 'result';
 
-export function useChessGame(puzzle: ChessPuzzle) {
+export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const { user, isPremium } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -189,7 +189,12 @@ export function useChessGame(puzzle: ChessPuzzle) {
 
     if (candidates.length > 0) {
       const next = candidates[Math.floor(Math.random() * candidates.length)];
-      navigate(`/position/${next.id}`);
+      if (next.id === puzzle.id) {
+        // Same puzzle — force remount via reset key
+        onReset?.();
+      } else {
+        navigate(`/position/${next.id}`);
+      }
     }
   }, [analysis, puzzle.id, solvedPuzzles, isPremium, navigate, dailySolved, user]);
 

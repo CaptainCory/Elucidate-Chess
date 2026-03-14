@@ -29,6 +29,7 @@ const PositionPage = () => {
   const { user } = useAuth();
   const [puzzle, setPuzzle] = useState<ChessPuzzle | null>(null);
   const [loading, setLoading] = useState(true);
+  const [resetKey, setResetKey] = useState(0);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
@@ -58,12 +59,12 @@ const PositionPage = () => {
     return <Navigate to="/" replace />;
   }
 
-  return <PositionView key={puzzle.id} puzzle={puzzle} user={user} />;
+  return <PositionView key={`${puzzle.id}-${resetKey}`} puzzle={puzzle} user={user} onReset={() => setResetKey(k => k + 1)} />;
 };
 
 // Separate component so the hook resets when puzzle changes via key prop
-function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
-  const game = useChessGame(puzzle);
+function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: any; onReset: () => void }) {
+  const game = useChessGame(puzzle, onReset);
   const [showSignIn, setShowSignIn] = useState(false);
 
   // Fetch persisted profile stats from DB
