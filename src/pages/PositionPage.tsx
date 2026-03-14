@@ -63,8 +63,8 @@ const PositionPage = () => {
 };
 
 // Separate component so the hook resets when puzzle changes via key prop
-function PositionView({ puzzle, user }: { puzzle: ChessPuzzle; user: any }) {
-  const game = useChessGame(puzzle);
+function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: any; onReset: () => void }) {
+  const game = useChessGame(puzzle, onReset);
   const [showSignIn, setShowSignIn] = useState(false);
 
   // Fetch persisted profile stats from DB
