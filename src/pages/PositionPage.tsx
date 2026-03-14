@@ -29,6 +29,7 @@ const PositionPage = () => {
   const { user } = useAuth();
   const [puzzle, setPuzzle] = useState<ChessPuzzle | null>(null);
   const [loading, setLoading] = useState(true);
+  const [resetKey, setResetKey] = useState(0);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
