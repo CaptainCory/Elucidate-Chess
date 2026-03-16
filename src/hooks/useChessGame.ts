@@ -188,9 +188,12 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     }
 
     if (candidates.length > 0) {
-      const next = candidates[Math.floor(Math.random() * candidates.length)];
+      // Try to pick a different puzzle than the current one
+      let filtered = candidates.filter(p => p.id !== puzzle.id);
+      if (filtered.length === 0) filtered = candidates;
+      const next = filtered[Math.floor(Math.random() * filtered.length)];
       if (next.id === puzzle.id) {
-        // Same puzzle — force remount via reset key
+        // Only same puzzle available — force remount
         onReset?.();
       } else {
         navigate(`/position/${next.id}`);
