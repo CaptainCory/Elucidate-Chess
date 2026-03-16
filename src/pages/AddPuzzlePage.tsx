@@ -181,8 +181,12 @@ export default function AddPuzzlePage() {
 
     setSaving(true);
     try {
-      // Generate a unique ID using crypto
-      const puzzleId = crypto.randomUUID().slice(0, 8);
+      // Generate sequential ID based on difficulty prefix
+      const prefix = form.difficulty === 'beginner' ? 'B' : form.difficulty === 'intermediate' ? 'I' : form.difficulty === 'advanced' ? 'A' : 'M';
+      const { data: existing } = await supabase.from('puzzles').select('id').like('id', `${prefix}%`);
+      const nums = (existing || []).map(p => parseInt(p.id.slice(1))).filter(n => !isNaN(n));
+      const nextNum = nums.length > 0 ? Math.max(...nums) + 1 : 1;
+      const puzzleId = `${prefix}${nextNum}`;
 
       const { error } = await supabase.from('puzzles').insert({
         id: puzzleId,
