@@ -52,7 +52,8 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             ref={textareaRef}
             value={thinking}
             onChange={(e) => {
-              if (e.target.value.length <= MAX_CHARS) setThinking(e.target.value);
+              const sanitized = e.target.value.replace(/[^a-zA-Z0-9 .,;:!?'"\-()+=\n]/g, '');
+              if (sanitized.length <= MAX_CHARS) setThinking(sanitized);
             }}
             onKeyDown={handleKeyDown}
             placeholder={moveSelected ? '' : "👆 Drag and drop a piece on the board, then describe the position and justify your reasoning"}
