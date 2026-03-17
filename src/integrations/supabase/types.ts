@@ -137,6 +137,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_seen_puzzles: {
+        Row: {
+          id: string
+          puzzle_id: string
+          seen_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          puzzle_id: string
+          seen_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          puzzle_id?: string
+          seen_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

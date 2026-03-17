@@ -146,16 +146,21 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   }, [puzzle, selectedMove, scores, streak, user, isPremium, dailySolved, queryClient]);
 
   const handleNext = useCallback(async () => {
-    const newSolvedPuzzles = [...solvedPuzzles, puzzle.id];
-    setSolvedPuzzles(newSolvedPuzzles);
-
     if (!isPremium && dailySolved >= DAILY_PUZZLE_LIMIT) {
       setIsLimited(true);
       setShowUpgradeOverlay(true);
       return;
     }
 
-    // Get user's current difficulty level from DB
+    // Mark current puzzle as seen in DB (for logged-in users)
+    if (user) {
+      await supabase.from('user_seen_puzzles').upsert(
+        { user_id: user.id, puzzle_id: puzzle.id },
+        { onConflict: 'user_id,puzzle_id' }
+      );
+    }
+
+    // Get user's current difficulty level
     let userDifficulty = 'beginner';
     if (user) {
       const { data: profile } = await supabase
@@ -168,38 +173,54 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       }
     }
 
-    // Fetch next puzzle at user's level, excluding already solved
-    const { data } = await supabase
+    // Fetch all puzzles at user's level
+    const { data: allAtLevel } = await supabase
       .from('puzzles')
       .select('id')
-      .eq('difficulty', userDifficulty)
-      .limit(100);
-    let candidates = (data || []).filter(p => !newSolvedPuzzles.includes(p.id));
+      .eq('difficulty', userDifficulty);
+    const allIds = (allAtLevel || []).map(p => p.id);
 
-    // Fallback: any puzzle at user's level (allow repeats)
+    // Fetch seen puzzle IDs for this user
+    let seenIds: string[] = [];
+    if (user) {
+      const { data: seen } = await supabase
+        .from('user_seen_puzzles')
+        .select('puzzle_id')
+        .eq('user_id', user.id);
+      seenIds = (seen || []).map(s => s.puzzle_id);
+    }
+
+    // Filter to unseen puzzles at this difficulty
+    let candidates = allIds.filter(id => !seenIds.includes(id) && id !== puzzle.id);
+
+    // If all puzzles at this level have been seen, reset and start fresh
     if (candidates.length === 0) {
-      candidates = data || [];
+      if (user) {
+        // Delete seen records for puzzles at this difficulty so we cycle again
+        const idsToReset = allIds;
+        await supabase
+          .from('user_seen_puzzles')
+          .delete()
+          .eq('user_id', user.id)
+          .in('puzzle_id', idsToReset);
+      }
+      candidates = allIds.filter(id => id !== puzzle.id);
     }
 
     // Fallback: any puzzle at all
     if (candidates.length === 0) {
-      const { data: allData } = await supabase.from('puzzles').select('id').limit(100);
-      candidates = allData || [];
+      const { data: anyData } = await supabase.from('puzzles').select('id').limit(100);
+      candidates = (anyData || []).map(p => p.id).filter(id => id !== puzzle.id);
     }
 
     if (candidates.length > 0) {
-      // Try to pick a different puzzle than the current one
-      let filtered = candidates.filter(p => p.id !== puzzle.id);
-      if (filtered.length === 0) filtered = candidates;
-      const next = filtered[Math.floor(Math.random() * filtered.length)];
-      if (next.id === puzzle.id) {
-        // Only same puzzle available — force remount
-        onReset?.();
-      } else {
-        navigate(`/position/${next.id}`);
-      }
+      const nextId = candidates[Math.floor(Math.random() * candidates.length)];
+      navigate(`/position/${nextId}`);
+    } else {
+      // Only one puzzle exists total — force remount
+      onReset?.();
     }
-  }, [analysis, puzzle.id, solvedPuzzles, isPremium, navigate, dailySolved, user]);
+  }, [puzzle.id, isPremium, navigate, dailySolved, user, onReset]);
 
   return {
     gameState,
