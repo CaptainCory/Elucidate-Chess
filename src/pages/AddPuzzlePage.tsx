@@ -141,7 +141,7 @@ export default function AddPuzzlePage() {
   }
 
 
-  const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 200);
+  const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 500);
   // FEN only: letters for pieces/color, digits for squares/counters, / for ranks, - for castling/en passant, space as delimiter
   const sanitizeFen = (value: string) => value.replace(/[^rnbqkpRNBQKP1-8wbKQa-h0-9 /\-]/g, '').slice(0, 100);
   const sanitizeMove = (value: string) => value.replace(/[^a-zA-Z0-9#+=x\-]/g, '').slice(0, 10);
@@ -159,7 +159,7 @@ export default function AddPuzzlePage() {
     if (field === 'name') {
       sanitized = sanitizeAlphanumeric(value);
     } else if (field === 'explanation') {
-      sanitized = sanitizeAlphanumeric(value).slice(0, 350);
+      sanitized = sanitizeAlphanumeric(value).slice(0, 500);
     } else if (field === 'fen' || field === 'previousFen') {
       sanitized = sanitizeFen(value);
     } else if (field === 'bestMove') {
@@ -298,9 +298,9 @@ export default function AddPuzzlePage() {
                 value={form.explanation}
                 onChange={(e) => updateField('explanation', e.target.value)}
                 rows={12}
-                maxLength={350}
+                maxLength={500}
               />
-              <p className="text-xs text-muted-foreground text-right">{form.explanation.length}/350</p>
+              <p className="text-xs text-muted-foreground text-right">{form.explanation.length}/500</p>
             </div>
           </div>
         </div>
