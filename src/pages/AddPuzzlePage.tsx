@@ -141,7 +141,7 @@ export default function AddPuzzlePage() {
   }
 
 
-  const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 500);
+  const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 .,;:!?'"\-()]/g, '').slice(0, 500);
   // FEN only: letters for pieces/color, digits for squares/counters, / for ranks, - for castling/en passant, space as delimiter
   const sanitizeFen = (value: string) => value.replace(/[^rnbqkpRNBQKP1-8wbKQa-h0-9 /\-]/g, '').slice(0, 100);
   const sanitizeMove = (value: string) => value.replace(/[^a-zA-Z0-9#+=x\-]/g, '').slice(0, 10);
