@@ -219,7 +219,7 @@ export default function AddPuzzlePage() {
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2">
               <Brain className="w-6 h-6 text-primary" />
-              <span className="font-bold text-foreground hidden sm:inline">ChessThink</span>
+              <span className="font-bold text-foreground hidden sm:inline">Elucidate Chess</span>
             </Link>
             <span className="text-muted-foreground">/</span>
             <span className="text-sm font-medium text-foreground">Puzzle Editor</span>
