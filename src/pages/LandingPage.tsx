@@ -4,8 +4,24 @@ import { useState } from 'react';
 import { AuthModal } from '@/components/AuthModal';
 import { PageSEO } from '@/components/PageSEO';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
-import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb } from 'lucide-react';
+import { ChessBoard } from '@/components/ChessBoard';
+import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
 
 const features = [
   {
@@ -30,12 +46,15 @@ const features = [
   },
 ];
 
+// A classic knight-fork puzzle FEN for the demo
+const DEMO_FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4';
+
 export default function LandingPage() {
   const { user } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-hidden">
       <PageSEO title="Elucidate Chess — AI Chess Trainer That Coaches Your Thinking" />
 
       {/* Nav */}
@@ -70,138 +89,261 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
+        {/* Ambient glow layers */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-30"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at 50% 0%, hsl(42 75% 50% / 0.2), transparent 60%)',
+            background: 'radial-gradient(ellipse at 30% 20%, hsl(42 75% 50% / 0.12), transparent 55%), radial-gradient(ellipse at 70% 80%, hsl(348 55% 42% / 0.06), transparent 55%)',
           }}
         />
-        <div className="max-w-4xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 text-center relative">
-          <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight text-foreground mb-6 leading-tight">
-            Train Your Chess Thinking,{' '}
-            <span className="text-primary">Not Just Your Moves</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-10">
-            The AI-powered chess trainer that scores your reasoning — like having a coach who cares{' '}
-            <em>HOW</em> you think, not just what you play.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/">
-              <Button size="lg" className="gap-2 text-base px-8 py-6">
-                <ArrowRight className="w-5 h-5" />
-                Try a Puzzle Free
-              </Button>
-            </Link>
-            <Link to="/how-it-works">
-              <Button variant="outline" size="lg" className="gap-2 text-base px-8 py-6">
-                <Lightbulb className="w-5 h-5" />
-                Learn the Method
-              </Button>
-            </Link>
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: 'var(--gradient-glow)', filter: 'blur(80px)', opacity: 0.4 }} />
+
+        <div className="max-w-6xl mx-auto px-6 pt-16 pb-12 md:pt-24 md:pb-20 relative">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left: Text */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+              className="text-center lg:text-left"
+            >
+              <motion.h1
+                variants={fadeUp}
+                custom={0}
+                className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 leading-[1.1]"
+              >
+                Train Your Chess Thinking,{' '}
+                <span className="text-primary relative">
+                  Not Just Your Moves
+                  <motion.span
+                    className="absolute -bottom-1 left-0 right-0 h-[3px] bg-primary/40 rounded-full"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    style={{ originX: 0 }}
+                  />
+                </span>
+              </motion.h1>
+              <motion.p
+                variants={fadeUp}
+                custom={1}
+                className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed mb-8"
+              >
+                The AI-powered chess trainer that scores your reasoning — like having a coach who cares{' '}
+                <em className="text-foreground font-medium">HOW</em> you think, not just what you play.
+              </motion.p>
+              <motion.div
+                variants={fadeUp}
+                custom={2}
+                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+              >
+                <Link to="/">
+                  <Button size="lg" className="gap-2 text-base px-8 py-6 shadow-lg hover:shadow-xl transition-shadow">
+                    <ArrowRight className="w-5 h-5" />
+                    Try a Position Free
+                  </Button>
+                </Link>
+                <Link to="/how-it-works">
+                  <Button variant="outline" size="lg" className="gap-2 text-base px-8 py-6">
+                    <Lightbulb className="w-5 h-5" />
+                    Learn the Method
+                  </Button>
+                </Link>
+              </motion.div>
+            </motion.div>
+
+            {/* Right: Interactive Demo Board */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, rotate: -1 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="relative"
+            >
+              {/* Glow behind board */}
+              <div className="absolute -inset-6 rounded-2xl pointer-events-none" style={{ background: 'var(--gradient-glow)', filter: 'blur(40px)', opacity: 0.5 }} />
+              <div className="relative">
+                <ChessBoard fen={DEMO_FEN} orientation="white" interactive={false} />
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2, duration: 0.5 }}
+                  className="mt-4 text-center"
+                >
+                  <p className="text-sm text-muted-foreground font-display italic">
+                    White to move — can you spot the winning idea?
+                  </p>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* How It Works */}
-      <section className="py-16 md:py-24 border-t border-border/30">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-center text-foreground mb-4">
-            How It Works
-          </h2>
-          <p className="text-center text-muted-foreground max-w-xl mx-auto mb-14">
-            Three steps to sharper chess thinking. No memorization required.
-          </p>
-          <div className="grid md:grid-cols-3 gap-8">
+      <section className="py-16 md:py-24 border-t border-border/30 relative">
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent, hsl(160 20% 8% / 0.5), transparent)' }} />
+        <div className="max-w-4xl mx-auto px-6 relative">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={staggerContainer}
+            className="text-center mb-14"
+          >
+            <motion.h2 variants={fadeUp} custom={0} className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+              How It Works
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={1} className="text-muted-foreground max-w-xl mx-auto">
+              Three steps to sharper chess thinking. No memorization required.
+            </motion.p>
+          </motion.div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            variants={staggerContainer}
+            className="grid md:grid-cols-3 gap-8"
+          >
             {[
-              { step: '1', title: 'Study the Position', desc: 'Examine a carefully chosen chess puzzle. Identify threats, imbalances, and candidate moves.' },
+              { step: '1', title: 'Study the Position', desc: 'Examine a carefully chosen chess position. Identify threats, imbalances, and candidate moves.' },
               { step: '2', title: 'Explain Your Thinking', desc: 'Write down your reasoning before making a move. What do you see? Why is your move best?' },
               { step: '3', title: 'Get AI Coaching', desc: 'Receive detailed feedback comparing your thinking to the strongest continuation. Learn WHY, not just what.' },
             ].map((item) => (
-              <div key={item.step} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary font-display text-xl font-bold mb-4">
+              <motion.div key={item.step} variants={fadeUp} className="text-center group">
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 border border-primary/20 text-primary font-display text-xl font-bold mb-4 group-hover:bg-primary/20 transition-colors">
                   {item.step}
                 </div>
                 <h3 className="font-display text-xl font-semibold text-foreground mb-2">{item.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Why Elucidate */}
       <section className="py-16 md:py-24 border-t border-border/30">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-center text-foreground mb-4">
-            Why Elucidate
-          </h2>
-          <p className="text-center text-muted-foreground max-w-xl mx-auto mb-14">
-            Most chess puzzle trainers only check if you found the right move. We analyze how you think.
-          </p>
-          <div className="grid sm:grid-cols-2 gap-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={staggerContainer}
+            className="text-center mb-14"
+          >
+            <motion.h2 variants={fadeUp} custom={0} className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Why Elucidate
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={1} className="text-muted-foreground max-w-xl mx-auto">
+              Most chess puzzle trainers only check if you found the right move. We analyze how you think.
+            </motion.p>
+          </motion.div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            variants={staggerContainer}
+            className="grid sm:grid-cols-2 gap-6"
+          >
             {features.map((f) => (
-              <div key={f.title} className="chess-card p-6 rounded-xl">
-                <f.icon className="w-8 h-8 text-primary mb-4" />
+              <motion.div
+                key={f.title}
+                variants={fadeUp}
+                className="chess-card p-6 rounded-xl border border-border/50 hover:border-primary/30 transition-colors group"
+              >
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 group-hover:bg-primary/15 transition-colors mb-4">
+                  <f.icon className="w-6 h-6 text-primary" />
+                </div>
                 <h3 className="font-display text-lg font-semibold text-foreground mb-2">{f.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{f.description}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Pricing */}
-      <section className="py-16 md:py-24 border-t border-border/30">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Pricing
-          </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto mb-10">
-            Start free. Upgrade when you're ready for unlimited chess improvement.
-          </p>
-          <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <div className="chess-card p-6 rounded-xl text-left">
+      <section className="py-16 md:py-24 border-t border-border/30 relative">
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent, hsl(160 20% 8% / 0.5), transparent)' }} />
+        <div className="max-w-3xl mx-auto px-6 text-center relative">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={staggerContainer}
+          >
+            <motion.h2 variants={fadeUp} custom={0} className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Pricing
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={1} className="text-muted-foreground max-w-xl mx-auto mb-10">
+              Start free. Upgrade when you're ready for unlimited chess improvement.
+            </motion.p>
+          </motion.div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            variants={staggerContainer}
+            className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto"
+          >
+            <motion.div variants={fadeUp} className="chess-card p-6 rounded-xl text-left border border-border/50">
               <h3 className="font-display text-xl font-semibold text-foreground mb-1">Basic</h3>
-              <p className="text-primary font-display text-2xl font-bold mb-3">Free</p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>✓ 3 puzzles per day</li>
-                <li>✓ AI reasoning feedback</li>
-                <li>✓ Progress tracking</li>
+              <p className="text-primary font-display text-3xl font-bold mb-4">Free</p>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                {['3 positions per day', 'AI reasoning feedback', 'Progress tracking'].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-primary/70 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
               </ul>
-            </div>
-            <div className="chess-card p-6 rounded-xl text-left border-primary/30">
+            </motion.div>
+            <motion.div variants={fadeUp} className="chess-card p-6 rounded-xl text-left border border-primary/30 relative overflow-hidden">
+              <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-bl-lg">
+                Popular
+              </div>
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="font-display text-xl font-semibold text-foreground">Premium</h3>
                 <Trophy className="w-4 h-4 text-primary" />
               </div>
-              <p className="text-primary font-display text-2xl font-bold mb-3">$9/mo</p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>✓ Unlimited puzzles</li>
-                <li>✓ All difficulty levels</li>
-                <li>✓ Advanced AI analysis</li>
-                <li>✓ Priority support</li>
+              <p className="text-primary font-display text-3xl font-bold mb-4">$9<span className="text-lg font-normal text-muted-foreground">/mo</span></p>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                {['Unlimited positions', 'All difficulty levels', 'Advanced AI analysis', 'Priority support'].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
               </ul>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-16 md:py-20 border-t border-border/30">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="max-w-3xl mx-auto px-6 text-center"
+        >
+          <motion.h2 variants={fadeUp} custom={0} className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
             Ready to Think Clearly?
-          </h2>
-          <p className="text-muted-foreground mb-8">
+          </motion.h2>
+          <motion.p variants={fadeUp} custom={1} className="text-muted-foreground mb-8">
             Join chess players who are improving by understanding, not memorizing.
-          </p>
-          <Link to="/">
-            <Button size="lg" className="gap-2 text-base px-8 py-6">
-              <ArrowRight className="w-5 h-5" />
-              Start Your First Puzzle
-            </Button>
-          </Link>
-        </div>
+          </motion.p>
+          <motion.div variants={fadeUp} custom={2}>
+            <Link to="/">
+              <Button size="lg" className="gap-2 text-base px-8 py-6 shadow-lg hover:shadow-xl transition-shadow">
+                <ArrowRight className="w-5 h-5" />
+                Start Your First Position
+              </Button>
+            </Link>
+          </motion.div>
+        </motion.div>
       </section>
 
       <ChessQuoteFooter />
