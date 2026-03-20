@@ -9,6 +9,8 @@ import { Separator } from '@/components/ui/separator';
 import { Crown, LogOut, Trophy, Target, TrendingUp, ArrowLeft, Loader2, Mail, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
+import { ProgressStats } from '@/components/ProgressStats';
+import { GraduationProgress } from '@/components/GraduationProgress';
 import { useQuery } from '@tanstack/react-query';
 
 const ProfilePage = () => {
