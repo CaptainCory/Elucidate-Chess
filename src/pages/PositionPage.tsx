@@ -11,7 +11,7 @@ import { ThinkingInput } from '@/components/ThinkingInput';
 import { HintTimer } from '@/components/HintTimer';
 import { AnalysisResult } from '@/components/AnalysisResult';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
-import { ProgressStats } from '@/components/ProgressStats';
+
 import { PlanBadge } from '@/components/PlanBadge';
 import { UserMenu } from '@/components/UserMenu';
 import { UpgradeOverlay } from '@/components/UpgradeOverlay';
