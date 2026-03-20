@@ -218,7 +218,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                     puzzle.difficulty === 'beginner' &&
                     game.gameState === 'thinking' &&
                     !game.selectedMove &&
-                    !game.isLimited
+                    !game.isDifficultyLocked
                   }
                 />
               </div>
