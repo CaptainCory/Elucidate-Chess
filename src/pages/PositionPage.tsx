@@ -228,8 +228,8 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                 <div className="flex items-center gap-2 text-foreground">
                   <Brain className="w-6 h-6 text-primary" />
                   <h2 className="text-xl font-semibold font-display">
-                    {game.isLimited && 'Daily limit reached'}
-                    {!game.isLimited && game.gameState === 'thinking' && 'Elucidation'}
+                    {game.isDifficultyLocked && 'Premium Required'}
+                    {!game.isDifficultyLocked && game.gameState === 'thinking' && 'Elucidation'}
                     {game.gameState === 'analyzing' && 'Analyzing your response...'}
                     {game.gameState === 'result' && 'Analysis Complete'}
                   </h2>
