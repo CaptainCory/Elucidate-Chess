@@ -115,10 +115,10 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
         } else if (rpcResult && typeof rpcResult === 'object' && !Array.isArray(rpcResult)) {
           const result = rpcResult as Record<string, unknown>;
           if (result.graduated) {
-            if (!isPremium && result.current_difficulty !== 'beginner') {
-              toast.success(`🎓 You've qualified for ${result.current_difficulty} — upgrade to Premium to unlock it!`);
-            } else {
-              toast.success(`🎓 Congratulations! You've graduated to ${result.current_difficulty} positions!`);
+            const newDiff = result.current_difficulty as string;
+            setGraduatedTo(newDiff);
+            if (!isPremium && newDiff !== 'beginner') {
+              // Don't toast — the celebration modal handles it
             }
           }
         }
