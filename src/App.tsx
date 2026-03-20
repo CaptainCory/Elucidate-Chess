@@ -13,6 +13,7 @@ import Membership from "./pages/Membership";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import HowItWorks from "./pages/HowItWorks";
 import AddPuzzlePage from "./pages/AddPuzzlePage";
+import ManagePuzzlesPage from "./pages/ManagePuzzlesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
