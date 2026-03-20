@@ -11,7 +11,7 @@ import { ThinkingInput } from '@/components/ThinkingInput';
 import { HintTimer } from '@/components/HintTimer';
 import { AnalysisResult } from '@/components/AnalysisResult';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
-import { ProgressStats } from '@/components/ProgressStats';
+
 import { PlanBadge } from '@/components/PlanBadge';
 import { UserMenu } from '@/components/UserMenu';
 import { UpgradeOverlay } from '@/components/UpgradeOverlay';
@@ -93,9 +93,9 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
         }}
       />
 
-      <div className="relative container max-w-6xl mx-auto px-3 py-4 lg:px-4 lg:py-8">
+      <div className="relative container max-w-6xl mx-auto px-3 py-2 lg:px-4 lg:py-4">
         {/* Header */}
-        <header className="text-center mb-4 lg:mb-8 animate-fade-in relative">
+        <header className="text-center mb-2 lg:mb-4 animate-fade-in relative">
           <div className="flex items-center justify-between mb-3">
             {/* Mobile: hamburger + plan badge */}
             <div className="flex items-center gap-2 lg:gap-3">
@@ -182,10 +182,8 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
           )}
         </header>
 
-        {/* Progress Stats - hidden on mobile */}
-        <div className="mb-4 lg:mb-8 max-w-md mx-auto hidden md:block">
-          <ProgressStats puzzlesSolved={profile?.puzzles_solved ?? 0} averageScore={profile?.average_score ?? game.averageScore} streak={Math.max(profile?.best_streak ?? 0, game.streak)} />
-        </div>
+
+
 
         {/* Graduation Progress */}
         {user && profile && (
