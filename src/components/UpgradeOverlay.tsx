@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Crown, Zap, Brain, X } from 'lucide-react';
+import { Crown, Zap, Brain, X, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AuthModal } from '@/components/AuthModal';
 import { useAuth } from '@/contexts/AuthContext';
@@ -51,15 +51,15 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
 
           <div className="flex flex-col items-center text-center space-y-6">
             <div className="w-16 h-16 rounded-full bg-primary/15 flex items-center justify-center">
-              <Crown className="w-8 h-8 text-primary" />
+              <Lock className="w-8 h-8 text-primary" />
             </div>
 
             <div className="space-y-2">
               <h2 className="text-2xl font-bold font-display text-foreground">
-                You're out of positions today
+                Unlock Intermediate & Advanced
               </h2>
               <p className="text-muted-foreground text-sm">
-                Upgrade to Premium for unlimited positions and AI analysis every day.
+                Free users get unlimited beginner positions. Upgrade to Premium to access all difficulty levels and accelerate your improvement.
               </p>
             </div>
 
@@ -97,7 +97,7 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
             <div className="w-full space-y-3 text-left">
               <div className="flex items-center gap-3 text-sm text-foreground">
                 <Zap className="w-4 h-4 text-primary shrink-0" />
-                <span>Unlimited positions daily</span>
+                <span>Intermediate & Advanced positions</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-foreground">
                 <Brain className="w-4 h-4 text-primary shrink-0" />
@@ -105,7 +105,7 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
               </div>
               <div className="flex items-center gap-3 text-sm text-foreground">
                 <Crown className="w-4 h-4 text-primary shrink-0" />
-                <span>All difficulty levels unlocked</span>
+                <span>Unlock all difficulty levels</span>
               </div>
             </div>
 
