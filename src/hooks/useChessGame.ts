@@ -172,11 +172,11 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       targetDifficulty = Math.random() < 0.5 ? 'intermediate' : 'advanced';
     }
 
-    // Fetch all puzzles at user's level
+    // Fetch all puzzles at target level
     const { data: allAtLevel } = await supabase
       .from('puzzles')
       .select('id')
-      .eq('difficulty', userDifficulty);
+      .eq('difficulty', targetDifficulty);
     const allIds = (allAtLevel || []).map(p => p.id);
 
     // Fetch seen puzzle IDs for this user
