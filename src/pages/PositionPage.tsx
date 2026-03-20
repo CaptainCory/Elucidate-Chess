@@ -95,7 +95,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
 
       <div className="relative container max-w-6xl mx-auto px-3 py-2 lg:px-4 lg:py-4">
         {/* Header */}
-        <header className="text-center mb-4 lg:mb-8 animate-fade-in relative">
+        <header className="text-center mb-2 lg:mb-4 animate-fade-in relative">
           <div className="flex items-center justify-between mb-3">
             {/* Mobile: hamburger + plan badge */}
             <div className="flex items-center gap-2 lg:gap-3">
