@@ -58,7 +58,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             onKeyDown={handleKeyDown}
             placeholder={moveSelected ? '' : "👆 Drag and drop a piece on the board, then describe the position and justify your reasoning"}
             className="thinking-area"
-            rows={5}
+            rows={4}
             maxLength={MAX_CHARS}
             disabled={disabled || isLoading || !moveSelected}
           />
