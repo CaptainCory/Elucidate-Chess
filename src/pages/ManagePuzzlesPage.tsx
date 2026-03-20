@@ -229,9 +229,9 @@ export default function ManagePuzzlesPage() {
           <div className="space-y-3">
             {puzzles.map(puzzle => (
               <div key={puzzle.id} className="chess-card p-4 rounded-xl flex items-center gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
-                  <span className="font-mono font-bold text-foreground text-sm">{puzzle.id}</span>
-                </div>
+                <a href={`/position/${puzzle.id}`} className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors flex items-center justify-center cursor-pointer" title={`Go to puzzle ${puzzle.id}`}>
+                  <span className="font-mono font-bold text-primary text-sm">{puzzle.id}</span>
+                </a>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-foreground truncate">{puzzle.name}</span>
