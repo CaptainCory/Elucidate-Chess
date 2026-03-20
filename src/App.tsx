@@ -14,6 +14,7 @@ import LeaderboardPage from "./pages/LeaderboardPage";
 import HowItWorks from "./pages/HowItWorks";
 import AddPuzzlePage from "./pages/AddPuzzlePage";
 import ManagePuzzlesPage from "./pages/ManagePuzzlesPage";
+import VocabularyPage from "./pages/VocabularyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
