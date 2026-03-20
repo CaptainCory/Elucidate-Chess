@@ -174,19 +174,8 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
           {!game.isPremium && (
             <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary">
               <span className="text-xs font-medium text-muted-foreground">
-                {game.remaining > 0
-                  ? `${game.remaining} position${game.remaining !== 1 ? 's' : ''} remaining today`
-                  : 'Daily limit reached'}
+                Free · Beginner only
               </span>
-              <div className="flex gap-0.5">
-                {Array.from({ length: game.DAILY_PUZZLE_LIMIT }).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`w-2 h-2 rounded-full transition-all duration-500 ${i < game.dailySolved ? 'bg-primary scale-125' : 'bg-muted-foreground/30 scale-100'}`}
-                    style={{ transitionDelay: `${i * 100}ms` }}
-                  />
-                ))}
-              </div>
             </div>
           )}
         </header>
