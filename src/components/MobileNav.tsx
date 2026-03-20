@@ -44,6 +44,14 @@ export function MobileNav({ user, onSignIn }: MobileNavProps) {
               Leaderboard
             </Link>
             <Link
+              to="/vocabulary"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-secondary transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              <BookOpen className="w-4 h-4 text-primary" />
+              Vocabulary
+            </Link>
+            <Link
               to="/add-puzzle"
               onClick={() => setOpen(false)}
               className="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-secondary transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"

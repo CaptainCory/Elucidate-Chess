@@ -110,6 +110,17 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                 </TooltipTrigger>
                 <TooltipContent>How It Works</TooltipContent>
               </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/vocabulary"
+                    className="hidden lg:flex items-center justify-center w-9 h-9 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Vocabulary</TooltipContent>
+              </Tooltip>
             </div>
             {/* Title - compact on mobile */}
             <div className="flex items-center gap-2 lg:gap-3">
