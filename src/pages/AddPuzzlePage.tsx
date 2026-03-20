@@ -238,11 +238,18 @@ export default function AddPuzzlePage() {
             <h1 className="text-2xl font-bold text-foreground">Add New Puzzle</h1>
             <p className="text-sm text-muted-foreground mt-1">Fill out the form to add a new puzzle to the database</p>
           </div>
-          <Link to="/">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-1" /> Back
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link to="/manage-puzzles">
+              <Button variant="outline" size="sm">
+                <Settings className="w-4 h-4 mr-1" /> Manage
+              </Button>
+            </Link>
+            <Link to="/">
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="w-4 h-4 mr-1" /> Back
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
