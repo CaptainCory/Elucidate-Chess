@@ -311,7 +311,7 @@ export default function LandingPage() {
               </div>
               <p className="text-primary font-display text-3xl font-bold mb-4">$9<span className="text-lg font-normal text-muted-foreground">/mo</span></p>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                {['Unlimited positions', 'All difficulty levels', 'Advanced AI analysis', 'Priority support'].map((item) => (
+                {['Unlimited positions', 'Intermediate & Advanced levels', 'Advanced AI analysis', 'Priority support'].map((item) => (
                   <li key={item} className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
                     {item}

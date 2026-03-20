@@ -199,7 +199,7 @@ const Membership = () => {
           <div className="chess-card p-6">
             <h2 className="text-lg font-semibold text-foreground mb-2">Upgrade to Premium</h2>
             <p className="text-sm text-muted-foreground mb-4">
-              Get unlimited puzzles every day with full AI-powered analysis.
+              Unlock intermediate and advanced positions with full AI-powered analysis.
             </p>
 
             {/* Plan toggle */}
