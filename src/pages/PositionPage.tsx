@@ -19,7 +19,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Plus, Loader2 } from 'lucide-react';
+import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Plus, Loader2, BookOpen } from 'lucide-react';
 import { MobileNav } from '@/components/MobileNav';
 import { ShareButton } from '@/components/ShareButton';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
@@ -109,6 +109,17 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>How It Works</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/vocabulary"
+                    className="hidden lg:flex items-center justify-center w-9 h-9 rounded-full bg-secondary hover:bg-secondary/80 transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Vocabulary</TooltipContent>
               </Tooltip>
             </div>
             {/* Title - compact on mobile */}
