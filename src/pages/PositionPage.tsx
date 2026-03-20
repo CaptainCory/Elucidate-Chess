@@ -199,6 +199,13 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                     ? (profile.intermediate_solved ?? 0)
                     : (profile.advanced_solved ?? 0)
               }
+              avgScore={
+                (profile.current_difficulty ?? 'beginner') === 'beginner'
+                  ? (profile.beginner_avg_score ?? 0)
+                  : (profile.current_difficulty ?? 'beginner') === 'intermediate'
+                    ? (profile.intermediate_avg_score ?? 0)
+                    : (profile.advanced_avg_score ?? 0)
+              }
               isPremium={game.isPremium}
             />
           </div>
