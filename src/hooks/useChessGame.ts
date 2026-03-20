@@ -230,4 +230,3 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     isPremium,
   };
 }
-}
