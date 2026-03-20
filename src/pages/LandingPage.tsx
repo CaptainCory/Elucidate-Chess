@@ -290,10 +290,10 @@ export default function LandingPage() {
             className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto"
           >
             <motion.div variants={fadeUp} className="chess-card p-6 rounded-xl text-left border border-border/50">
-              <h3 className="font-display text-xl font-semibold text-foreground mb-1">Basic</h3>
-              <p className="text-primary font-display text-3xl font-bold mb-4">Free</p>
+              <h3 className="font-display text-xl font-semibold text-foreground mb-1">Free</h3>
+              <p className="text-primary font-display text-3xl font-bold mb-4">$0</p>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                {['3 positions per day', 'AI reasoning feedback', 'Progress tracking'].map((item) => (
+                {['Unlimited beginner positions', 'AI reasoning feedback', 'Progress tracking'].map((item) => (
                   <li key={item} className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-primary/70 flex-shrink-0" />
                     {item}
