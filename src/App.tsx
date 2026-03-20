@@ -14,6 +14,7 @@ import LeaderboardPage from "./pages/LeaderboardPage";
 import HowItWorks from "./pages/HowItWorks";
 import AddPuzzlePage from "./pages/AddPuzzlePage";
 import ManagePuzzlesPage from "./pages/ManagePuzzlesPage";
+import VocabularyPage from "./pages/VocabularyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/add-puzzle" element={<AddPuzzlePage />} />
             <Route path="/manage-puzzles" element={<ManagePuzzlesPage />} />
+            <Route path="/vocabulary" element={<VocabularyPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

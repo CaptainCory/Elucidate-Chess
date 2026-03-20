@@ -68,6 +68,9 @@ export default function LandingPage() {
             <Link to="/how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
               How It Works
             </Link>
+            <Link to="/vocabulary" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
+              Vocabulary
+            </Link>
             <Link to="/leaderboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
               Leaderboard
             </Link>
