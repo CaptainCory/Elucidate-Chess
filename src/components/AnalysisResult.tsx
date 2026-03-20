@@ -115,6 +115,15 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
         <p className={`text-xl font-semibold ${getScoreColor(analysis.score)}`}>
           {getScoreLabel(analysis.score)}
         </p>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => toggleSpeech(buildSpeechText())}
+          className="mx-auto flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary"
+        >
+          {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+          {isSpeaking ? 'Stop' : 'Listen to Feedback'}
+        </Button>
       </div>
 
       {/* Move Comparison */}
