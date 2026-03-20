@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Lightbulb } from "lucide-react";
 import { ChessQuoteFooter } from "@/components/ChessQuoteFooter";
+import { PageSEO } from "@/components/PageSEO";
 import {
   Accordion,
   AccordionContent,
