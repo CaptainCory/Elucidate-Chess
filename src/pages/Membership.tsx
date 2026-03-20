@@ -142,12 +142,12 @@ const Membership = () => {
               <CreditCard className="w-5 h-5 text-muted-foreground mt-0.5" />
               <div>
                 <p className="text-sm font-medium text-foreground">
-                  {isPremium ? 'Unlimited Puzzles' : 'Free Plan'}
+                  {isPremium ? 'All Difficulty Levels' : 'Free Plan'}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {isPremium
-                    ? 'Unlimited daily puzzles with AI analysis'
-                    : '3 puzzles per day · Upgrade for unlimited access'}
+                    ? 'Unlimited puzzles at all difficulty levels with AI analysis'
+                    : 'Unlimited beginner positions · Upgrade for intermediate & advanced'}
                 </p>
               </div>
             </div>
