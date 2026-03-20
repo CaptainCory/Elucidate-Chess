@@ -187,6 +187,23 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
           <ProgressStats puzzlesSolved={profile?.puzzles_solved ?? 0} averageScore={profile?.average_score ?? game.averageScore} streak={Math.max(profile?.best_streak ?? 0, game.streak)} />
         </div>
 
+        {/* Graduation Progress */}
+        {user && profile && (
+          <div className="mb-4 lg:mb-6 max-w-md mx-auto">
+            <GraduationProgress
+              difficulty={profile.current_difficulty ?? 'beginner'}
+              solved={
+                (profile.current_difficulty ?? 'beginner') === 'beginner'
+                  ? (profile.beginner_solved ?? 0)
+                  : (profile.current_difficulty ?? 'beginner') === 'intermediate'
+                    ? (profile.intermediate_solved ?? 0)
+                    : (profile.advanced_solved ?? 0)
+              }
+              isPremium={game.isPremium}
+            />
+          </div>
+        )}
+
         {/* Main Content */}
         {(() => {
           // Determine which section should have the attention guide
