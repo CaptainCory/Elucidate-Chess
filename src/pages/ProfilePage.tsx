@@ -36,6 +36,8 @@ const ProfilePage = () => {
     enabled: !!user,
   });
 
+  const isPremiumUser = isPremium || profile?.is_premium;
+
   if (loading || !user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
