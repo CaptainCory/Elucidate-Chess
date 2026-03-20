@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Lightbulb } from 'lucide-react';
+import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Lightbulb, Volume2, VolumeX } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { FollowUpChat } from '@/components/FollowUpChat';
+import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 
 export interface PositionPiece {
   square: string;
@@ -48,6 +49,21 @@ interface AnalysisResultProps {
 }
 
 export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResultProps) {
+  const { isSpeaking, toggle: toggleSpeech } = useTextToSpeech();
+
+  const buildSpeechText = () => {
+    const parts: string[] = [];
+    parts.push(analysis.moveCorrect ? 'Correct move!' : 'Incorrect move.');
+    parts.push(`Score: ${analysis.score} out of 100.`);
+    parts.push(analysis.reasoningFeedback);
+    if (analysis.keyInsights.length > 0) {
+      parts.push('Key insights: ' + analysis.keyInsights.slice(0, 2).join('. '));
+    }
+    if (analysis.improvement) {
+      parts.push('To improve: ' + analysis.improvement);
+    }
+    return parts.join(' ');
+  };
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Don't trigger next if typing in the follow-up chat
@@ -99,6 +115,15 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
         <p className={`text-xl font-semibold ${getScoreColor(analysis.score)}`}>
           {getScoreLabel(analysis.score)}
         </p>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => toggleSpeech(buildSpeechText())}
+          className="mx-auto flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary"
+        >
+          {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+          {isSpeaking ? 'Stop' : 'Listen to Feedback'}
+        </Button>
       </div>
 
       {/* Move Comparison */}
