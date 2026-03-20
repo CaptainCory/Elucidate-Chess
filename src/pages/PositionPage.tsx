@@ -174,19 +174,8 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
           {!game.isPremium && (
             <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary">
               <span className="text-xs font-medium text-muted-foreground">
-                {game.remaining > 0
-                  ? `${game.remaining} position${game.remaining !== 1 ? 's' : ''} remaining today`
-                  : 'Daily limit reached'}
+                Free · Beginner only
               </span>
-              <div className="flex gap-0.5">
-                {Array.from({ length: game.DAILY_PUZZLE_LIMIT }).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`w-2 h-2 rounded-full transition-all duration-500 ${i < game.dailySolved ? 'bg-primary scale-125' : 'bg-muted-foreground/30 scale-100'}`}
-                    style={{ transitionDelay: `${i * 100}ms` }}
-                  />
-                ))}
-              </div>
             </div>
           )}
         </header>
@@ -199,8 +188,8 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
         {/* Main Content */}
         {(() => {
           // Determine which section should have the attention guide
-          const boardFocused = game.gameState === 'thinking' && !game.selectedMove && !game.isLimited;
-          const inputFocused = game.gameState === 'thinking' && !!game.selectedMove && !game.isLimited;
+          const boardFocused = game.gameState === 'thinking' && !game.selectedMove && !game.isDifficultyLocked;
+          const inputFocused = game.gameState === 'thinking' && !!game.selectedMove && !game.isDifficultyLocked;
           const resultFocused = game.gameState === 'result';
 
           return (
@@ -220,7 +209,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   fen={puzzle.fen}
                   previousFen={puzzle.previousFen}
                   orientation="white"
-                  interactive={game.gameState === 'thinking' && !game.isLimited}
+                  interactive={game.gameState === 'thinking' && !game.isDifficultyLocked}
                   onMove={game.handleMove}
                 />
 
@@ -229,7 +218,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                     puzzle.difficulty === 'beginner' &&
                     game.gameState === 'thinking' &&
                     !game.selectedMove &&
-                    !game.isLimited
+                    !game.isDifficultyLocked
                   }
                 />
               </div>
@@ -239,19 +228,19 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                 <div className="flex items-center gap-2 text-foreground">
                   <Brain className="w-6 h-6 text-primary" />
                   <h2 className="text-xl font-semibold font-display">
-                    {game.isLimited && 'Daily limit reached'}
-                    {!game.isLimited && game.gameState === 'thinking' && 'Elucidation'}
+                    {game.isDifficultyLocked && 'Premium Required'}
+                    {!game.isDifficultyLocked && game.gameState === 'thinking' && 'Elucidation'}
                     {game.gameState === 'analyzing' && 'Analyzing your response...'}
                     {game.gameState === 'result' && 'Analysis Complete'}
                   </h2>
                 </div>
 
-                {game.isLimited && (
+                {game.isDifficultyLocked && (
                   <div className="flex flex-col items-center justify-center py-8 space-y-4 text-center">
                     <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
                       <Crown className="w-8 h-8 text-primary" />
                     </div>
-                    <p className="text-muted-foreground">You've reached your daily limit of {game.DAILY_PUZZLE_LIMIT} positions.</p>
+                    <p className="text-muted-foreground">This position requires Premium. Upgrade to unlock intermediate and advanced puzzles.</p>
                     <button
                       onClick={() => game.setShowUpgradeOverlay(true)}
                       className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
@@ -261,7 +250,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   </div>
                 )}
 
-                {!game.isLimited && game.gameState === 'thinking' && (
+                {!game.isDifficultyLocked && game.gameState === 'thinking' && (
                   <ThinkingInput onSubmit={game.handleSubmit} isLoading={false} moveSelected={!!game.selectedMove} />
                 )}
 
