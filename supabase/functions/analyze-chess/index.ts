@@ -144,7 +144,7 @@ const verifyPosition = (fen: string, bestMove: string, userMove: string): Positi
   };
 };
 
-const DAILY_LIMIT = 3;
+// Access is gated by difficulty: free users can only access beginner puzzles
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
