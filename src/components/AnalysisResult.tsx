@@ -49,6 +49,21 @@ interface AnalysisResultProps {
 }
 
 export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResultProps) {
+  const { isSpeaking, toggle: toggleSpeech } = useTextToSpeech();
+
+  const buildSpeechText = () => {
+    const parts: string[] = [];
+    parts.push(analysis.moveCorrect ? 'Correct move!' : 'Incorrect move.');
+    parts.push(`Score: ${analysis.score} out of 100.`);
+    parts.push(analysis.reasoningFeedback);
+    if (analysis.keyInsights.length > 0) {
+      parts.push('Key insights: ' + analysis.keyInsights.slice(0, 2).join('. '));
+    }
+    if (analysis.improvement) {
+      parts.push('To improve: ' + analysis.improvement);
+    }
+    return parts.join(' ');
+  };
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Don't trigger next if typing in the follow-up chat
