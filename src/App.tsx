@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AmazonSticker } from "@/components/AmazonSticker";
 import Index from "./pages/Index";
+import LandingPage from "./pages/LandingPage";
 import PositionPage from "./pages/PositionPage";
 import ProfilePage from "./pages/ProfilePage";
 import Membership from "./pages/Membership";
@@ -26,6 +27,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/landing" element={<LandingPage />} />
             <Route path="/position/:id" element={<PositionPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />

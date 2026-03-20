@@ -1,0 +1,33 @@
+# Elucidate Chess
+
+## What is Elucidate Chess?
+Elucidate Chess is an AI-powered chess puzzle trainer that coaches your thinking, not just your moves. Unlike traditional chess puzzle apps that only check if you found the right answer, Elucidate asks you to explain your reasoning in writing, then provides detailed AI feedback on your thought process.
+
+## Who is it for?
+- Chess players of all levels (beginner to master) who want to improve their understanding
+- Players who want to build real chess intuition, not just memorize patterns
+- Anyone who believes understanding WHY a move is strong matters more than finding it by accident
+
+## Key Features
+- AI-powered reasoning analysis: Write your thinking, get scored on your logic
+- Chess puzzle positions across beginner, intermediate, advanced, and master levels
+- Personalized AI coaching feedback comparing your reasoning to optimal play
+- Progress tracking with detailed statistics per difficulty level
+- Leaderboard to compare with other players
+- Follow-up chat for deeper analysis of positions
+
+## How It Works
+1. Study a carefully chosen chess position
+2. Write down your reasoning — what threats you see, what candidate moves you consider, and why
+3. Submit your move along with your explanation
+4. Receive detailed AI feedback that scores your reasoning and explains the strongest continuation
+
+## Pricing
+- Basic (Free): 3 puzzles per day with AI feedback
+- Premium ($9/month): Unlimited puzzles, all difficulty levels, advanced analysis
+
+## URL
+https://think-chess-wise.lovable.app
+
+## Philosophy
+The name "Elucidate" comes from the Latin "elucidare" — to bring light, to make clear. The philosophy is that chess improvement comes from clarity of thinking, not memorization of lines. When you understand the reason a move is strong, you can find similar moves in your own games without ever having studied that exact position.
