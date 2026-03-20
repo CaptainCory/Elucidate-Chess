@@ -206,7 +206,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
   }, [fen, interactive, userMove, isAnimatingIntro, selectedSquare, makeMove]);
 
   return (
-    <div className="w-full max-w-[500px] mx-auto">
+    <div className="w-full max-w-[550px] mx-auto">
       <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border relative">
         {isAnimatingIntro && (
           <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-full bg-muted/90 text-xs font-medium text-muted-foreground backdrop-blur-sm">
