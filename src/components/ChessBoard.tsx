@@ -230,7 +230,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
             backgroundColor: 'hsl(38, 40%, 78%)',
           }}
           squareStyles={highlightSquares}
-          calcWidth={({ screenWidth }) => Math.min(500, screenWidth - 32)}
+          calcWidth={({ screenWidth }) => Math.min(550, screenWidth - 32)}
           pieces={Object.fromEntries(
             Object.entries(pieceImages).map(([piece, src]) => [
               piece,
