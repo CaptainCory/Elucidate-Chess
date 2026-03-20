@@ -23,6 +23,8 @@ import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Plus, Loader2, BookO
 import { MobileNav } from '@/components/MobileNav';
 import { ShareButton } from '@/components/ShareButton';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
+import { GraduationProgress } from '@/components/GraduationProgress';
+import { GraduationCelebration } from '@/components/GraduationCelebration';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
