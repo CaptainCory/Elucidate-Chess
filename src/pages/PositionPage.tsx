@@ -300,6 +300,12 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
       </div>
 
       <UpgradeOverlay open={game.showUpgradeOverlay} onClose={() => game.setShowUpgradeOverlay(false)} />
+      {game.graduatedTo && (
+        <GraduationCelebration
+          newDifficulty={game.graduatedTo}
+          onDismiss={() => game.setGraduatedTo(null)}
+        />
+      )}
       <AuthModal open={showSignIn} onOpenChange={setShowSignIn} />
     </div>
   );
