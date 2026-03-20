@@ -93,7 +93,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
         }}
       />
 
-      <div className="relative container max-w-6xl mx-auto px-3 py-4 lg:px-4 lg:py-8">
+      <div className="relative container max-w-6xl mx-auto px-3 py-2 lg:px-4 lg:py-4">
         {/* Header */}
         <header className="text-center mb-4 lg:mb-8 animate-fade-in relative">
           <div className="flex items-center justify-between mb-3">
