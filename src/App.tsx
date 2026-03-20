@@ -13,6 +13,7 @@ import Membership from "./pages/Membership";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import HowItWorks from "./pages/HowItWorks";
 import AddPuzzlePage from "./pages/AddPuzzlePage";
+import ManagePuzzlesPage from "./pages/ManagePuzzlesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/membership" element={<Membership />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/add-puzzle" element={<AddPuzzlePage />} />
+            <Route path="/manage-puzzles" element={<ManagePuzzlesPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
