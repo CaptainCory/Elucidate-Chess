@@ -209,7 +209,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   fen={puzzle.fen}
                   previousFen={puzzle.previousFen}
                   orientation="white"
-                  interactive={game.gameState === 'thinking' && !game.isLimited}
+                  interactive={game.gameState === 'thinking' && !game.isDifficultyLocked}
                   onMove={game.handleMove}
                 />
 
