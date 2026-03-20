@@ -126,7 +126,7 @@ const ProfilePage = () => {
           </CardContent>
         </Card>
 
-        {/* Stats */}
+        {/* Progress Stats */}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
@@ -134,26 +134,46 @@ const ProfilePage = () => {
               Your Stats
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-3 rounded-lg bg-secondary/50">
-                <Trophy className="w-5 h-5 mx-auto mb-1 text-primary" />
-                <p className="text-2xl font-bold font-display text-foreground">{profile?.puzzles_solved ?? 0}</p>
-                <p className="text-xs text-muted-foreground">Solved</p>
-              </div>
-              <div className="text-center p-3 rounded-lg bg-secondary/50">
-                <Target className="w-5 h-5 mx-auto mb-1 text-accent" />
-                <p className="text-2xl font-bold font-display text-foreground">{profile?.average_score ?? 0}</p>
-                <p className="text-xs text-muted-foreground">Avg Score</p>
-              </div>
-              <div className="text-center p-3 rounded-lg bg-secondary/50">
-                <TrendingUp className="w-5 h-5 mx-auto mb-1 text-primary" />
-                <p className="text-2xl font-bold font-display text-foreground">{profile?.best_streak ?? 0}</p>
-                <p className="text-xs text-muted-foreground">Best Streak</p>
-              </div>
-            </div>
+          <CardContent className="space-y-4">
+            <ProgressStats
+              puzzlesSolved={profile?.puzzles_solved ?? 0}
+              averageScore={profile?.average_score ?? 0}
+              streak={profile?.best_streak ?? 0}
+            />
           </CardContent>
         </Card>
+
+        {/* Graduation Progress */}
+        {profile && (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-primary" />
+                Skill Progress
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <GraduationProgress
+                difficulty={profile.current_difficulty ?? 'beginner'}
+                solved={
+                  (profile.current_difficulty ?? 'beginner') === 'beginner'
+                    ? (profile.beginner_solved ?? 0)
+                    : (profile.current_difficulty ?? 'beginner') === 'intermediate'
+                      ? (profile.intermediate_solved ?? 0)
+                      : (profile.advanced_solved ?? 0)
+                }
+                avgScore={
+                  (profile.current_difficulty ?? 'beginner') === 'beginner'
+                    ? (profile.beginner_avg_score ?? 0)
+                    : (profile.current_difficulty ?? 'beginner') === 'intermediate'
+                      ? (profile.intermediate_avg_score ?? 0)
+                      : (profile.advanced_avg_score ?? 0)
+                }
+                isPremium={!!isPremiumUser}
+              />
+            </CardContent>
+          </Card>
+        )}
 
         {/* Sign Out */}
         <Separator />
