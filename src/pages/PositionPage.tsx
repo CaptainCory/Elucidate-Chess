@@ -188,8 +188,8 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
         {/* Main Content */}
         {(() => {
           // Determine which section should have the attention guide
-          const boardFocused = game.gameState === 'thinking' && !game.selectedMove && !game.isLimited;
-          const inputFocused = game.gameState === 'thinking' && !!game.selectedMove && !game.isLimited;
+          const boardFocused = game.gameState === 'thinking' && !game.selectedMove && !game.isDifficultyLocked;
+          const inputFocused = game.gameState === 'thinking' && !!game.selectedMove && !game.isDifficultyLocked;
           const resultFocused = game.gameState === 'result';
 
           return (
