@@ -250,7 +250,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   </div>
                 )}
 
-                {!game.isLimited && game.gameState === 'thinking' && (
+                {!game.isDifficultyLocked && game.gameState === 'thinking' && (
                   <ThinkingInput onSubmit={game.handleSubmit} isLoading={false} moveSelected={!!game.selectedMove} />
                 )}
 
