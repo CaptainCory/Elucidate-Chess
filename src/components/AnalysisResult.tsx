@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Lightbulb } from 'lucide-react';
+import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Lightbulb, Volume2, VolumeX } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { FollowUpChat } from '@/components/FollowUpChat';
+import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 
 export interface PositionPiece {
   square: string;
