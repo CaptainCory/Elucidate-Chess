@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import { Lock, TrendingUp } from 'lucide-react';
 
 const THRESHOLDS: Record<string, { target: number; scoreReq: number; next: string }> = {
-  beginner: { target: 3, scoreReq: 60, next: 'Intermediate' },
-  intermediate: { target: 5, scoreReq: 65, next: 'Advanced' },
+  beginner: { target: 3, scoreReq: 85, next: 'Intermediate' },
+  intermediate: { target: 5, scoreReq: 85, next: 'Advanced' },
   advanced: { target: 0, scoreReq: 0, next: '' },
 };
 
