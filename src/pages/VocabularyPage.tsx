@@ -253,9 +253,12 @@ export default function VocabularyPage() {
                   variants={fadeUp}
                   custom={0}
                 >
-                  <button
+                  <div
                     onClick={() => setExpandedSlug(isExpanded ? null : entry.slug)}
-                    className="w-full text-left chess-card rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-300 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="cursor-pointer w-full text-left chess-card rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedSlug(isExpanded ? null : entry.slug); } }}
                   >
                     <div className="p-5 md:p-6 flex items-start gap-4">
                       <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-display font-bold text-sm">
@@ -275,35 +278,36 @@ export default function VocabularyPage() {
                         </svg>
                       </div>
                     </div>
-                  </button>
 
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                      className="chess-card rounded-b-xl border border-t-0 border-border/50 overflow-hidden"
-                    >
-                      <div className="p-5 md:p-8 grid md:grid-cols-2 gap-6 md:gap-8 items-start">
-                        <div>
-                          <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-4">
-                            {entry.description}
-                          </p>
-                          <p className="text-xs text-primary/70 italic">
-                            {entry.keySquares}
-                          </p>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        className="border-t border-border/50"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="p-5 md:p-8 flex flex-col gap-6 items-center">
+                          <div className="w-full">
+                            <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-4">
+                              {entry.description}
+                            </p>
+                            <p className="text-xs text-primary/70 italic">
+                              {entry.keySquares}
+                            </p>
+                          </div>
+                          <div className="w-full max-w-[360px]">
+                            <ChessBoard
+                              fen={entry.fen}
+                              orientation={entry.orientation}
+                              interactive={false}
+                            />
+                          </div>
                         </div>
-                        <div className="mx-auto w-full max-w-[320px]">
-                          <ChessBoard
-                            fen={entry.fen}
-                            orientation={entry.orientation}
-                            interactive={false}
-                          />
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
+                      </motion.div>
+                    )}
+                  </div>
                 </motion.div>
               );
             })}
