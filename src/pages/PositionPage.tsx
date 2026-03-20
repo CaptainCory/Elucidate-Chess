@@ -75,7 +75,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
     queryFn: async () => {
       const { data } = await supabase
         .from('profiles')
-        .select('puzzles_solved, average_score, best_streak, current_difficulty, beginner_solved, intermediate_solved, advanced_solved')
+        .select('puzzles_solved, average_score, best_streak, current_difficulty, beginner_solved, intermediate_solved, advanced_solved, beginner_avg_score, intermediate_avg_score, advanced_avg_score')
         .eq('user_id', user!.id)
         .maybeSingle();
       return data;
@@ -198,6 +198,13 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   : (profile.current_difficulty ?? 'beginner') === 'intermediate'
                     ? (profile.intermediate_solved ?? 0)
                     : (profile.advanced_solved ?? 0)
+              }
+              avgScore={
+                (profile.current_difficulty ?? 'beginner') === 'beginner'
+                  ? (profile.beginner_avg_score ?? 0)
+                  : (profile.current_difficulty ?? 'beginner') === 'intermediate'
+                    ? (profile.intermediate_avg_score ?? 0)
+                    : (profile.advanced_avg_score ?? 0)
               }
               isPremium={game.isPremium}
             />

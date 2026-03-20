@@ -144,25 +144,39 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       );
     }
 
-    // Get user's current difficulty level
+    // Get user's current difficulty level and performance
     let userDifficulty = 'beginner';
+    let userAvgAtLevel = 0;
     if (user) {
       const { data: profile } = await supabase
         .from('profiles')
-        .select('current_difficulty')
+        .select('current_difficulty, beginner_avg_score, intermediate_avg_score, advanced_avg_score')
         .eq('user_id', user.id)
         .maybeSingle();
       if (profile?.current_difficulty) {
         // Free users stay on beginner regardless of their profile difficulty
         userDifficulty = isPremium ? profile.current_difficulty : 'beginner';
+        // Get avg score at current level for adaptive selection
+        if (userDifficulty === 'intermediate') userAvgAtLevel = profile.intermediate_avg_score ?? 0;
+        else if (userDifficulty === 'advanced') userAvgAtLevel = profile.advanced_avg_score ?? 0;
+        else userAvgAtLevel = profile.beginner_avg_score ?? 0;
       }
     }
 
-    // Fetch all puzzles at user's level
+    // Adaptive difficulty: if struggling at current level (avg < 50), mix in easier puzzles
+    let targetDifficulty = userDifficulty;
+    if (userDifficulty === 'intermediate' && userAvgAtLevel < 50) {
+      // 50% chance of getting a beginner puzzle to rebuild confidence
+      targetDifficulty = Math.random() < 0.5 ? 'beginner' : 'intermediate';
+    } else if (userDifficulty === 'advanced' && userAvgAtLevel < 50) {
+      targetDifficulty = Math.random() < 0.5 ? 'intermediate' : 'advanced';
+    }
+
+    // Fetch all puzzles at target level
     const { data: allAtLevel } = await supabase
       .from('puzzles')
       .select('id')
-      .eq('difficulty', userDifficulty);
+      .eq('difficulty', targetDifficulty);
     const allIds = (allAtLevel || []).map(p => p.id);
 
     // Fetch seen puzzle IDs for this user
