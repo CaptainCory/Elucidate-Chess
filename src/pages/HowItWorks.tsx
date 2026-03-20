@@ -54,8 +54,32 @@ const faqs = [
 ];
 
 export default function HowItWorks() {
+  useEffect(() => {
+    const faqSchema = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer,
+        },
+      })),
+    };
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify(faqSchema);
+    document.head.appendChild(script);
+    return () => { document.head.removeChild(script); };
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
+      <PageSEO
+        title="How It Works — Elucidate Chess Method"
+        description="Learn how Elucidate Chess trains your chess thinking through AI-powered reasoning analysis. Study positions, explain your moves, get personalized coaching."
+      />
       {/* Nav */}
       <header className="border-b border-border/50 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center gap-3">
