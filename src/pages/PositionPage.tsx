@@ -235,12 +235,12 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   </h2>
                 </div>
 
-                {game.isLimited && (
+                {game.isDifficultyLocked && (
                   <div className="flex flex-col items-center justify-center py-8 space-y-4 text-center">
                     <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
                       <Crown className="w-8 h-8 text-primary" />
                     </div>
-                    <p className="text-muted-foreground">You've reached your daily limit of {game.DAILY_PUZZLE_LIMIT} positions.</p>
+                    <p className="text-muted-foreground">This position requires Premium. Upgrade to unlock intermediate and advanced puzzles.</p>
                     <button
                       onClick={() => game.setShowUpgradeOverlay(true)}
                       className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
