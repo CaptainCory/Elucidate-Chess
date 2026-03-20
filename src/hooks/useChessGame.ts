@@ -222,9 +222,12 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     isDifficultyLocked,
     showUpgradeOverlay,
     setShowUpgradeOverlay,
+    graduatedTo,
+    setGraduatedTo,
     handleMove,
     handleSubmit,
     handleNext,
     isPremium,
   };
+}
 }
