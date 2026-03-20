@@ -179,15 +179,12 @@ serve(async (req) => {
       }
     }
 
-    if (!isPremium && userId) {
-      const { data: countResult } = await supabase.rpc("get_daily_attempt_count", { p_user_id: userId });
-      const dailyCount = countResult ?? 0;
-      if (dailyCount >= DAILY_LIMIT) {
-        return new Response(JSON.stringify({ error: "Daily puzzle limit reached. Upgrade to Premium for unlimited access." }), {
-          status: 403,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
+    // Free users can only analyze beginner puzzles
+    if (!isPremium && puzzleDifficulty && puzzleDifficulty !== "beginner") {
+      return new Response(JSON.stringify({ error: "Intermediate and Advanced puzzles require Premium. Upgrade to unlock all difficulty levels." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // Record the attempt server-side
