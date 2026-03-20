@@ -21,6 +21,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [isDifficultyLocked, setIsDifficultyLocked] = useState(false);
+  const [graduatedTo, setGraduatedTo] = useState<string | null>(null);
 
   const averageScore = scores.length > 0
     ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
