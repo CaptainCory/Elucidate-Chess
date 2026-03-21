@@ -95,6 +95,22 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
     return 'text-destructive';
   };
 
+  const getGrade = (score: number) => {
+    if (score >= 97) return 'A+';
+    if (score >= 93) return 'A';
+    if (score >= 90) return 'A-';
+    if (score >= 87) return 'B+';
+    if (score >= 83) return 'B';
+    if (score >= 80) return 'B-';
+    if (score >= 77) return 'C+';
+    if (score >= 73) return 'C';
+    if (score >= 70) return 'C-';
+    if (score >= 67) return 'D+';
+    if (score >= 63) return 'D';
+    if (score >= 60) return 'D-';
+    return 'F';
+  };
+
   const getScoreLabel = (score: number) => {
     if (score >= 90) return 'Excellent!';
     if (score >= 80) return 'Great Job!';
@@ -108,11 +124,16 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
       {/* Score Badge */}
       <div className="text-center space-y-2">
         <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-card border-4 border-primary animate-pulse-glow">
-          <span className={`text-4xl font-bold font-mono ${getScoreColor(analysis.score)}`}>
-            {analysis.score}
-          </span>
+          <div className="text-center">
+            <span className={`text-4xl font-bold font-mono ${getScoreColor(analysis.score)}`}>
+              {analysis.score}
+            </span>
+          </div>
         </div>
-        <p className={`text-xl font-semibold ${getScoreColor(analysis.score)}`}>
+        <p className={`text-2xl font-bold font-mono ${getScoreColor(analysis.score)}`}>
+          {getGrade(analysis.score)}
+        </p>
+        <p className={`text-sm font-semibold ${getScoreColor(analysis.score)}`}>
           {getScoreLabel(analysis.score)}
         </p>
         <Button
