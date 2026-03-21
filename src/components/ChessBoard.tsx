@@ -204,7 +204,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
       className="w-full max-w-[480px] mx-auto"
       initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border relative">
         {isAnimatingIntro && (
