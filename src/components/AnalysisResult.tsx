@@ -124,11 +124,16 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
       {/* Score Badge */}
       <div className="text-center space-y-2">
         <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-card border-4 border-primary animate-pulse-glow">
-          <span className={`text-4xl font-bold font-mono ${getScoreColor(analysis.score)}`}>
-            {analysis.score}
-          </span>
+          <div className="text-center">
+            <span className={`text-4xl font-bold font-mono ${getScoreColor(analysis.score)}`}>
+              {analysis.score}
+            </span>
+          </div>
         </div>
-        <p className={`text-xl font-semibold ${getScoreColor(analysis.score)}`}>
+        <p className={`text-2xl font-bold font-mono ${getScoreColor(analysis.score)}`}>
+          {getGrade(analysis.score)}
+        </p>
+        <p className={`text-sm font-semibold ${getScoreColor(analysis.score)}`}>
           {getScoreLabel(analysis.score)}
         </p>
         <Button
