@@ -164,6 +164,14 @@ export type Database = {
     }
     Functions: {
       get_daily_attempt_count: { Args: { p_user_id: string }; Returns: number }
+      get_next_puzzle: {
+        Args: {
+          p_current_puzzle_id: string
+          p_is_premium?: boolean
+          p_user_id: string
+        }
+        Returns: string
+      }
       increment_puzzle_stats:
         | {
             Args: { p_score: number; p_streak: number; p_user_id: string }
