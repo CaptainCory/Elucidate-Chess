@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import Chessboard from 'chessboardjsx';
 import { Chess, Square } from 'chess.js';
 
@@ -49,7 +50,6 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
 
     const timer = setTimeout(() => {
       setDisplayFen(fen);
-      // Highlight the squares that changed (opponent's last move)
       try {
         const prevGame = new Chess(previousFen);
         const currGame = new Chess(fen);
@@ -67,7 +67,6 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
               const file = String.fromCharCode(97 + c);
               const rank = 8 - r;
               const sq = `${file}${rank}`;
-              // Square that lost a piece = from; square that gained a piece = to
               if (prevPiece && !currPiece) {
                 fromSquare = sq;
               } else if (currPiece) {
@@ -78,17 +77,16 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
         }
         const highlights: Record<string, React.CSSProperties> = {};
         if (fromSquare) {
-          highlights[fromSquare] = { backgroundColor: 'hsla(30, 70%, 45%, 0.35)' }; // dull orange
+          highlights[fromSquare] = { backgroundColor: 'hsla(30, 70%, 45%, 0.35)' };
         }
         if (toSquare) {
-          highlights[toSquare] = { backgroundColor: 'hsla(30, 90%, 55%, 0.6)' }; // bright orange
+          highlights[toSquare] = { backgroundColor: 'hsla(30, 90%, 55%, 0.6)' };
         }
         setHighlightSquares(highlights);
       } catch {
         // ignore
       }
 
-      // Keep the destination highlight persistent
       setIsAnimatingIntro(false);
     }, 720);
 
@@ -103,7 +101,6 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
       const d = buffer.getChannelData(0);
       for (let i = 0; i < len; i++) {
         const t = i / ctx.sampleRate;
-        // Sharp woody click: fast attack, very fast decay, higher frequency content
         const click = Math.exp(-t * 200) * (Math.random() * 2 - 1);
         const tap = Math.exp(-t * 120) * Math.sin(2 * Math.PI * 800 * t) * 0.3;
         const body = Math.exp(-t * 80) * Math.sin(2 * Math.PI * 2200 * t) * 0.15;
@@ -168,11 +165,9 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
     const piece = game.get(square as Square);
 
     if (selectedSquare) {
-      // Second tap – try to move
       const moved = makeMove(selectedSquare, square);
       if (!moved) {
-        // If clicked a friendly piece, re-select it instead
-        const turn = game.turn(); // 'w' or 'b'
+        const turn = game.turn();
         if (piece && piece.color === turn) {
           setSelectedSquare(square);
           const moves = game.moves({ square: square as Square, verbose: true });
@@ -189,7 +184,6 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
         }
       }
     } else {
-      // First tap – select a piece
       const turn = game.turn();
       if (piece && piece.color === turn) {
         setSelectedSquare(square);
@@ -206,12 +200,22 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
   }, [fen, interactive, userMove, isAnimatingIntro, selectedSquare, makeMove]);
 
   return (
-    <div className="w-full max-w-[480px] mx-auto">
+    <motion.div
+      className="w-full max-w-[480px] mx-auto"
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border relative">
         {isAnimatingIntro && (
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-full bg-muted/90 text-xs font-medium text-muted-foreground backdrop-blur-sm">
+          <motion.div
+            className="absolute top-2 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-full bg-muted/90 text-xs font-medium text-muted-foreground backdrop-blur-sm"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             Opponent's last move...
-          </div>
+          </motion.div>
         )}
         <Chessboard
           position={displayFen}
@@ -246,12 +250,17 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
         />
       </div>
       {userMove && (
-        <div className="mt-3 text-center">
+        <motion.div
+          className="mt-3 text-center"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+        >
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/20 text-primary text-sm font-mono font-semibold">
             Your move: {userMove}
           </span>
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }
