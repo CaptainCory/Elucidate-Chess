@@ -136,91 +136,26 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   }, [puzzle, selectedMove, scores, streak, user, isPremium, isDifficultyLocked, queryClient]);
 
   const handleNext = useCallback(async () => {
-    // Mark current puzzle as seen in DB (for logged-in users)
-    if (user) {
-      await supabase.from('user_seen_puzzles').upsert(
-        { user_id: user.id, puzzle_id: puzzle.id },
-        { onConflict: 'user_id,puzzle_id' }
-      );
-    }
+    try {
+      const { data: nextId, error } = await supabase.rpc('get_next_puzzle', {
+        p_user_id: user?.id ?? '00000000-0000-0000-0000-000000000000',
+        p_current_puzzle_id: puzzle.id,
+        p_is_premium: isPremium,
+      });
 
-    // Get user's current difficulty level and performance
-    let userDifficulty = 'beginner';
-    let userAvgAtLevel = 0;
-    if (user) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('current_difficulty, beginner_avg_score, intermediate_avg_score, advanced_avg_score')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      if (profile?.current_difficulty) {
-        // Free users stay on beginner regardless of their profile difficulty
-        userDifficulty = isPremium ? profile.current_difficulty : 'beginner';
-        // Get avg score at current level for adaptive selection
-        if (userDifficulty === 'intermediate') userAvgAtLevel = profile.intermediate_avg_score ?? 0;
-        else if (userDifficulty === 'advanced') userAvgAtLevel = profile.advanced_avg_score ?? 0;
-        else userAvgAtLevel = profile.beginner_avg_score ?? 0;
+      if (error) {
+        console.error('get_next_puzzle error:', error);
+        onReset?.();
+        return;
       }
-    }
 
-    // Adaptive difficulty: if struggling at current level (avg < 50), mix in easier puzzles
-    let targetDifficulty = userDifficulty;
-    if (userDifficulty === 'intermediate' && userAvgAtLevel < 50) {
-      // 50% chance of getting a beginner puzzle to rebuild confidence
-      targetDifficulty = Math.random() < 0.5 ? 'beginner' : 'intermediate';
-    } else if (userDifficulty === 'advanced' && userAvgAtLevel < 50) {
-      targetDifficulty = Math.random() < 0.5 ? 'intermediate' : 'advanced';
-    }
-
-    // Fetch all puzzles at target level
-    const { data: allAtLevel } = await supabase
-      .from('puzzles')
-      .select('id')
-      .eq('difficulty', targetDifficulty);
-    const allIds = (allAtLevel || []).map(p => p.id);
-
-    // Fetch seen puzzle IDs for this user
-    let seenIds: string[] = [];
-    if (user) {
-      const { data: seen } = await supabase
-        .from('user_seen_puzzles')
-        .select('puzzle_id')
-        .eq('user_id', user.id);
-      seenIds = (seen || []).map(s => s.puzzle_id);
-    }
-
-    // Filter to unseen puzzles at this difficulty
-    let candidates = allIds.filter(id => !seenIds.includes(id) && id !== puzzle.id);
-
-    // If all puzzles at this level have been seen, reset and start fresh
-    if (candidates.length === 0) {
-      if (user) {
-        const idsToReset = allIds;
-        await supabase
-          .from('user_seen_puzzles')
-          .delete()
-          .eq('user_id', user.id)
-          .in('puzzle_id', idsToReset);
+      if (nextId) {
+        navigate(`/position/${nextId}`);
+      } else {
+        onReset?.();
       }
-      candidates = allIds.filter(id => id !== puzzle.id);
-    }
-
-    // Fallback: any beginner puzzle
-    if (candidates.length === 0) {
-      const { data: anyData } = await supabase.from('puzzles').select('id').eq('difficulty', 'beginner').limit(100);
-      candidates = (anyData || []).map(p => p.id).filter(id => id !== puzzle.id);
-    }
-
-    // Last fallback: any puzzle
-    if (candidates.length === 0) {
-      const { data: anyData } = await supabase.from('puzzles').select('id').limit(100);
-      candidates = (anyData || []).map(p => p.id).filter(id => id !== puzzle.id);
-    }
-
-    if (candidates.length > 0) {
-      const nextId = candidates[Math.floor(Math.random() * candidates.length)];
-      navigate(`/position/${nextId}`);
-    } else {
+    } catch (err) {
+      console.error('Failed to get next puzzle:', err);
       onReset?.();
     }
   }, [puzzle.id, isPremium, navigate, user, onReset]);
