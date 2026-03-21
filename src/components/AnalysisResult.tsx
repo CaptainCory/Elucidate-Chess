@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Lightbulb, Volume2, VolumeX } from 'lucide-react';
+import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Volume2, VolumeX } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { FollowUpChat } from '@/components/FollowUpChat';
 import { useTextToSpeech } from '@/hooks/useTextToSpeech';
+import { AnimatedScore } from '@/components/AnimatedScore';
 
 export interface PositionPiece {
   square: string;
@@ -64,9 +66,9 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
     }
     return parts.join(' ');
   };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger next if typing in the follow-up chat
       const target = e.target as HTMLElement;
       if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') return;
       if (e.key === 'Enter' && !e.shiftKey && !e.metaKey && !e.ctrlKey) {
@@ -77,16 +79,6 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onNext]);
-  const formatPieceList = (pieces: PositionPiece[]) =>
-    pieces.map((piece) => `${piece.piece}@${piece.square}`).join(', ');
-
-  const verification = analysis.positionVerification;
-  const whitePieces = verification
-    ? verification.pieces.filter((piece) => piece.color === 'white')
-    : [];
-  const blackPieces = verification
-    ? verification.pieces.filter((piece) => piece.color === 'black')
-    : [];
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-success';
@@ -119,36 +111,49 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
     return 'Room for Growth';
   };
 
+  const stagger = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] } },
+  };
+
   return (
-    <div className="space-y-6 animate-scale-in">
+    <motion.div
+      className="space-y-6"
+      variants={stagger}
+      initial="hidden"
+      animate="show"
+    >
       {/* Score Badge */}
-      <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-card border-4 border-primary animate-pulse-glow">
-          <div className="text-center">
-            <span className={`text-4xl font-bold font-mono ${getScoreColor(analysis.score)}`}>
-              {analysis.score}
-            </span>
-          </div>
+      <motion.div variants={fadeUp}>
+        <AnimatedScore
+          score={analysis.score}
+          grade={getGrade(analysis.score)}
+          label={getScoreLabel(analysis.score)}
+          colorClass={getScoreColor(analysis.score)}
+        />
+        <div className="text-center mt-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => toggleSpeech(buildSpeechText())}
+            className="mx-auto flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary"
+          >
+            {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            {isSpeaking ? 'Stop' : 'Listen to Feedback'}
+          </Button>
         </div>
-        <p className={`text-2xl font-bold font-mono ${getScoreColor(analysis.score)}`}>
-          {getGrade(analysis.score)}
-        </p>
-        <p className={`text-sm font-semibold ${getScoreColor(analysis.score)}`}>
-          {getScoreLabel(analysis.score)}
-        </p>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => toggleSpeech(buildSpeechText())}
-          className="mx-auto flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary"
-        >
-          {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-          {isSpeaking ? 'Stop' : 'Listen to Feedback'}
-        </Button>
-      </div>
+      </motion.div>
 
       {/* Move Comparison */}
-      <div className="chess-card p-4 space-y-3">
+      <motion.div variants={fadeUp} className="chess-card p-4 space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {analysis.moveCorrect ? (
@@ -165,20 +170,22 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
           <span className="font-medium">Best Move:</span>
           <code className="px-2 py-1 bg-primary/20 rounded font-mono text-primary">{analysis.bestMove}</code>
         </div>
-      </div>
+      </motion.div>
 
       {/* Next Position (top) */}
-      <Button
-        onClick={onNext}
-        className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 focus-guide"
-        size="lg"
-      >
-        Next Position
-        <ArrowRight className="w-5 h-5 ml-2" />
-      </Button>
+      <motion.div variants={fadeUp}>
+        <Button
+          onClick={onNext}
+          className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 focus-guide"
+          size="lg"
+        >
+          Next Position
+          <ArrowRight className="w-5 h-5 ml-2" />
+        </Button>
+      </motion.div>
 
       {/* Reasoning Feedback */}
-      <div className="chess-card p-4 space-y-3">
+      <motion.div variants={fadeUp} className="chess-card p-4 space-y-3">
         <div className="flex items-center gap-2 text-foreground">
           <Target className="w-5 h-5 text-primary" />
           <h3 className="font-semibold font-display">Analysis Feedback</h3>
@@ -186,41 +193,42 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
         <div className="text-secondary-foreground prose prose-invert prose-sm max-w-none">
           <ReactMarkdown>{analysis.reasoningFeedback}</ReactMarkdown>
         </div>
-      </div>
+      </motion.div>
 
-
-
-
-      {/* Follow-up Chat — always visible after key insights */}
+      {/* Follow-up Chat */}
       {puzzleContext && (
-        <FollowUpChat
-          fen={puzzleContext.fen}
-          userMove={analysis.userMove}
-          bestMove={puzzleContext.bestMove}
-          puzzleExplanation={puzzleContext.explanation}
-          analysisScore={analysis.score}
-          analysisFeedback={analysis.reasoningFeedback}
-        />
+        <motion.div variants={fadeUp}>
+          <FollowUpChat
+            fen={puzzleContext.fen}
+            userMove={analysis.userMove}
+            bestMove={puzzleContext.bestMove}
+            puzzleExplanation={puzzleContext.explanation}
+            analysisScore={analysis.score}
+            analysisFeedback={analysis.reasoningFeedback}
+          />
+        </motion.div>
       )}
 
       {/* Improvement Suggestion */}
       {analysis.improvement && (
-        <div className="chess-card p-4 border-primary/30 bg-primary/5">
+        <motion.div variants={fadeUp} className="chess-card p-4 border-primary/30 bg-primary/5">
           <p className="text-sm text-secondary-foreground">
             <span className="font-semibold text-primary">💡 To improve:</span> {analysis.improvement}
           </p>
-        </div>
+        </motion.div>
       )}
 
       {/* Next Button */}
-      <Button
-        onClick={onNext}
-        className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 focus-guide"
-        size="lg"
-      >
-        Next Position
-        <ArrowRight className="w-5 h-5 ml-2" />
-      </Button>
-    </div>
+      <motion.div variants={fadeUp}>
+        <Button
+          onClick={onNext}
+          className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 focus-guide"
+          size="lg"
+        >
+          Next Position
+          <ArrowRight className="w-5 h-5 ml-2" />
+        </Button>
+      </motion.div>
+    </motion.div>
   );
 }
