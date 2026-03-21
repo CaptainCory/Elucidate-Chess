@@ -1,0 +1,107 @@
+
+-- RPC: get_next_puzzle
+-- Consolidates 3-5 client queries into a single server-side call.
+-- 1. Marks the current puzzle as seen
+-- 2. Reads user profile for difficulty + adaptive logic
+-- 3. Picks a random unseen puzzle at the right difficulty
+-- 4. Auto-resets seen puzzles when all exhausted
+-- Returns the next puzzle ID as text
+
+CREATE OR REPLACE FUNCTION public.get_next_puzzle(
+  p_user_id uuid,
+  p_current_puzzle_id text,
+  p_is_premium boolean DEFAULT false
+)
+RETURNS text
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO 'public'
+AS $$
+DECLARE
+  v_difficulty text := 'beginner';
+  v_avg_at_level integer := 0;
+  v_target_difficulty text;
+  v_next_id text;
+  v_profile profiles%ROWTYPE;
+BEGIN
+  -- 1. Mark current puzzle as seen
+  IF p_user_id IS NOT NULL THEN
+    INSERT INTO user_seen_puzzles (user_id, puzzle_id)
+    VALUES (p_user_id, p_current_puzzle_id)
+    ON CONFLICT (user_id, puzzle_id) DO NOTHING;
+  END IF;
+
+  -- 2. Get user's difficulty and avg score
+  IF p_user_id IS NOT NULL THEN
+    SELECT * INTO v_profile FROM profiles WHERE user_id = p_user_id;
+    IF FOUND THEN
+      v_difficulty := CASE WHEN p_is_premium THEN v_profile.current_difficulty ELSE 'beginner' END;
+      v_avg_at_level := CASE v_difficulty
+        WHEN 'intermediate' THEN v_profile.intermediate_avg_score
+        WHEN 'advanced' THEN v_profile.advanced_avg_score
+        ELSE v_profile.beginner_avg_score
+      END;
+    END IF;
+  END IF;
+
+  -- 3. Adaptive difficulty
+  v_target_difficulty := v_difficulty;
+  IF v_difficulty = 'intermediate' AND v_avg_at_level < 50 AND random() < 0.5 THEN
+    v_target_difficulty := 'beginner';
+  ELSIF v_difficulty = 'advanced' AND v_avg_at_level < 50 AND random() < 0.5 THEN
+    v_target_difficulty := 'intermediate';
+  END IF;
+
+  -- 4. Pick random unseen puzzle at target difficulty
+  SELECT p.id INTO v_next_id
+  FROM puzzles p
+  WHERE p.difficulty = v_target_difficulty
+    AND p.id != p_current_puzzle_id
+    AND NOT EXISTS (
+      SELECT 1 FROM user_seen_puzzles usp
+      WHERE usp.user_id = p_user_id AND usp.puzzle_id = p.id
+    )
+  ORDER BY random()
+  LIMIT 1;
+
+  -- 5. If all seen, reset and pick again
+  IF v_next_id IS NULL AND p_user_id IS NOT NULL THEN
+    DELETE FROM user_seen_puzzles
+    WHERE user_id = p_user_id
+      AND puzzle_id IN (SELECT id FROM puzzles WHERE difficulty = v_target_difficulty);
+
+    SELECT p.id INTO v_next_id
+    FROM puzzles p
+    WHERE p.difficulty = v_target_difficulty
+      AND p.id != p_current_puzzle_id
+    ORDER BY random()
+    LIMIT 1;
+  END IF;
+
+  -- 6. Fallback: any beginner puzzle
+  IF v_next_id IS NULL THEN
+    SELECT p.id INTO v_next_id
+    FROM puzzles p
+    WHERE p.difficulty = 'beginner'
+      AND p.id != p_current_puzzle_id
+    ORDER BY random()
+    LIMIT 1;
+  END IF;
+
+  -- 7. Last fallback: any puzzle
+  IF v_next_id IS NULL THEN
+    SELECT p.id INTO v_next_id
+    FROM puzzles p
+    WHERE p.id != p_current_puzzle_id
+    ORDER BY random()
+    LIMIT 1;
+  END IF;
+
+  RETURN v_next_id;
+END;
+$$;
+
+-- Indexes for performance at scale
+CREATE INDEX IF NOT EXISTS idx_user_seen_puzzles_user_id ON user_seen_puzzles (user_id);
+CREATE INDEX IF NOT EXISTS idx_user_seen_puzzles_user_puzzle ON user_seen_puzzles (user_id, puzzle_id);
+CREATE INDEX IF NOT EXISTS idx_puzzles_difficulty ON puzzles (difficulty);
