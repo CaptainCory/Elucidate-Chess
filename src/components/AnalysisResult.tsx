@@ -170,7 +170,7 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
       {/* Next Position (top) */}
       <Button
         onClick={onNext}
-        className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90"
+        className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 focus-guide"
         size="lg"
       >
         Next Position
@@ -215,7 +215,7 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
       {/* Next Button */}
       <Button
         onClick={onNext}
-        className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90"
+        className="w-full py-6 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 focus-guide"
         size="lg"
       >
         Next Position
