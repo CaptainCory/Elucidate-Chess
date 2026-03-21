@@ -188,23 +188,8 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
         </div>
       </div>
 
-      {/* Key Insights */}
-      {analysis.keyInsights.length > 0 && (
-        <div className="chess-card p-4 space-y-3">
-          <div className="flex items-center gap-2 text-foreground">
-            <Lightbulb className="w-5 h-5 text-accent" />
-            <h3 className="font-semibold font-display">Key Insights</h3>
-          </div>
-          <ul className="space-y-2">
-            {analysis.keyInsights.slice(0, 2).map((insight, i) => (
-              <li key={i} className="flex items-start gap-2 text-secondary-foreground">
-                <span className="text-primary mt-1">•</span>
-                <span>{insight}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+
+
 
       {/* Follow-up Chat — always visible after key insights */}
       {puzzleContext && (
