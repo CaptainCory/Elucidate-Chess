@@ -188,5 +188,6 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     handleSubmit,
     handleNext,
     isPremium,
+    isNavigating,
   };
 }
