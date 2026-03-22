@@ -135,7 +135,12 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     }
   }, [puzzle, selectedMove, scores, streak, user, isPremium, isDifficultyLocked, queryClient]);
 
+  const [isNavigating, setIsNavigating] = useState(false);
+
   const handleNext = useCallback(async () => {
+    if (isNavigating) return;
+    setIsNavigating(true);
+
     try {
       const { data: nextId, error } = await supabase.rpc('get_next_puzzle', {
         p_user_id: user?.id ?? '00000000-0000-0000-0000-000000000000',
@@ -145,20 +150,26 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
 
       if (error) {
         console.error('get_next_puzzle error:', error);
-        onReset?.();
+        toast.error('Could not load next position. Please try again.');
+        setIsNavigating(false);
         return;
       }
 
-      if (nextId) {
+      if (nextId && nextId !== puzzle.id) {
         navigate(`/position/${nextId}`);
-      } else {
+      } else if (nextId) {
+        // Same puzzle returned — force remount
         onReset?.();
+      } else {
+        toast.info('No more positions available right now.');
       }
     } catch (err) {
       console.error('Failed to get next puzzle:', err);
-      onReset?.();
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsNavigating(false);
     }
-  }, [puzzle.id, isPremium, navigate, user, onReset]);
+  }, [puzzle.id, isPremium, navigate, user, onReset, isNavigating]);
 
   return {
     gameState,
