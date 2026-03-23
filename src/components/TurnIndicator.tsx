@@ -33,9 +33,10 @@ export function TurnIndicator({ fen }: TurnIndicatorProps) {
       <motion.span
         animate={{ scale: [1, 1.3, 1] }}
         transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-        className="w-3 h-3 rounded-full shadow-sm"
+        className="w-3 h-3 rounded-full shadow-sm border"
         style={{
-          backgroundColor: isWhite ? 'hsl(220, 20%, 15%)' : 'hsl(45, 20%, 90%)',
+          backgroundColor: isWhite ? 'hsl(45, 20%, 95%)' : 'hsl(220, 15%, 12%)',
+          borderColor: isWhite ? 'hsl(38, 30%, 60%)' : 'hsl(220, 10%, 40%)',
         }}
       />
       <span className="uppercase">{isWhite ? 'White' : 'Black'} to move</span>
