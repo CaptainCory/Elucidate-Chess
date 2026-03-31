@@ -24,6 +24,7 @@ interface ChessBoardProps {
   orientation?: 'white' | 'black';
   onMove?: (move: string) => void;
   interactive?: boolean;
+  externalSquareStyles?: Record<string, React.CSSProperties>;
 }
 
 export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, interactive = false }: ChessBoardProps) {
