@@ -325,6 +325,7 @@ export default function VocabularyPage() {
                               fen={entry.fen}
                               orientation={entry.orientation}
                               interactive={false}
+                              externalSquareStyles={entry.highlights}
                             />
                           </div>
                         </div>
