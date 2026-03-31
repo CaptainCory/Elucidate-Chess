@@ -84,7 +84,7 @@ export default function HowItWorks() {
       <header className="border-b border-border/50 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center gap-3">
           <Link
-            to="/"
+            to="/play"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
           >
             <ArrowLeft className="h-4 w-4" />

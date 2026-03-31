@@ -20,7 +20,7 @@ const LeaderboardPage = () => {
 
       <div className="relative container max-w-3xl mx-auto px-4 py-8">
         <header className="flex items-center justify-between mb-8">
-          <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+          <Link to="/play" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Back to Puzzles</span>
           </Link>

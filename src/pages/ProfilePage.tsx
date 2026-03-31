@@ -56,7 +56,7 @@ const ProfilePage = () => {
 
       <div className="relative container max-w-2xl mx-auto px-4 py-8 space-y-6">
         {/* Back button */}
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
+        <Link to="/play" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
           <ArrowLeft className="w-4 h-4" />
           Back to puzzles
         </Link>
