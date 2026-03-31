@@ -239,7 +239,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                 <ChessBoard
                   fen={puzzle.fen}
                   previousFen={puzzle.previousFen}
-                  orientation="white"
+                  orientation={(() => { try { const { Chess } = require('chess.js'); const g = new Chess(puzzle.fen); return g.turn() === 'b' ? 'black' : 'white'; } catch { return 'white'; } })()}
                   interactive={game.gameState === 'thinking' && !game.isDifficultyLocked}
                   onMove={game.handleMove}
                 />
