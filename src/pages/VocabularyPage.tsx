@@ -14,7 +14,8 @@ interface VocabEntry {
   description: string;
   fen: string;
   orientation: 'white' | 'black';
-  keySquares: string; // narrative hint about what to look at
+  keySquares: string;
+  highlights: Record<string, React.CSSProperties>;
 }
 
 const vocabulary: VocabEntry[] = [
