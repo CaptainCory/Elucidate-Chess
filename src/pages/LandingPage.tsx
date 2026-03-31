@@ -140,10 +140,10 @@ export default function LandingPage() {
                 custom={2}
                 className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
               >
-                <Link to="/">
-                  <Button size="lg" className="gap-2 text-base px-8 py-6 shadow-lg hover:shadow-xl transition-shadow">
+                <Link to="/play">
+                  <Button size="lg" className="gap-2 text-lg px-10 py-7 shadow-lg hover:shadow-xl transition-shadow">
                     <ArrowRight className="w-5 h-5" />
-                    Try a Position Free
+                    Try It For Free
                   </Button>
                 </Link>
                 <Link to="/how-it-works">
