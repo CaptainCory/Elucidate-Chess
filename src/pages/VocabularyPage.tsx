@@ -297,7 +297,7 @@ export default function VocabularyPage() {
                               {entry.keySquares}
                             </p>
                           </div>
-                          <div className="w-full max-w-[360px]">
+                          <div className="w-full max-w-[480px]">
                             <ChessBoard
                               fen={entry.fen}
                               orientation={entry.orientation}
