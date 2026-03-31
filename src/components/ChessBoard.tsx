@@ -27,7 +27,7 @@ interface ChessBoardProps {
   externalSquareStyles?: Record<string, React.CSSProperties>;
 }
 
-export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, interactive = false }: ChessBoardProps) {
+export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, interactive = false, externalSquareStyles }: ChessBoardProps) {
   const [userMove, setUserMove] = useState<string | null>(null);
   const [highlightSquares, setHighlightSquares] = useState<Record<string, React.CSSProperties>>({});
   const [displayFen, setDisplayFen] = useState(previousFen || fen);
