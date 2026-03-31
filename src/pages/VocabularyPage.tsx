@@ -18,6 +18,13 @@ interface VocabEntry {
   highlights: Record<string, React.CSSProperties>;
 }
 
+const hl = {
+  attacker: { backgroundColor: 'hsla(38, 92%, 50%, 0.55)', boxShadow: 'inset 0 0 0 3px hsla(38, 92%, 50%, 0.8)' },
+  target: { backgroundColor: 'hsla(0, 72%, 55%, 0.4)', boxShadow: 'inset 0 0 0 3px hsla(0, 72%, 55%, 0.7)' },
+  move: { backgroundColor: 'hsla(142, 60%, 45%, 0.4)', boxShadow: 'inset 0 0 0 3px hsla(142, 60%, 45%, 0.7)' },
+  line: { backgroundColor: 'hsla(210, 70%, 55%, 0.3)', boxShadow: 'inset 0 0 0 2px hsla(210, 70%, 55%, 0.5)' },
+};
+
 const vocabulary: VocabEntry[] = [
   {
     slug: 'fork',
@@ -28,6 +35,7 @@ const vocabulary: VocabEntry[] = [
     fen: 'r3k3/2N5/8/8/8/8/8/4K3 b - - 0 1',
     orientation: 'white',
     keySquares: 'The knight on c7 attacks both the king on e8 and the rook on a8 — Black must save the king, losing the rook.',
+    highlights: { c7: hl.attacker, e8: hl.target, a8: hl.target },
   },
   {
     slug: 'pin',
@@ -38,6 +46,7 @@ const vocabulary: VocabEntry[] = [
     fen: 'r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1',
     orientation: 'white',
     keySquares: 'The bishop on b5 pins the knight on c6 to the king on e8 — the knight cannot move without exposing the king to check.',
+    highlights: { b5: hl.attacker, c6: hl.target, e8: hl.line },
   },
   {
     slug: 'skewer',
@@ -48,6 +57,7 @@ const vocabulary: VocabEntry[] = [
     fen: '3q4/8/8/3k4/8/8/8/4R1K1 w - - 0 1',
     orientation: 'white',
     keySquares: 'Rd1+ skewers the king on d5 — when the king moves off the d-file, the rook captures the queen on d8.',
+    highlights: { e1: hl.attacker, d1: hl.move, d5: hl.target, d8: hl.target },
   },
   {
     slug: 'discovered-attack',
@@ -58,6 +68,7 @@ const vocabulary: VocabEntry[] = [
     fen: '3qk3/8/8/4B3/4R3/8/8/6K1 w - - 0 1',
     orientation: 'white',
     keySquares: 'Moving the bishop from e5 (e.g., Bc7) discovers check from the rook on e4 along the e-file, while the bishop attacks the queen — Black loses the queen.',
+    highlights: { e5: hl.attacker, e4: hl.line, e8: hl.target, d8: hl.target },
   },
   {
     slug: 'back-rank-mate',
@@ -68,6 +79,7 @@ const vocabulary: VocabEntry[] = [
     fen: '6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1',
     orientation: 'white',
     keySquares: 'Ra8# is checkmate — the king on g8 is trapped behind its own pawns on f7, g7, and h7.',
+    highlights: { a1: hl.attacker, a8: hl.move, g8: hl.target, f7: hl.line, g7: hl.line, h7: hl.line },
   },
   {
     slug: 'smothered-mate',
@@ -78,6 +90,7 @@ const vocabulary: VocabEntry[] = [
     fen: '6rk/5Npp/8/8/8/8/8/6K1 b - - 0 1',
     orientation: 'white',
     keySquares: 'The knight on f7 delivers checkmate — the king on h8 is smothered by its own rook on g8 and pawns on g7 and h7.',
+    highlights: { f7: hl.attacker, h8: hl.target, g8: hl.line, g7: hl.line, h7: hl.line },
   },
   {
     slug: 'deflection',
@@ -88,6 +101,7 @@ const vocabulary: VocabEntry[] = [
     fen: '1r4k1/5ppp/8/8/8/8/Q4PPP/4R1K1 w - - 0 1',
     orientation: 'white',
     keySquares: 'Qa8! attacks the rook, which is the sole defender of the back rank. If Rxa8, White plays Re8# checkmate — the rook was deflected.',
+    highlights: { a2: hl.attacker, a8: hl.move, b8: hl.target, e1: hl.line },
   },
   {
     slug: 'decoy',
@@ -98,6 +112,7 @@ const vocabulary: VocabEntry[] = [
     fen: '4r1k1/5ppp/8/8/8/8/1Q3PPP/4R1K1 w - - 0 1',
     orientation: 'white',
     keySquares: 'Qb8! decoys the rook — after Rxb8 the e-file is unguarded, and Re8# delivers back rank checkmate.',
+    highlights: { b2: hl.attacker, b8: hl.move, e8: hl.target, e1: hl.line },
   },
   {
     slug: 'overloading',
@@ -108,6 +123,7 @@ const vocabulary: VocabEntry[] = [
     fen: '3r2k1/4qppp/8/4N3/8/8/5PPP/3R2K1 w - - 0 1',
     orientation: 'white',
     keySquares: 'Nxf7! exploits the overloaded queen — she must guard both f7 and the d8 rook. If Qxf7, Rxd8# is back rank mate. If Kxf7, Rxd8 wins the rook.',
+    highlights: { e5: hl.attacker, f7: hl.move, e7: hl.target, d8: hl.line, d1: hl.line },
   },
   {
     slug: 'zwischenzug',
@@ -118,6 +134,7 @@ const vocabulary: VocabEntry[] = [
     fen: 'r1bqkb1r/pppp1ppp/2n2n2/8/2BpP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1',
     orientation: 'white',
     keySquares: 'Black just captured on d4, expecting Nxd4. Instead, Bxf7+! is a zwischenzug — an in-between check that wins a pawn before White recaptures on d4.',
+    highlights: { c4: hl.attacker, f7: hl.move, d4: hl.line, e8: hl.target },
   },
   {
     slug: 'sacrifice',
@@ -128,6 +145,7 @@ const vocabulary: VocabEntry[] = [
     fen: 'r1bq1rk1/ppp2ppp/2n1pn2/3p4/3P4/3BPN2/PPP2PPP/R1BQK2R w KQ - 0 1',
     orientation: 'white',
     keySquares: 'Bxh7+! — the classic "Greek Gift" sacrifice rips open Black\'s kingside. After Kxh7, Ng5+ and Qh5 launch a devastating attack.',
+    highlights: { d3: hl.attacker, h7: hl.move, f3: hl.line, g8: hl.target },
   },
   {
     slug: 'battery',
@@ -138,6 +156,7 @@ const vocabulary: VocabEntry[] = [
     fen: 'r4rk1/ppp2ppp/3b4/3p4/8/3B4/PPP1QPPP/R4RK1 w - - 0 1',
     orientation: 'white',
     keySquares: 'The queen on e2 and bishop on d3 form a battery along the b1-h7 diagonal, aiming directly at Black\'s king.',
+    highlights: { e2: hl.attacker, d3: hl.attacker, h7: hl.target, g8: hl.line },
   },
   {
     slug: 'ladder-mate',
@@ -148,6 +167,7 @@ const vocabulary: VocabEntry[] = [
     fen: '8/8/8/8/8/8/1k6/R1R1K3 w - - 0 1',
     orientation: 'white',
     keySquares: 'The two rooks alternate checks — Ra2+, then Rc3+ on the next rank — walking the king to the edge for checkmate.',
+    highlights: { a1: hl.attacker, c1: hl.attacker, a2: hl.move, b2: hl.target },
   },
   {
     slug: 'x-ray',
@@ -158,6 +178,7 @@ const vocabulary: VocabEntry[] = [
     fen: '4k3/8/8/4r3/8/8/4R3/4K3 w - - 0 1',
     orientation: 'white',
     keySquares: 'The white rook on e2 x-rays through the black rook on e5 — if the e5 rook moves, Re8+ would check the king.',
+    highlights: { e2: hl.attacker, e5: hl.line, e8: hl.target },
   },
   {
     slug: 'promotion',
@@ -168,6 +189,7 @@ const vocabulary: VocabEntry[] = [
     fen: '8/4P1k1/8/8/8/8/8/4K3 w - - 0 1',
     orientation: 'white',
     keySquares: 'The white pawn on e7 is one square away from promotion — e8=Q creates a new queen.',
+    highlights: { e7: hl.attacker, e8: hl.move },
   },
 ];
 
