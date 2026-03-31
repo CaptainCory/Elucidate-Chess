@@ -17,10 +17,12 @@ export type Database = {
       profiles: {
         Row: {
           advanced_avg_score: number
+          advanced_high_scores: number
           advanced_solved: number
           avatar_url: string | null
           average_score: number
           beginner_avg_score: number
+          beginner_high_scores: number
           beginner_solved: number
           best_streak: number
           created_at: string
@@ -28,6 +30,7 @@ export type Database = {
           display_name: string | null
           id: string
           intermediate_avg_score: number
+          intermediate_high_scores: number
           intermediate_solved: number
           is_premium: boolean
           puzzles_solved: number
@@ -36,10 +39,12 @@ export type Database = {
         }
         Insert: {
           advanced_avg_score?: number
+          advanced_high_scores?: number
           advanced_solved?: number
           avatar_url?: string | null
           average_score?: number
           beginner_avg_score?: number
+          beginner_high_scores?: number
           beginner_solved?: number
           best_streak?: number
           created_at?: string
@@ -47,6 +52,7 @@ export type Database = {
           display_name?: string | null
           id?: string
           intermediate_avg_score?: number
+          intermediate_high_scores?: number
           intermediate_solved?: number
           is_premium?: boolean
           puzzles_solved?: number
@@ -55,10 +61,12 @@ export type Database = {
         }
         Update: {
           advanced_avg_score?: number
+          advanced_high_scores?: number
           advanced_solved?: number
           avatar_url?: string | null
           average_score?: number
           beginner_avg_score?: number
+          beginner_high_scores?: number
           beginner_solved?: number
           best_streak?: number
           created_at?: string
@@ -66,6 +74,7 @@ export type Database = {
           display_name?: string | null
           id?: string
           intermediate_avg_score?: number
+          intermediate_high_scores?: number
           intermediate_solved?: number
           is_premium?: boolean
           puzzles_solved?: number
