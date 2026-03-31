@@ -165,7 +165,9 @@ export default function LandingPage() {
               {/* Glow behind board */}
               <div className="absolute -inset-6 rounded-2xl pointer-events-none" style={{ background: 'var(--gradient-glow)', filter: 'blur(40px)', opacity: 0.5 }} />
               <div className="relative">
-                <ChessBoard fen={DEMO_FEN} orientation="white" interactive={false} />
+                <Suspense fallback={<div className="aspect-square bg-muted/30 rounded-xl animate-pulse" />}>
+                  <LazyChessBoard fen={DEMO_FEN} orientation="white" interactive={false} />
+                </Suspense>
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
