@@ -120,7 +120,7 @@ export default function HowItWorks() {
               <AccordionTrigger className="text-left font-display text-base md:text-lg font-semibold hover:no-underline py-5">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed text-[15px] pb-5">
+              <AccordionContent className="text-foreground/80 leading-relaxed text-base md:text-lg pb-5">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>
