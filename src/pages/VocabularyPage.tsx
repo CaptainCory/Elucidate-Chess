@@ -43,7 +43,7 @@ const vocabulary: VocabEntry[] = [
     summary: 'A piece cannot move because it would expose a more valuable piece behind it.',
     description:
       'A pin occurs when a piece is attacked along a line (file, rank, or diagonal) and cannot move without exposing a more valuable piece behind it — typically the king (absolute pin) or the queen (relative pin). Bishops and rooks are the most common pinning pieces. Pins restrict the opponent\'s mobility and often win material.',
-    fen: 'r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1',
+    fen: 'r1bqkb1r/ppp2ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1',
     orientation: 'white',
     keySquares: 'The bishop on b5 pins the knight on c6 to the king on e8 — the knight cannot move without exposing the king to check.',
     highlights: { b5: hl.attacker, c6: hl.target, e8: hl.line },
