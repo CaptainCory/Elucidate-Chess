@@ -115,13 +115,13 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+      transition: { staggerChildren: 0.1, delayChildren: 0.05 },
     },
   } as const;
 
   const fadeUp = {
-    hidden: { opacity: 0, y: 16 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" as const } },
+    hidden: { opacity: 0, y: 8 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" as const } },
   };
 
   return (
@@ -190,7 +190,7 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
           <Target className="w-5 h-5 text-primary" />
           <h3 className="font-semibold font-display">Analysis Feedback</h3>
         </div>
-        <div className="text-secondary-foreground prose prose-invert prose-sm max-w-none">
+        <div className="text-muted-foreground prose prose-sm max-w-none [&_p]:text-muted-foreground [&_strong]:text-foreground">
           <ReactMarkdown>{analysis.reasoningFeedback}</ReactMarkdown>
         </div>
       </motion.div>
