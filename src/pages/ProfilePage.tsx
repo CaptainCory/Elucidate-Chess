@@ -169,6 +169,13 @@ const ProfilePage = () => {
                       ? (profile.intermediate_avg_score ?? 0)
                       : (profile.advanced_avg_score ?? 0)
                 }
+                highScores={
+                  (profile.current_difficulty ?? 'beginner') === 'beginner'
+                    ? ((profile as any).beginner_high_scores ?? 0)
+                    : (profile.current_difficulty ?? 'beginner') === 'intermediate'
+                      ? ((profile as any).intermediate_high_scores ?? 0)
+                      : ((profile as any).advanced_high_scores ?? 0)
+                }
                 isPremium={!!isPremiumUser}
               />
             </CardContent>
