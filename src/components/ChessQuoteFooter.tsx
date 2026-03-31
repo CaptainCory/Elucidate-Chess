@@ -11,6 +11,7 @@ export const ChessQuoteFooter = () => {
       </blockquote>
       <p className="text-sm font-semibold text-primary/70">— {quote.author}</p>
       <p className="text-xs pt-2">Powered by AI • Practice Makes Progress</p>
+      <a href="/admin" className="inline-block text-[10px] text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors mt-4">Admin</a>
     </footer>
   );
 };
