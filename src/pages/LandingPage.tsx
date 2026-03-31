@@ -1,26 +1,26 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { AuthModal } from '@/components/AuthModal';
 import { PageSEO } from '@/components/PageSEO';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
-import { ChessBoard } from '@/components/ChessBoard';
+const LazyChessBoard = lazy(() => import('@/components/ChessBoard').then(m => ({ default: m.ChessBoard })));
 import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 12 },
   visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+    transition: { duration: 0.4, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   }),
 };
 
 const staggerContainer = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.08 } },
 };
 
 const features = [
@@ -52,14 +52,6 @@ const DEMO_FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq 
 export default function LandingPage() {
   const { user, loading } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
@@ -173,7 +165,9 @@ export default function LandingPage() {
               {/* Glow behind board */}
               <div className="absolute -inset-6 rounded-2xl pointer-events-none" style={{ background: 'var(--gradient-glow)', filter: 'blur(40px)', opacity: 0.5 }} />
               <div className="relative">
-                <ChessBoard fen={DEMO_FEN} orientation="white" interactive={false} />
+                <Suspense fallback={<div className="aspect-square bg-muted/30 rounded-xl animate-pulse" />}>
+                  <LazyChessBoard fen={DEMO_FEN} orientation="white" interactive={false} />
+                </Suspense>
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
