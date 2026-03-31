@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { AuthModal } from '@/components/AuthModal';
 import { PageSEO } from '@/components/PageSEO';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
-import { ChessBoard } from '@/components/ChessBoard';
+const LazyChessBoard = lazy(() => import('@/components/ChessBoard').then(m => ({ default: m.ChessBoard })));
 import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
