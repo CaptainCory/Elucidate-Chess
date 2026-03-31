@@ -201,7 +201,7 @@ export default function VocabularyPage() {
                 Back
               </Button>
             </Link>
-            <Link to="/">
+            <Link to="/play">
               <Button size="sm">Start Training</Button>
             </Link>
           </div>

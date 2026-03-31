@@ -58,7 +58,7 @@ const PositionPage = () => {
   }
 
   if (!puzzle || notFound) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/play" replace />;
   }
 
   return <PositionView key={`${puzzle.id}-${resetKey}`} puzzle={puzzle} user={user} onReset={() => setResetKey(k => k + 1)} />;

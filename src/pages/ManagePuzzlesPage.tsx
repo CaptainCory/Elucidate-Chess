@@ -78,7 +78,7 @@ export default function ManagePuzzlesPage() {
         <h1 className="text-2xl font-bold text-foreground">Sign In Required</h1>
         <p className="text-muted-foreground text-center max-w-md">You need to be signed in with a premium account.</p>
         <Button onClick={() => setShowSignIn(true)} className="bg-primary text-primary-foreground">Sign In</Button>
-        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Back to puzzles</Link>
+        <Link to="/play" className="text-sm text-muted-foreground hover:text-foreground">← Back to puzzles</Link>
         <AuthModal open={showSignIn} onOpenChange={setShowSignIn} />
       </div>
     );
@@ -90,7 +90,7 @@ export default function ManagePuzzlesPage() {
         <Crown className="w-16 h-16 text-primary" />
         <h1 className="text-2xl font-bold text-foreground">Premium Required</h1>
         <Link to="/membership"><Button className="bg-primary text-primary-foreground"><Crown className="w-4 h-4 mr-2" />Upgrade</Button></Link>
-        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Back to puzzles</Link>
+        <Link to="/play" className="text-sm text-muted-foreground hover:text-foreground">← Back to puzzles</Link>
       </div>
     );
   }
@@ -125,7 +125,7 @@ export default function ManagePuzzlesPage() {
           {codeError && <p className="text-sm text-destructive">Incorrect access code.</p>}
           <Button onClick={handleSubmitCode} className="w-full bg-primary text-primary-foreground">Enter</Button>
         </div>
-        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Back to puzzles</Link>
+        <Link to="/play" className="text-sm text-muted-foreground hover:text-foreground">← Back to puzzles</Link>
       </div>
     );
   }
@@ -196,7 +196,7 @@ export default function ManagePuzzlesPage() {
       <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2">
+            <Link to="/play" className="flex items-center gap-2">
               <Brain className="w-6 h-6 text-primary" />
               <span className="font-bold text-foreground hidden sm:inline">Elucidate Chess</span>
             </Link>
@@ -218,7 +218,7 @@ export default function ManagePuzzlesPage() {
             <h1 className="text-2xl font-bold text-foreground">Puzzle Catalog</h1>
             <p className="text-sm text-muted-foreground mt-1">{puzzles.length} puzzles · Click edit to modify</p>
           </div>
-          <Link to="/"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-1" /> Back</Button></Link>
+          <Link to="/play"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-1" /> Back</Button></Link>
         </div>
 
         {fetching ? (
