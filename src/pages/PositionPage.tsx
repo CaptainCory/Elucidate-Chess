@@ -69,6 +69,9 @@ const PositionPage = () => {
 function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: any; onReset: () => void }) {
   const game = useChessGame(puzzle, onReset);
   const [showSignIn, setShowSignIn] = useState(false);
+  const boardOrientation = useMemo(() => {
+    try { return new Chess(puzzle.fen).turn() === 'b' ? 'black' : 'white'; } catch { return 'white'; }
+  }, [puzzle.fen]);
 
   // Fetch persisted profile stats from DB
   const { data: profile } = useQuery({
