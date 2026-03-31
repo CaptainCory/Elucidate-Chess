@@ -175,7 +175,7 @@ export function FollowUpChat({
               }`}
             >
               {msg.role === 'assistant' ? (
-                <div className="prose prose-invert prose-sm max-w-none">
+                <div className="prose prose-sm max-w-none text-muted-foreground [&_p]:text-muted-foreground [&_strong]:text-foreground [&_code]:text-primary">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
               ) : (

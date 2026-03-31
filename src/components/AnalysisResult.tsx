@@ -190,7 +190,7 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
           <Target className="w-5 h-5 text-primary" />
           <h3 className="font-semibold font-display">Analysis Feedback</h3>
         </div>
-        <div className="text-secondary-foreground prose prose-invert prose-sm max-w-none">
+        <div className="text-muted-foreground prose prose-sm max-w-none [&_p]:text-muted-foreground [&_strong]:text-foreground">
           <ReactMarkdown>{analysis.reasoningFeedback}</ReactMarkdown>
         </div>
       </motion.div>

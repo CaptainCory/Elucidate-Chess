@@ -17,7 +17,7 @@ export function MobileNav({ user, onSignIn }: MobileNavProps) {
     <div className="lg:hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="p-2 rounded-lg bg-secondary text-foreground hover:bg-secondary/80 transition-colors"
+        className={`p-2 rounded-lg transition-colors ${open ? 'bg-primary/20 text-primary' : 'bg-secondary text-foreground hover:bg-secondary/80'}`}
         aria-label="Toggle menu"
       >
         {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
