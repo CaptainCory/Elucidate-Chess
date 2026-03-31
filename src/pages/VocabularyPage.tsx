@@ -316,7 +316,7 @@ export default function VocabularyPage() {
                             <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-4">
                               {entry.description}
                             </p>
-                            <p className="text-xs text-primary/70 italic">
+                            <p className="text-sm md:text-base text-primary font-medium leading-relaxed">
                               {entry.keySquares}
                             </p>
                           </div>
