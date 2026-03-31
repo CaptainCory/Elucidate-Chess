@@ -339,10 +339,10 @@ export default function LandingPage() {
             Join chess players who are improving by understanding, not memorizing.
           </motion.p>
           <motion.div variants={fadeUp} custom={2}>
-            <Link to="/">
-              <Button size="lg" className="gap-2 text-base px-8 py-6 shadow-lg hover:shadow-xl transition-shadow">
+            <Link to="/play">
+              <Button size="lg" className="gap-2 text-lg px-10 py-7 shadow-lg hover:shadow-xl transition-shadow">
                 <ArrowRight className="w-5 h-5" />
-                Start Your First Position
+                Try It For Free
               </Button>
             </Link>
           </motion.div>
