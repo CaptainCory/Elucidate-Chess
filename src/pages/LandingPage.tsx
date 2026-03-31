@@ -75,7 +75,7 @@ export default function LandingPage() {
               Leaderboard
             </Link>
             {user ? (
-              <Link to="/">
+              <Link to="/play">
                 <Button size="sm" className="gap-2">
                   <Sparkles className="w-4 h-4" />
                   Start Training
