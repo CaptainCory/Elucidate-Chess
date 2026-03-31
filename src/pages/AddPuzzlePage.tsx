@@ -62,7 +62,7 @@ export default function AddPuzzlePage() {
         <Button onClick={() => setShowSignIn(true)} className="bg-primary text-primary-foreground">
           Sign In
         </Button>
-        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link to="/play" className="text-sm text-muted-foreground hover:text-foreground">
           ← Back to puzzles
         </Link>
         <AuthModal open={showSignIn} onOpenChange={setShowSignIn} />
@@ -85,7 +85,7 @@ export default function AddPuzzlePage() {
             Upgrade to Premium
           </Button>
         </Link>
-        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link to="/play" className="text-sm text-muted-foreground hover:text-foreground">
           ← Back to puzzles
         </Link>
       </div>
@@ -133,7 +133,7 @@ export default function AddPuzzlePage() {
             Enter
           </Button>
         </div>
-        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link to="/play" className="text-sm text-muted-foreground hover:text-foreground">
           ← Back to puzzles
         </Link>
       </div>
@@ -217,7 +217,7 @@ export default function AddPuzzlePage() {
       <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2">
+            <Link to="/play" className="flex items-center gap-2">
               <Brain className="w-6 h-6 text-primary" />
               <span className="font-bold text-foreground hidden sm:inline">Elucidate Chess</span>
             </Link>
@@ -244,7 +244,7 @@ export default function AddPuzzlePage() {
                 <Settings className="w-4 h-4 mr-1" /> Manage
               </Button>
             </Link>
-            <Link to="/">
+            <Link to="/play">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="w-4 h-4 mr-1" /> Back
               </Button>
