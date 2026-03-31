@@ -31,10 +31,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Fork',
     summary: 'One piece attacks two or more enemy pieces simultaneously.',
     description:
-      'A fork is one of the most common tactical motifs. A single piece — often a knight — attacks two or more enemy pieces at the same time, guaranteeing material gain because the opponent can only save one. Knights are especially dangerous forkers because they jump over pieces and attack squares of the opposite color to the one they stand on.',
+      'A fork happens when one of your pieces attacks two (or more) enemy pieces at the same time. Your opponent can only save one, so you win the other. Knights are the best at this because they can jump over pieces.',
     fen: 'r3k3/2N5/8/8/8/8/8/4K3 b - - 0 1',
     orientation: 'white',
-    keySquares: 'The knight on c7 attacks both the king on e8 and the rook on a8 — Black must save the king, losing the rook.',
+    keySquares: 'The knight on c7 attacks the king and the rook at the same time. Black must move the king, so White captures the rook for free.',
     highlights: { c7: hl.attacker, e8: hl.target, a8: hl.target },
   },
   {
@@ -42,10 +42,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Pin',
     summary: 'A piece cannot move because it would expose a more valuable piece behind it.',
     description:
-      'A pin occurs when a piece is attacked along a line (file, rank, or diagonal) and cannot move without exposing a more valuable piece behind it — typically the king (absolute pin) or the queen (relative pin). Bishops and rooks are the most common pinning pieces. Pins restrict the opponent\'s mobility and often win material.',
+      'A pin traps a piece in place. If the pinned piece moves, it would reveal a more valuable piece behind it (like the king or queen) to attack. A piece pinned to the king literally cannot move — it\'s against the rules.',
     fen: 'r1bqkb1r/ppp2ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1',
     orientation: 'white',
-    keySquares: 'The bishop on b5 pins the knight on c6 to the king on e8 — the knight cannot move without exposing the king to check.',
+    keySquares: 'The bishop on b5 pins the knight on c6 to the king. The knight is stuck — moving it would put the king in check.',
     highlights: { b5: hl.attacker, c6: hl.target, e8: hl.line },
   },
   {
@@ -53,10 +53,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Skewer',
     summary: 'Attack a valuable piece that must move, exposing a piece behind it to capture.',
     description:
-      'A skewer is the reverse of a pin. A more valuable piece is attacked first and forced to move, revealing a less valuable piece behind it that can be captured. For example, a rook might check a king along a file; when the king moves, a queen behind it is captured. Skewers are devastating in endgames.',
+      'A skewer is like a pin in reverse. You attack a valuable piece (often the king) that is forced to move, and then you capture the less valuable piece hiding behind it.',
     fen: '3q4/8/8/3k4/8/8/8/4R1K1 w - - 0 1',
     orientation: 'white',
-    keySquares: 'Rd1+ skewers the king on d5 — when the king moves off the d-file, the rook captures the queen on d8.',
+    keySquares: 'Rd1+ checks the king on d5. The king must move, and then the rook captures the queen on d8.',
     highlights: { e1: hl.attacker, d1: hl.move, d5: hl.target, d8: hl.target },
   },
   {
@@ -64,10 +64,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Discovered Attack',
     summary: 'Moving one piece reveals an attack from a piece behind it.',
     description:
-      'A discovered attack happens when a piece moves out of the way, unmasking an attack from a long-range piece (bishop, rook, or queen) behind it. When the revealed attack is a check, it\'s called a discovered check — extremely powerful because the moving piece can go almost anywhere with impunity while the opponent must deal with the check.',
+      'A discovered attack happens when you move a piece out of the way, revealing an attack from a piece behind it. If the revealed attack is a check, it\'s called a "discovered check" — and the piece you moved can go almost anywhere because your opponent must deal with the check first.',
     fen: '3qk3/8/8/4B3/4R3/8/8/6K1 w - - 0 1',
     orientation: 'white',
-    keySquares: 'Moving the bishop from e5 (e.g., Bc7) discovers check from the rook on e4 along the e-file, while the bishop attacks the queen — Black loses the queen.',
+    keySquares: 'When the bishop moves off e5, it uncovers the rook\'s attack on the king along the e-file. The bishop can grab the queen while the king deals with the check.',
     highlights: { e5: hl.attacker, e4: hl.line, e8: hl.target, d8: hl.target },
   },
   {
@@ -75,10 +75,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Back Rank Mate',
     summary: 'A rook or queen delivers checkmate on the opponent\'s first rank.',
     description:
-      'The back rank mate exploits a king trapped behind its own pawns on the first (or eighth) rank. A rook or queen slides to the back rank and delivers checkmate because the king has no escape squares — its own pawns block the way. This is one of the most important tactical patterns to watch for, both offensively and defensively. Creating a "luft" (pawn move to give the king an escape) is the main preventive measure.',
+      'This happens when a king is trapped on the back rank by its own pawns. A rook or queen slides to the back rank and it\'s checkmate — the king has nowhere to go. To prevent this, you can push a pawn to give your king an escape square (called a "luft").',
     fen: '6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1',
     orientation: 'white',
-    keySquares: 'Ra8# is checkmate — the king on g8 is trapped behind its own pawns on f7, g7, and h7.',
+    keySquares: 'Ra8# is checkmate. The king on g8 is boxed in by its own pawns on f7, g7, and h7 with no escape.',
     highlights: { a1: hl.attacker, a8: hl.move, g8: hl.target, f7: hl.line, g7: hl.line, h7: hl.line },
   },
   {
@@ -86,10 +86,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Smothered Mate',
     summary: 'A knight delivers checkmate to a king surrounded by its own pieces.',
     description:
-      'The smothered mate is an elegant checkmate pattern where a knight delivers the final blow to a king completely boxed in by its own pieces. The classic pattern often involves a queen sacrifice to force the king into a corner, then the knight lands the checkmate. It\'s rare but stunning when it appears in a game.',
+      'A smothered mate happens when a king is completely surrounded by its own pieces and a knight delivers checkmate. The king has no escape because its own army is in the way. It\'s rare but one of the most beautiful patterns in chess.',
     fen: '6rk/5Npp/8/8/8/8/8/6K1 b - - 0 1',
     orientation: 'white',
-    keySquares: 'The knight on f7 delivers checkmate — the king on h8 is smothered by its own rook on g8 and pawns on g7 and h7.',
+    keySquares: 'The knight on f7 is giving checkmate. The king on h8 can\'t escape — it\'s blocked by its own rook on g8 and pawns on g7 and h7.',
     highlights: { f7: hl.attacker, h8: hl.target, g8: hl.line, g7: hl.line, h7: hl.line },
   },
   {
@@ -97,10 +97,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Deflection',
     summary: 'Force a defending piece away from its critical duty.',
     description:
-      'Deflection is a tactical theme where you force a key defensive piece to abandon its post. For example, if a rook is the only piece guarding against a back rank mate, attacking that rook forces it to move or capture elsewhere, allowing the mate to land. Deflection often combines with other tactics and frequently involves a sacrifice.',
+      'Deflection means forcing an important defending piece to leave its post. Once the defender moves away, the thing it was protecting becomes vulnerable. It often involves offering a sacrifice your opponent can\'t refuse.',
     fen: '1r4k1/5ppp/8/8/8/8/Q4PPP/4R1K1 w - - 0 1',
     orientation: 'white',
-    keySquares: 'Qa8! attacks the rook, which is the sole defender of the back rank. If Rxa8, White plays Re8# checkmate — the rook was deflected.',
+    keySquares: 'Qa8! attacks the rook, which is the only piece guarding the back rank. If the rook captures (Rxa8), White plays Re8# checkmate.',
     highlights: { a2: hl.attacker, a8: hl.move, b8: hl.target, e1: hl.line },
   },
   {
@@ -108,10 +108,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Decoy',
     summary: 'Lure an enemy piece to a specific square where it becomes vulnerable.',
     description:
-      'A decoy sacrifice lures an opponent\'s piece to a particular square — usually with a sacrifice — where it becomes vulnerable to a follow-up tactic. The key difference from deflection: deflection pulls a piece away from defense, while a decoy draws a piece to a specific square. Queen sacrifices that force the king to a dangerous square are classic decoy motifs.',
+      'A decoy lures an opponent\'s piece to a bad square, usually with a sacrifice. The difference from deflection: deflection pulls a piece away from its job, while a decoy draws a piece to a specific square where it gets into trouble.',
     fen: '4r1k1/5ppp/8/8/8/8/1Q3PPP/4R1K1 w - - 0 1',
     orientation: 'white',
-    keySquares: 'Qb8! decoys the rook — after Rxb8 the e-file is unguarded, and Re8# delivers back rank checkmate.',
+    keySquares: 'Qb8! lures the rook to b8 (Rxb8). Now the e-file is wide open and Re8# is checkmate.',
     highlights: { b2: hl.attacker, b8: hl.move, e8: hl.target, e1: hl.line },
   },
   {
@@ -119,10 +119,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Overloading',
     summary: 'A piece has too many defensive responsibilities and cannot handle them all.',
     description:
-      'An overloaded piece is one that is assigned multiple defensive tasks simultaneously and cannot fulfill all of them. By attacking one of the things the overloaded piece protects, you force the opponent to choose which duty to abandon. This often results in winning material or achieving checkmate. Recognizing overloaded pieces is a hallmark of strong tactical vision.',
+      'An overloaded piece is trying to do two jobs at once. By attacking one of the things it\'s protecting, you force your opponent to choose which one to save — and they lose the other.',
     fen: '3r2k1/4qppp/8/4N3/8/8/5PPP/3R2K1 w - - 0 1',
     orientation: 'white',
-    keySquares: 'Nxf7! exploits the overloaded queen — she must guard both f7 and the d8 rook. If Qxf7, Rxd8# is back rank mate. If Kxf7, Rxd8 wins the rook.',
+    keySquares: 'Nxf7! The queen must protect both f7 and the d8 rook. If she takes the knight (Qxf7), Rxd8# is checkmate. If the king takes, Rxd8 wins the rook.',
     highlights: { e5: hl.attacker, f7: hl.move, e7: hl.target, d8: hl.line, d1: hl.line },
   },
   {
@@ -130,10 +130,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Zwischenzug (In-Between Move)',
     summary: 'An unexpected intermediate move inserted before the expected continuation.',
     description:
-      'Zwischenzug (German for "intermediate move") is when a player inserts an unexpected move — often a check or a threat — before making the expected recapture or continuation. This in-between move changes the evaluation of the position entirely. It\'s one of the trickiest tactical ideas because it breaks the "automatic" flow of a sequence.',
+      'A zwischenzug (German for "in-between move") is a surprise move you sneak in before doing what your opponent expects. Instead of recapturing right away, you throw in a check or threat first, then come back to recapture with an extra advantage.',
     fen: 'r1bqkb1r/pppp1ppp/2n2n2/8/2BpP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1',
     orientation: 'white',
-    keySquares: 'Black just captured on d4, expecting Nxd4. Instead, Bxf7+! is a zwischenzug — an in-between check that wins a pawn before White recaptures on d4.',
+    keySquares: 'Black just took on d4 and expects White to recapture. Instead, Bxf7+! is a sneaky in-between check — White wins an extra pawn before taking back on d4.',
     highlights: { c4: hl.attacker, f7: hl.move, d4: hl.line, e8: hl.target },
   },
   {
@@ -141,10 +141,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Sacrifice',
     summary: 'Deliberately giving up material to gain a greater advantage.',
     description:
-      'A sacrifice is the intentional giving up of material (a pawn, piece, exchange, or even the queen) to gain a compensating advantage — whether it\'s checkmate, a decisive attack, better piece activity, or a winning endgame. Sacrifices can be tactical (calculable to a forced win) or positional (long-term compensation). The most beautiful games in chess history often feature brilliant sacrifices.',
+      'A sacrifice is when you intentionally give up a piece to get something bigger in return — like a checkmate attack, a winning position, or a decisive advantage. The best sacrifices look crazy at first but lead to forced wins.',
     fen: 'r1bq1rk1/ppp2ppp/2n1pn2/3p4/3P4/3BPN2/PPP2PPP/R1BQK2R w KQ - 0 1',
     orientation: 'white',
-    keySquares: 'Bxh7+! — the classic "Greek Gift" sacrifice rips open Black\'s kingside. After Kxh7, Ng5+ and Qh5 launch a devastating attack.',
+    keySquares: 'Bxh7+! sacrifices the bishop to tear open Black\'s king. After Kxh7, Ng5+ and Qh5 create an unstoppable attack.',
     highlights: { d3: hl.attacker, h7: hl.move, f3: hl.line, g8: hl.target },
   },
   {
@@ -152,10 +152,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Battery',
     summary: 'Two or more pieces line up on the same file, rank, or diagonal to amplify their power.',
     description:
-      'A battery is created when two or more pieces of the same type (or compatible type) line up on the same file, rank, or diagonal. The classic battery is a queen and bishop on the same diagonal, or two rooks doubled on an open file. Batteries concentrate firepower on a single target and are especially powerful when aimed at the opponent\'s king.',
+      'A battery is when you line up two or more pieces on the same file, rank, or diagonal so they combine their power. A classic example is a queen and bishop aiming down the same diagonal toward the enemy king.',
     fen: 'r4rk1/ppp2ppp/3b4/3p4/8/3B4/PPP1QPPP/R4RK1 w - - 0 1',
     orientation: 'white',
-    keySquares: 'The queen on e2 and bishop on d3 form a battery along the b1-h7 diagonal, aiming directly at Black\'s king.',
+    keySquares: 'The queen on e2 and bishop on d3 are lined up along the b1-h7 diagonal, pointing straight at Black\'s king.',
     highlights: { e2: hl.attacker, d3: hl.attacker, h7: hl.target, g8: hl.line },
   },
   {
@@ -163,10 +163,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Ladder Mate (Staircase Mate)',
     summary: 'Two rooks (or rook and queen) alternate checks to push the king to the edge and deliver mate.',
     description:
-      'The ladder mate — also called the staircase mate or lawnmower mate — is one of the first checkmate patterns beginners learn. Two major pieces (typically two rooks) alternate giving check, driving the enemy king rank by rank (or file by file) toward the edge of the board, where checkmate is delivered. Each check forces the king one step closer to its doom.',
+      'The ladder mate is one of the first checkmates you should learn. Two rooks take turns giving check, pushing the enemy king one row at a time toward the edge of the board, where it gets checkmated.',
     fen: '8/8/8/8/8/8/1k6/R1R1K3 w - - 0 1',
     orientation: 'white',
-    keySquares: 'The two rooks alternate checks — Ra2+, then Rc3+ on the next rank — walking the king to the edge for checkmate.',
+    keySquares: 'The two rooks take turns checking — Ra2+, then Rc3+ — walking the king to the edge step by step until it\'s checkmate.',
     highlights: { a1: hl.attacker, c1: hl.attacker, a2: hl.move, b2: hl.target },
   },
   {
@@ -174,10 +174,10 @@ const vocabulary: VocabEntry[] = [
     title: 'X-Ray (X-Ray Attack)',
     summary: 'A piece exerts influence through an enemy piece to a square beyond it.',
     description:
-      'An x-ray attack occurs when a long-range piece (bishop, rook, or queen) attacks or defends through an enemy piece. The attacking piece "sees through" the obstruction. This is important in both tactics (the blocking piece might move or be captured) and in endgames where rooks x-ray each other along a file. Recognizing x-ray patterns helps you evaluate positions more accurately.',
+      'An x-ray happens when a long-range piece (bishop, rook, or queen) "sees through" an enemy piece to a square behind it. If the blocking piece moves or gets captured, the x-ray piece springs into action.',
     fen: '4k3/8/8/4r3/8/8/4R3/4K3 w - - 0 1',
     orientation: 'white',
-    keySquares: 'The white rook on e2 x-rays through the black rook on e5 — if the e5 rook moves, Re8+ would check the king.',
+    keySquares: 'The white rook on e2 x-rays through the black rook on e5. If the black rook moves off the e-file, Re8+ checks the king.',
     highlights: { e2: hl.attacker, e5: hl.line, e8: hl.target },
   },
   {
@@ -185,10 +185,10 @@ const vocabulary: VocabEntry[] = [
     title: 'Pawn Promotion',
     summary: 'A pawn reaches the far end of the board and transforms into a more powerful piece.',
     description:
-      'When a pawn reaches the eighth rank (or first rank for Black), it promotes — becoming a queen, rook, bishop, or knight of the same color. Promotion to a queen is most common, but underpromotion (choosing a knight, for example, to deliver a fork or avoid stalemate) creates some of chess\'s most beautiful tactical moments. Endgames often revolve entirely around whether a pawn can promote.',
+      'When a pawn reaches the other side of the board, it promotes — you can turn it into a queen, rook, bishop, or knight. Most of the time you pick a queen. Many endgames are all about getting a pawn to the finish line.',
     fen: '8/4P1k1/8/8/8/8/8/4K3 w - - 0 1',
     orientation: 'white',
-    keySquares: 'The white pawn on e7 is one square away from promotion — e8=Q creates a new queen.',
+    keySquares: 'The white pawn on e7 is one step away from becoming a queen with e8=Q.',
     highlights: { e7: hl.attacker, e8: hl.move },
   },
 ];
