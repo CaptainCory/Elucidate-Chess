@@ -29,8 +29,8 @@ const App = () => (
         <AmazonSticker />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/landing" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/play" element={<Index />} />
             <Route path="/position/:id" element={<PositionPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
