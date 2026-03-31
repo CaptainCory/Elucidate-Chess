@@ -24,9 +24,10 @@ interface ChessBoardProps {
   orientation?: 'white' | 'black';
   onMove?: (move: string) => void;
   interactive?: boolean;
+  externalSquareStyles?: Record<string, React.CSSProperties>;
 }
 
-export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, interactive = false }: ChessBoardProps) {
+export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, interactive = false, externalSquareStyles }: ChessBoardProps) {
   const [userMove, setUserMove] = useState<string | null>(null);
   const [highlightSquares, setHighlightSquares] = useState<Record<string, React.CSSProperties>>({});
   const [displayFen, setDisplayFen] = useState(previousFen || fen);
@@ -233,7 +234,7 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
           lightSquareStyle={{
             backgroundColor: 'hsl(38, 40%, 78%)',
           }}
-          squareStyles={highlightSquares}
+          squareStyles={{ ...(externalSquareStyles || {}), ...highlightSquares }}
           calcWidth={({ screenWidth }) => Math.min(480, screenWidth - 32)}
           pieces={Object.fromEntries(
             Object.entries(pieceImages).map(([piece, src]) => [
