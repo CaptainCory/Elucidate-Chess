@@ -136,7 +136,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       toast.error('Failed to analyze your response. Please try again.');
       setGameState('thinking');
     }
-  }, [puzzle, selectedMove, scores, streak, user, isPremium, isDifficultyLocked, queryClient]);
+  }, [puzzle, selectedMove, scores, user, isPremium, isDifficultyLocked, queryClient]);
 
   const [isNavigating, setIsNavigating] = useState(false);
 
