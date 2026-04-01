@@ -79,7 +79,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
     queryFn: async () => {
       const { data } = await supabase
         .from('profiles')
-        .select('puzzles_solved, average_score, best_streak, current_difficulty, beginner_solved, intermediate_solved, advanced_solved, beginner_avg_score, intermediate_avg_score, advanced_avg_score')
+        .select('puzzles_solved, average_score, best_streak, current_streak, current_difficulty, beginner_solved, intermediate_solved, advanced_solved, beginner_avg_score, intermediate_avg_score, advanced_avg_score')
         .eq('user_id', user!.id)
         .maybeSingle();
       return data;
