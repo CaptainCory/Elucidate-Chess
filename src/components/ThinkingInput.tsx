@@ -15,15 +15,6 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleTranscript = useCallback((text: string) => {
-    setThinking((prev) => {
-      const joined = prev ? `${prev} ${text}` : text;
-      return joined.slice(0, MAX_CHARS);
-    });
-  }, []);
-
-  const { isRecording, isTranscribing, toggleRecording } = useSpeechToText(handleTranscript);
-
   useEffect(() => {
     if (moveSelected && textareaRef.current) {
       containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
