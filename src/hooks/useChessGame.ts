@@ -179,7 +179,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     analysis,
     solvedPuzzles,
     scores,
-    streak,
+    averageScore,
     averageScore,
     selectedMove,
     isDifficultyLocked,
