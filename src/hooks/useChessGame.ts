@@ -17,7 +17,6 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
   const [solvedPuzzles, setSolvedPuzzles] = useState<string[]>([]);
   const [scores, setScores] = useState<number[]>([]);
-  const [streak, setStreak] = useState(0);
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [isDifficultyLocked, setIsDifficultyLocked] = useState(false);
@@ -92,21 +91,12 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       const newScores = [...scores, analysisResult.score];
       setScores(newScores);
 
-      let newStreak: number;
-      if (analysisResult.score >= 70) {
-        newStreak = streak + 1;
-        setStreak(newStreak);
-      } else {
-        newStreak = 0;
-        setStreak(0);
-      }
-
       if (user) {
         const { data: rpcResult, error: rpcError } = await supabase
           .rpc('increment_puzzle_stats', {
             p_user_id: user.id,
             p_score: analysisResult.score,
-            p_streak: newStreak,
+            p_streak: 0, // streak is now managed server-side, this param is ignored
             p_difficulty: puzzle.difficulty,
           });
 
@@ -146,7 +136,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       toast.error('Failed to analyze your response. Please try again.');
       setGameState('thinking');
     }
-  }, [puzzle, selectedMove, scores, streak, user, isPremium, isDifficultyLocked, queryClient]);
+  }, [puzzle, selectedMove, scores, user, isPremium, isDifficultyLocked, queryClient]);
 
   const [isNavigating, setIsNavigating] = useState(false);
 
@@ -189,7 +179,6 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     analysis,
     solvedPuzzles,
     scores,
-    streak,
     averageScore,
     selectedMove,
     isDifficultyLocked,
