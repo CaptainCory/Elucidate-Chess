@@ -27,6 +27,7 @@ export type Database = {
           best_streak: number
           created_at: string
           current_difficulty: string
+          current_streak: number
           display_name: string | null
           id: string
           intermediate_avg_score: number
@@ -49,6 +50,7 @@ export type Database = {
           best_streak?: number
           created_at?: string
           current_difficulty?: string
+          current_streak?: number
           display_name?: string | null
           id?: string
           intermediate_avg_score?: number
@@ -71,6 +73,7 @@ export type Database = {
           best_streak?: number
           created_at?: string
           current_difficulty?: string
+          current_streak?: number
           display_name?: string | null
           id?: string
           intermediate_avg_score?: number
