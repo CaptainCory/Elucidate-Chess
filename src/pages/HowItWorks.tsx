@@ -101,7 +101,7 @@ const steps: WalkthroughStep[] = [
     highlights: {
       f7: glowRed,
     },
-    autoAdvanceMs: 3500,
+    
   },
   {
     id: 'move',
