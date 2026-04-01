@@ -229,10 +229,10 @@ export function ChessBoard({ fen, previousFen, orientation = 'white', onMove, in
             borderRadius: '0.75rem',
           }}
           darkSquareStyle={{
-            backgroundColor: 'hsl(160, 18%, 25%)',
+            backgroundColor: 'hsl(28, 35%, 52%)',
           }}
           lightSquareStyle={{
-            backgroundColor: 'hsl(38, 40%, 78%)',
+            backgroundColor: 'hsl(40, 45%, 85%)',
           }}
           squareStyles={{ ...(externalSquareStyles || {}), ...highlightSquares }}
           calcWidth={({ screenWidth }) => Math.min(480, screenWidth - 32)}

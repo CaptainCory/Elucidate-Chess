@@ -45,9 +45,9 @@
 
     --radius: 0.75rem;
 
-    /* Chess board colors – walnut & ivory */
-    --board-light: 38 40% 78%;
-    --board-dark: 160 18% 25%;
+    /* Chess board colors – warm walnut & cream */
+    --board-light: 40 45% 85%;
+    --board-dark: 28 35% 52%;
     --board-highlight: 42 75% 50%;
 
     /* Gradients */
