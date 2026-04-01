@@ -1,8 +1,7 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Send, Loader2, Mic, MicOff } from 'lucide-react';
-import { useSpeechToText } from '@/hooks/useSpeechToText';
+import { Send, Loader2 } from 'lucide-react';
 
 interface ThinkingInputProps {
   onSubmit: (thinking: string) => void;
