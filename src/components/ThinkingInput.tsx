@@ -1,8 +1,7 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Send, Loader2, Mic, MicOff } from 'lucide-react';
-import { useSpeechToText } from '@/hooks/useSpeechToText';
+import { Send, Loader2 } from 'lucide-react';
 
 interface ThinkingInputProps {
   onSubmit: (thinking: string) => void;
@@ -15,15 +14,6 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
   const [thinking, setThinking] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleTranscript = useCallback((text: string) => {
-    setThinking((prev) => {
-      const joined = prev ? `${prev} ${text}` : text;
-      return joined.slice(0, MAX_CHARS);
-    });
-  }, []);
-
-  const { isRecording, isTranscribing, toggleRecording } = useSpeechToText(handleTranscript);
 
   useEffect(() => {
     if (moveSelected && textareaRef.current) {
@@ -65,25 +55,6 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
           <label className="block text-sm font-medium text-foreground">
             {moveSelected ? 'Explain your thinking process' : 'Describe the Position and Justify Your Reasoning'}
           </label>
-          {moveSelected && (
-            <Button
-              type="button"
-              variant={isRecording ? 'destructive' : 'outline'}
-              size="sm"
-              onClick={toggleRecording}
-              disabled={disabled || isLoading || isTranscribing}
-              className="flex items-center gap-1.5 text-xs"
-            >
-              {isTranscribing ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              ) : isRecording ? (
-                <MicOff className="w-3.5 h-3.5" />
-              ) : (
-                <Mic className="w-3.5 h-3.5" />
-              )}
-              {isTranscribing ? 'Transcribing…' : isRecording ? 'Stop' : 'Voice'}
-            </Button>
-          )}
         </div>
         <div className="relative">
           <textarea
@@ -100,16 +71,10 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
             maxLength={MAX_CHARS}
             disabled={disabled || isLoading || !moveSelected}
           />
-          {moveSelected && !thinking && !isRecording && (
+          {moveSelected && !thinking && (
             <div className="absolute top-3 left-4 flex items-center gap-2 pointer-events-none">
               <span className="inline-block w-0.5 h-5 bg-primary animate-blink rounded-full" />
-              <span className="text-sm font-medium text-primary">Start typing or use voice…</span>
-            </div>
-          )}
-          {isRecording && (
-            <div className="absolute top-3 left-4 flex items-center gap-2 pointer-events-none">
-              <span className="inline-block w-2 h-2 bg-destructive rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-destructive">Listening…</span>
+              <span className="text-sm font-medium text-primary">Start typing…</span>
             </div>
           )}
         </div>
