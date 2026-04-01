@@ -148,17 +148,7 @@ export default function HowItWorks() {
   const step = steps[currentStep];
   const isLastStep = currentStep === steps.length - 1;
 
-  // Auto-advance for certain steps
-  useEffect(() => {
-    if (step.autoAdvanceMs && currentStep < steps.length - 1) {
-      timerRef.current = setTimeout(() => {
-        setCurrentStep(prev => prev + 1);
-      }, step.autoAdvanceMs);
-      return () => {
-        if (timerRef.current) clearTimeout(timerRef.current);
-      };
-    }
-  }, [currentStep, step.autoAdvanceMs]);
+  // Auto-advance removed — all steps are click-to-advance
 
   // Typing animation for the thinking step
   useEffect(() => {
