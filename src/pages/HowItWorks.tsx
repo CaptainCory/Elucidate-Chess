@@ -50,7 +50,6 @@ const steps: WalkthroughStep[] = [
     icon: <Eye className="h-5 w-5" />,
     content: "Before anything else, take a breath and really look at the position. Don't rush to find a move — just observe. Where are the pieces? What's the overall picture?",
     highlights: {},
-    autoAdvanceMs: 4000,
   },
   {
     id: 'turn',
@@ -58,7 +57,6 @@ const steps: WalkthroughStep[] = [
     icon: <Crown className="h-5 w-5" />,
     content: "It's White's turn to move. This is always your first question — everything else depends on knowing who's moving.",
     highlights: {},
-    autoAdvanceMs: 3500,
   },
   {
     id: 'material',
