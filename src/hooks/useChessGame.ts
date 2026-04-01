@@ -91,21 +91,12 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       const newScores = [...scores, analysisResult.score];
       setScores(newScores);
 
-      let newStreak: number;
-      if (analysisResult.score >= 70) {
-        newStreak = streak + 1;
-        setStreak(newStreak);
-      } else {
-        newStreak = 0;
-        setStreak(0);
-      }
-
       if (user) {
         const { data: rpcResult, error: rpcError } = await supabase
           .rpc('increment_puzzle_stats', {
             p_user_id: user.id,
             p_score: analysisResult.score,
-            p_streak: newStreak,
+            p_streak: 0, // streak is now managed server-side, this param is ignored
             p_difficulty: puzzle.difficulty,
           });
 
