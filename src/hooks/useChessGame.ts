@@ -17,7 +17,6 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
   const [solvedPuzzles, setSolvedPuzzles] = useState<string[]>([]);
   const [scores, setScores] = useState<number[]>([]);
-  const [streak, setStreak] = useState(0);
   const [selectedMove, setSelectedMove] = useState<string | null>(null);
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [isDifficultyLocked, setIsDifficultyLocked] = useState(false);
