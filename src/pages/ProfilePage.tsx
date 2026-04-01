@@ -138,7 +138,8 @@ const ProfilePage = () => {
             <ProgressStats
               puzzlesSolved={profile?.puzzles_solved ?? 0}
               averageScore={profile?.average_score ?? 0}
-              streak={profile?.best_streak ?? 0}
+              currentStreak={(profile as any)?.current_streak ?? 0}
+              bestStreak={profile?.best_streak ?? 0}
             />
           </CardContent>
         </Card>
