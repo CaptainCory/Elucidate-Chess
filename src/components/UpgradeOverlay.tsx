@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Crown, Zap, Brain, X, Lock } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Crown, Zap, Brain, X, Lock, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AuthModal } from '@/components/AuthModal';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,6 +16,18 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
   const { user } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [plan, setPlan] = useState<'monthly' | 'annual'>('annual');
+  const [playerCount, setPlayerCount] = useState<number | null>(null);
+
+  // Fetch player count for social proof
+  useEffect(() => {
+    if (!open) return;
+    supabase
+      .from('profiles')
+      .select('id', { count: 'exact', head: true })
+      .then(({ count }) => {
+        if (count !== null) setPlayerCount(count);
+      });
+  }, [open]);
 
   if (!open) return null;
 
@@ -59,9 +71,19 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
                 Unlock Intermediate & Advanced
               </h2>
               <p className="text-muted-foreground text-sm">
-                Free users get unlimited beginner positions. Upgrade to Premium to access all difficulty levels and accelerate your improvement.
+                You've been crushing beginner positions — time to level up! Start your <strong className="text-foreground">free 7-day trial</strong> and access all difficulty levels.
               </p>
             </div>
+
+            {/* Social proof */}
+            {playerCount !== null && playerCount > 0 && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Users className="w-4 h-4 text-primary" />
+                <span>
+                  Join {playerCount} player{playerCount !== 1 ? 's' : ''} improving their chess thinking
+                </span>
+              </div>
+            )}
 
             {/* Plan toggle */}
             <div className="w-full flex gap-3">
@@ -76,6 +98,7 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
               >
                 <p className="text-sm font-semibold text-foreground">Monthly</p>
                 <p className="text-lg font-bold text-foreground">$9<span className="text-xs font-normal text-muted-foreground">/mo</span></p>
+                <p className="text-[10px] text-muted-foreground mt-1">7 days free, then $9/mo</p>
               </button>
               <button
                 onClick={() => setPlan('annual')}
@@ -91,6 +114,7 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
                 </span>
                 <p className="text-sm font-semibold text-foreground">Annual</p>
                 <p className="text-lg font-bold text-foreground">$89<span className="text-xs font-normal text-muted-foreground">/yr</span></p>
+                <p className="text-[10px] text-muted-foreground mt-1">7 days free, then $89/yr</p>
               </button>
             </div>
 
@@ -105,20 +129,14 @@ export const UpgradeOverlay = ({ open, onClose }: UpgradeOverlayProps) => {
               </div>
               <div className="flex items-center gap-3 text-sm text-foreground">
                 <Crown className="w-4 h-4 text-primary shrink-0" />
-                <span>Unlock all difficulty levels</span>
+                <span>Cancel anytime during trial — no charge</span>
               </div>
             </div>
 
             <div className="w-full space-y-3">
               <Button onClick={handleUpgrade} className="w-full gap-2" size="lg">
                 <Crown className="w-4 h-4" />
-                {user
-                  ? plan === 'monthly'
-                    ? 'Upgrade for $9/month'
-                    : 'Upgrade for $89/year'
-                  : plan === 'monthly'
-                    ? 'Sign in & Upgrade for $9/month'
-                    : 'Sign in & Upgrade for $89/year'}
+                {user ? 'Start Free 7-Day Trial' : 'Sign in & Start Free Trial'}
               </Button>
               <button
                 onClick={onClose}

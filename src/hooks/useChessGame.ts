@@ -128,6 +128,19 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       }
 
       setGameState('result');
+
+      // Progress cliff: after 10 beginner puzzles, prompt free users to upgrade
+      if (!isPremium && user && puzzle.difficulty === 'beginner') {
+        const { data: prof } = await supabase
+          .from('profiles')
+          .select('beginner_solved')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (prof && prof.beginner_solved >= 10 && prof.beginner_solved % 5 === 0) {
+          // Show upgrade prompt every 5 puzzles after 10
+          setTimeout(() => setShowUpgradeOverlay(true), 2500);
+        }
+      }
     } catch (error) {
       console.error('Analysis error:', error);
       toast.error('Failed to analyze your response. Please try again.');
