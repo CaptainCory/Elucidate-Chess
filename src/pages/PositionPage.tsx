@@ -20,7 +20,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Crown, Trophy, LogIn, HelpCircle, Plus, Loader2, BookOpen } from 'lucide-react';
+import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Plus, Loader2, BookOpen } from 'lucide-react';
 import { MobileNav } from '@/components/MobileNav';
 import { ShareButton } from '@/components/ShareButton';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
@@ -89,6 +89,13 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Ambient glow */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-30"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 0%, hsl(38 92% 50% / 0.15), transparent 60%)',
+        }}
+      />
 
       <div className="relative container max-w-6xl mx-auto px-3 py-2 lg:px-4 lg:py-4">
         {/* Header */}
@@ -122,13 +129,15 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
               </Tooltip>
             </div>
             {/* Title - compact on mobile */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 lg:gap-3">
+              <Crown className="w-7 h-7 lg:w-10 lg:h-10 text-primary" />
               <Link
                 to="/"
-                className="text-xl md:text-2xl lg:text-3xl font-semibold font-display text-foreground hover:text-primary transition-colors cursor-pointer tracking-tight"
+                className="text-xl md:text-3xl lg:text-5xl font-bold font-display text-foreground hover:text-primary transition-colors cursor-pointer"
               >
-                Elucidate
+                Elucidate Chess
               </Link>
+              <Sparkles className="w-5 h-5 lg:w-8 lg:h-8 text-accent hidden sm:block" />
             </div>
             {/* Desktop nav links + auth */}
             <div className="flex items-center gap-3">
