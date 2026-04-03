@@ -20,7 +20,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { Button } from '@/components/ui/button';
 import { useChessGame } from '@/hooks/useChessGame';
 import { useAuth } from '@/contexts/AuthContext';
-import { Brain, Crown, Sparkles, Trophy, LogIn, HelpCircle, Plus, Loader2, BookOpen } from 'lucide-react';
+import { Brain, Crown, Trophy, LogIn, HelpCircle, Plus, Loader2, BookOpen } from 'lucide-react';
 import { MobileNav } from '@/components/MobileNav';
 import { ShareButton } from '@/components/ShareButton';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
