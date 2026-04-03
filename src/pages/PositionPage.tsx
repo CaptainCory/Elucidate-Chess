@@ -89,13 +89,6 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Ambient glow */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-30"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 0%, hsl(38 92% 50% / 0.15), transparent 60%)',
-        }}
-      />
 
       <div className="relative container max-w-6xl mx-auto px-3 py-2 lg:px-4 lg:py-4">
         {/* Header */}
