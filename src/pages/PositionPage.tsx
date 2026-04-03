@@ -122,15 +122,13 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
               </Tooltip>
             </div>
             {/* Title - compact on mobile */}
-            <div className="flex items-center gap-2 lg:gap-3">
-              <Crown className="w-7 h-7 lg:w-10 lg:h-10 text-primary" />
+            <div className="flex items-center gap-2">
               <Link
                 to="/"
-                className="text-xl md:text-3xl lg:text-5xl font-bold font-display text-foreground hover:text-primary transition-colors cursor-pointer"
+                className="text-xl md:text-2xl lg:text-3xl font-semibold font-display text-foreground hover:text-primary transition-colors cursor-pointer tracking-tight"
               >
-                Elucidate Chess
+                Elucidate
               </Link>
-              <Sparkles className="w-5 h-5 lg:w-8 lg:h-8 text-accent hidden sm:block" />
             </div>
             {/* Desktop nav links + auth */}
             <div className="flex items-center gap-3">
