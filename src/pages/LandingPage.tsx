@@ -68,6 +68,10 @@ export default function LandingPage() {
             <Link to="/how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
               How It Works
             </Link>
+            <Link to="/daily" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5" />
+              Daily
+            </Link>
             <Link to="/vocabulary" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
               Vocabulary
             </Link>
