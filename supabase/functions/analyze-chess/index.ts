@@ -187,13 +187,6 @@ serve(async (req) => {
       });
     }
 
-    // Record the attempt server-side
-    if (userId) {
-      await supabase.from("puzzle_attempts").insert({
-        user_id: userId,
-        puzzle_id: puzzleId || "unknown",
-      });
-    }
     // --- END ACCESS ENFORCEMENT ---
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
