@@ -188,6 +188,8 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     setShowUpgradeOverlay,
     graduatedTo,
     setGraduatedTo,
+    newAchievements,
+    setNewAchievements,
     handleMove,
     handleSubmit,
     handleNext,
