@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Volume2, VolumeX } from 'lucide-react';
+import { CheckCircle, XCircle, ArrowRight, Trophy, Target } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { FollowUpChat } from '@/components/FollowUpChat';
-import { useTextToSpeech } from '@/hooks/useTextToSpeech';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { AnimatedScore } from '@/components/AnimatedScore';
 
 export interface PositionPiece {
