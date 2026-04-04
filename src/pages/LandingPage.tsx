@@ -5,7 +5,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { PageSEO } from '@/components/PageSEO';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 const LazyChessBoard = lazy(() => import('@/components/ChessBoard').then(m => ({ default: m.ChessBoard })));
-import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2 } from 'lucide-react';
+import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
