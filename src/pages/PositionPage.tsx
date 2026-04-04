@@ -26,6 +26,7 @@ import { ShareButton } from '@/components/ShareButton';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 import { GraduationProgress } from '@/components/GraduationProgress';
 import { GraduationCelebration } from '@/components/GraduationCelebration';
+import { AchievementToast } from '@/components/AchievementToast';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
