@@ -175,7 +175,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_daily_attempt_count: { Args: { p_user_id: string }; Returns: number }
       get_next_puzzle: {
         Args: {
           p_current_puzzle_id: string
@@ -184,20 +183,15 @@ export type Database = {
         }
         Returns: string
       }
-      increment_puzzle_stats:
-        | {
-            Args: { p_score: number; p_streak: number; p_user_id: string }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              p_difficulty?: string
-              p_score: number
-              p_streak: number
-              p_user_id: string
-            }
-            Returns: Json
-          }
+      increment_puzzle_stats: {
+        Args: {
+          p_difficulty?: string
+          p_score: number
+          p_streak: number
+          p_user_id: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
