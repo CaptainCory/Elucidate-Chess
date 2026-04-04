@@ -5,7 +5,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { PageSEO } from '@/components/PageSEO';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 const LazyChessBoard = lazy(() => import('@/components/ChessBoard').then(m => ({ default: m.ChessBoard })));
-import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2 } from 'lucide-react';
+import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
@@ -67,6 +67,10 @@ export default function LandingPage() {
           <div className="flex items-center gap-4">
             <Link to="/how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
               How It Works
+            </Link>
+            <Link to="/daily" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5" />
+              Daily
             </Link>
             <Link to="/vocabulary" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
               Vocabulary

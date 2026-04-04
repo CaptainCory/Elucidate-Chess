@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      daily_challenge_scores: {
+        Row: {
+          challenge_date: string
+          created_at: string
+          id: string
+          score: number
+          user_id: string
+        }
+        Insert: {
+          challenge_date: string
+          created_at?: string
+          id?: string
+          score: number
+          user_id: string
+        }
+        Update: {
+          challenge_date?: string
+          created_at?: string
+          id?: string
+          score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      daily_challenges: {
+        Row: {
+          challenge_date: string
+          created_at: string
+          id: string
+          puzzle_id: string
+        }
+        Insert: {
+          challenge_date: string
+          created_at?: string
+          id?: string
+          puzzle_id: string
+        }
+        Update: {
+          challenge_date?: string
+          created_at?: string
+          id?: string
+          puzzle_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           advanced_avg_score: number
@@ -146,6 +191,27 @@ export type Database = {
           name?: string
           previous_fen?: string
           themes?: string[]
+        }
+        Relationships: []
+      }
+      user_achievements: {
+        Row: {
+          achievement_key: string
+          id: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          achievement_key: string
+          id?: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          achievement_key?: string
+          id?: string
+          unlocked_at?: string
+          user_id?: string
         }
         Relationships: []
       }

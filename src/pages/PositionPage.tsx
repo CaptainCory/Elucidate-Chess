@@ -26,6 +26,7 @@ import { ShareButton } from '@/components/ShareButton';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 import { GraduationProgress } from '@/components/GraduationProgress';
 import { GraduationCelebration } from '@/components/GraduationCelebration';
+import { AchievementToast } from '@/components/AchievementToast';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -320,6 +321,12 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
         <GraduationCelebration
           newDifficulty={game.graduatedTo}
           onDismiss={() => game.setGraduatedTo(null)}
+        />
+      )}
+      {game.newAchievements.length > 0 && (
+        <AchievementToast
+          achievementKeys={game.newAchievements}
+          onDone={() => game.setNewAchievements([])}
         />
       )}
       <AuthModal open={showSignIn} onOpenChange={setShowSignIn} />

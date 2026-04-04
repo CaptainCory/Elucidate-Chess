@@ -6,11 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Crown, LogOut, Trophy, Target, TrendingUp, ArrowLeft, Loader2, Mail, User } from 'lucide-react';
+import { Crown, LogOut, Trophy, Target, TrendingUp, ArrowLeft, Loader2, Mail, User, Award } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 import { ProgressStats } from '@/components/ProgressStats';
 import { GraduationProgress } from '@/components/GraduationProgress';
+import { AchievementBadge, ACHIEVEMENTS } from '@/components/AchievementBadge';
 import { useQuery } from '@tanstack/react-query';
 
 const ProfilePage = () => {
@@ -32,6 +33,18 @@ const ProfilePage = () => {
         .eq('user_id', user!.id)
         .maybeSingle();
       return data;
+    },
+    enabled: !!user,
+  });
+
+  const { data: achievements } = useQuery({
+    queryKey: ['achievements', user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('user_achievements')
+        .select('achievement_key')
+        .eq('user_id', user!.id);
+      return new Set(data?.map(a => a.achievement_key) || []);
     },
     enabled: !!user,
   });
@@ -179,6 +192,29 @@ const ProfilePage = () => {
                 }
                 isPremium={!!isPremiumUser}
               />
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Achievements */}
+        {achievements && (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Award className="w-5 h-5 text-primary" />
+                Achievements
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {ACHIEVEMENTS.map(a => (
+                  <AchievementBadge
+                    key={a.key}
+                    achievement={a}
+                    unlocked={achievements.has(a.key)}
+                  />
+                ))}
+              </div>
             </CardContent>
           </Card>
         )}

@@ -21,6 +21,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const [showUpgradeOverlay, setShowUpgradeOverlay] = useState(false);
   const [isDifficultyLocked, setIsDifficultyLocked] = useState(false);
   const [graduatedTo, setGraduatedTo] = useState<string | null>(null);
+  const [newAchievements, setNewAchievements] = useState<string[]>([]);
 
   const averageScore = scores.length > 0
     ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
@@ -107,9 +108,10 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
           if (result.graduated) {
             const newDiff = result.current_difficulty as string;
             setGraduatedTo(newDiff);
-            if (!isPremium && newDiff !== 'beginner') {
-              // Don't toast — the celebration modal handles it
-            }
+          }
+          // Handle new achievements
+          if (Array.isArray(result.new_achievements) && (result.new_achievements as string[]).length > 0) {
+            setNewAchievements(result.new_achievements as string[]);
           }
         }
 
@@ -186,6 +188,8 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     setShowUpgradeOverlay,
     graduatedTo,
     setGraduatedTo,
+    newAchievements,
+    setNewAchievements,
     handleMove,
     handleSubmit,
     handleNext,

@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, ArrowRight, Trophy, Target, Volume2, VolumeX } from 'lucide-react';
+import { CheckCircle, XCircle, ArrowRight, Trophy, Target } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { FollowUpChat } from '@/components/FollowUpChat';
-import { useTextToSpeech } from '@/hooks/useTextToSpeech';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { AnimatedScore } from '@/components/AnimatedScore';
 
 export interface PositionPiece {
@@ -51,21 +51,12 @@ interface AnalysisResultProps {
 }
 
 export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResultProps) {
-  const { isSpeaking, toggle: toggleSpeech } = useTextToSpeech();
+  const { playScoreSound } = useSoundEffects();
 
-  const buildSpeechText = () => {
-    const parts: string[] = [];
-    parts.push(analysis.moveCorrect ? 'Correct move!' : 'Incorrect move.');
-    parts.push(`Score: ${analysis.score} out of 100.`);
-    parts.push(analysis.reasoningFeedback);
-    if (analysis.keyInsights.length > 0) {
-      parts.push('Key insights: ' + analysis.keyInsights.slice(0, 2).join('. '));
-    }
-    if (analysis.improvement) {
-      parts.push('To improve: ' + analysis.improvement);
-    }
-    return parts.join(' ');
-  };
+  // Play score sound on mount
+  useEffect(() => {
+    playScoreSound(analysis.score);
+  }, [analysis.score, playScoreSound]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -139,17 +130,6 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
           label={getScoreLabel(analysis.score)}
           colorClass={getScoreColor(analysis.score)}
         />
-        <div className="text-center mt-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => toggleSpeech(buildSpeechText())}
-            className="mx-auto flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary"
-          >
-            {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            {isSpeaking ? 'Stop' : 'Listen to Feedback'}
-          </Button>
-        </div>
       </motion.div>
 
       {/* Move Comparison */}
