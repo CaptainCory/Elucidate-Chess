@@ -6,11 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Crown, LogOut, Trophy, Target, TrendingUp, ArrowLeft, Loader2, Mail, User } from 'lucide-react';
+import { Crown, LogOut, Trophy, Target, TrendingUp, ArrowLeft, Loader2, Mail, User, Award } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 import { ProgressStats } from '@/components/ProgressStats';
 import { GraduationProgress } from '@/components/GraduationProgress';
+import { AchievementBadge, ACHIEVEMENTS } from '@/components/AchievementBadge';
 import { useQuery } from '@tanstack/react-query';
 
 const ProfilePage = () => {
