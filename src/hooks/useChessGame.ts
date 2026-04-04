@@ -108,9 +108,10 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
           if (result.graduated) {
             const newDiff = result.current_difficulty as string;
             setGraduatedTo(newDiff);
-            if (!isPremium && newDiff !== 'beginner') {
-              // Don't toast — the celebration modal handles it
-            }
+          }
+          // Handle new achievements
+          if (Array.isArray(result.new_achievements) && (result.new_achievements as string[]).length > 0) {
+            setNewAchievements(result.new_achievements as string[]);
           }
         }
 
