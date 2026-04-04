@@ -323,6 +323,12 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
           onDismiss={() => game.setGraduatedTo(null)}
         />
       )}
+      {game.newAchievements.length > 0 && (
+        <AchievementToast
+          achievementKeys={game.newAchievements}
+          onDone={() => game.setNewAchievements([])}
+        />
+      )}
       <AuthModal open={showSignIn} onOpenChange={setShowSignIn} />
     </div>
   );

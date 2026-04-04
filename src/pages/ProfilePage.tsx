@@ -196,6 +196,29 @@ const ProfilePage = () => {
           </Card>
         )}
 
+        {/* Achievements */}
+        {achievements && (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Award className="w-5 h-5 text-primary" />
+                Achievements
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {ACHIEVEMENTS.map(a => (
+                  <AchievementBadge
+                    key={a.key}
+                    achievement={a}
+                    unlocked={achievements.has(a.key)}
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Sign Out */}
         <Separator />
         <Button variant="outline" className="w-full" onClick={() => void signOut()}>
