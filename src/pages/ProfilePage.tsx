@@ -37,6 +37,18 @@ const ProfilePage = () => {
     enabled: !!user,
   });
 
+  const { data: achievements } = useQuery({
+    queryKey: ['achievements', user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('user_achievements')
+        .select('achievement_key')
+        .eq('user_id', user!.id);
+      return new Set(data?.map(a => a.achievement_key) || []);
+    },
+    enabled: !!user,
+  });
+
   const isPremiumUser = isPremium || profile?.is_premium;
 
   if (loading || !user) {
