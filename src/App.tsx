@@ -16,6 +16,7 @@ import AddPuzzlePage from "./pages/AddPuzzlePage";
 import ManagePuzzlesPage from "./pages/ManagePuzzlesPage";
 import VocabularyPage from "./pages/VocabularyPage";
 import AdminDashboard from "./pages/AdminDashboard";
+import DailyChallengePage from "./pages/DailyChallengePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
