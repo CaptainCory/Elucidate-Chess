@@ -130,17 +130,6 @@ export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResu
           label={getScoreLabel(analysis.score)}
           colorClass={getScoreColor(analysis.score)}
         />
-        <div className="text-center mt-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => toggleSpeech(buildSpeechText())}
-            className="mx-auto flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary"
-          >
-            {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            {isSpeaking ? 'Stop' : 'Listen to Feedback'}
-          </Button>
-        </div>
       </motion.div>
 
       {/* Move Comparison */}
