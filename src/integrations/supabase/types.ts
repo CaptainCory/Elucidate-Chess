@@ -59,6 +59,27 @@ export type Database = {
         }
         Relationships: []
       }
+      email_subscribers: {
+        Row: {
+          email: string
+          id: string
+          subscribed_at: string
+          unsubscribed: boolean
+        }
+        Insert: {
+          email: string
+          id?: string
+          subscribed_at?: string
+          unsubscribed?: boolean
+        }
+        Update: {
+          email?: string
+          id?: string
+          subscribed_at?: string
+          unsubscribed?: boolean
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           advanced_avg_score: number
