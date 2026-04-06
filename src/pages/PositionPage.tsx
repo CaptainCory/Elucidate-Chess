@@ -27,6 +27,7 @@ import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 import { GraduationProgress } from '@/components/GraduationProgress';
 import { GraduationCelebration } from '@/components/GraduationCelebration';
 import { AchievementToast } from '@/components/AchievementToast';
+import { EmailCaptureModal } from '@/components/EmailCaptureModal';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
