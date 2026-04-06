@@ -71,6 +71,23 @@ const PositionPage = () => {
 function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: any; onReset: () => void }) {
   const game = useChessGame(puzzle, onReset);
   const [showSignIn, setShowSignIn] = useState(false);
+  const [showEmailCapture, setShowEmailCapture] = useState(false);
+
+  // Show email capture after 3rd guest solve
+  useEffect(() => {
+    if (user) return; // signed-in users skip
+    if (localStorage.getItem('email_subscribed') === 'true') return;
+    if (game.gameState !== 'result') return;
+
+    const count = parseInt(localStorage.getItem('guest_solves') || '0', 10) + 1;
+    localStorage.setItem('guest_solves', String(count));
+
+    // Show on 3rd solve, then every 5 after
+    if (count === 3 || (count > 3 && (count - 3) % 5 === 0)) {
+      const timer = setTimeout(() => setShowEmailCapture(true), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [game.gameState, user]);
   const boardOrientation = useMemo(() => {
     try { return new Chess(puzzle.fen).turn() === 'b' ? 'black' : 'white'; } catch { return 'white'; }
   }, [puzzle.fen]);
