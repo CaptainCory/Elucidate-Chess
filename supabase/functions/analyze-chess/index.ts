@@ -101,6 +101,22 @@ const parseFenPieces = (fen: string): PieceOnBoard[] => {
 
 const formatPieceSquare = (piece: PieceOnBoard) => `${piece.piece}@${piece.square}`;
 
+const renderAsciiBoard = (pieces: PieceOnBoard[]): string => {
+  const pieceSymbols: Record<string, string> = {
+    'King-white': 'K', 'Queen-white': 'Q', 'Rook-white': 'R', 'Bishop-white': 'B', 'Knight-white': 'N', 'Pawn-white': 'P',
+    'King-black': 'k', 'Queen-black': 'q', 'Rook-black': 'r', 'Bishop-black': 'b', 'Knight-black': 'n', 'Pawn-black': 'p',
+  };
+  const board: string[][] = Array.from({ length: 8 }, () => Array(8).fill('.'));
+  for (const p of pieces) {
+    const file = p.square.charCodeAt(0) - 97;
+    const rank = parseInt(p.square[1]) - 1;
+    board[7 - rank][file] = pieceSymbols[`${p.piece}-${p.color}`] ?? '?';
+  }
+  const files = '    a  b  c  d  e  f  g  h';
+  const rows = board.map((row, i) => `  ${8 - i} ${row.map(c => `[${c}]`).join('')}`).join('\n');
+  return `${files}\n${rows}\n${files}`;
+};
+
 const verifyPosition = (fen: string, bestMove: string, userMove: string): PositionVerification => {
   const pieces = parseFenPieces(fen);
   const chess = new Chess(fen);
