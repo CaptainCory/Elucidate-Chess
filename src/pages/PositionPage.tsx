@@ -348,6 +348,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
         />
       )}
       <AuthModal open={showSignIn} onOpenChange={setShowSignIn} />
+      <EmailCaptureModal open={showEmailCapture} onOpenChange={setShowEmailCapture} />
     </div>
   );
 }
