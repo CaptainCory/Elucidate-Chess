@@ -258,10 +258,13 @@ Be honest and helpful. Keep it brief.`;
     const userPrompt = `=== CHESS POSITION ===
 FEN: ${fen}
 
-IMPORTANT: Parse the FEN above FIRST. Identify every piece on the board before proceeding. Do not reference any piece not present in this FEN.
+IMPORTANT: Use ONLY the board diagram and piece list below. If a square is shown as [.] it is EMPTY — no piece is there. Do not imagine or infer pieces that are not listed.
 
 Active side to move: ${sideToMoveLabel}
 Difficulty: ${puzzleDifficulty}
+
+=== BOARD DIAGRAM (from engine, authoritative) ===
+${renderAsciiBoard(positionVerification.pieces)}
 
 === VERIFIED POSITION FACTS (DETERMINISTIC ENGINE) ===
 White pieces (${positionVerification.whitePieceCount}): ${whitePiecesSummary || 'None'}
@@ -276,7 +279,7 @@ Student move is legal: ${positionVerification.userMoveLegal ? 'Yes' : 'No'}
 Best move is legal: ${positionVerification.bestMoveLegal ? 'Yes' : 'No'}
 Best move leads to immediate checkmate: ${positionVerification.bestMoveLeadsToMate ? 'Yes' : 'No'}
 
-Treat the verified facts above as authoritative. Never contradict them.
+CRITICAL: A square marked [.] is EMPTY. Do not claim any piece occupies an empty square. Treat the board diagram and piece list as the sole source of truth.
 
 === STUDENT SUBMISSION ===
 Student's Move (in SAN): ${userMove}
