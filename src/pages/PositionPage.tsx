@@ -250,6 +250,9 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
             <div className="grid lg:grid-cols-2 gap-8 items-start relative z-0">
               {/* Chess Board */}
               <div className={`space-y-4 rounded-xl transition-shadow duration-500 ${boardFocused ? 'focus-guide p-2 -m-2' : ''}`}>
+                <h2 className="text-2xl md:text-3xl font-bold font-display text-foreground text-center leading-tight">
+                  {puzzle.name}
+                </h2>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <TurnIndicator fen={puzzle.fen} />
