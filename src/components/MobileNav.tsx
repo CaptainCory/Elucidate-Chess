@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { Menu, X, HelpCircle, Trophy, LogIn, Plus, BookOpen } from 'lucide-react';
+import { Menu, X, HelpCircle, Trophy, LogIn, Plus, BookOpen, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserMenu } from '@/components/UserMenu';
 

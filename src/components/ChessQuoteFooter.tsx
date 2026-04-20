@@ -10,8 +10,17 @@ export const ChessQuoteFooter = () => {
         "{quote.text}"
       </blockquote>
       <p className="text-sm font-semibold text-primary/70">— {quote.author}</p>
-      <p className="text-xs pt-2">Powered by AI • Practice Makes Progress</p>
-      <a href="/admin" className="inline-block text-[10px] text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors mt-4">Admin</a>
+<p className="text-xs pt-2">Powered by AI • Practice Makes Progress</p>
+      <div className="flex items-center gap-4 mt-4">
+        <a 
+          href="/quotes" 
+          className="text-[10px] text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors"
+        >
+          Quotes
+        </a>
+        <span className="text-muted-foreground/20">•</span>
+        <a href="/admin" className="text-[10px] text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors">Admin</a>
+      </div>
     </footer>
   );
 };
