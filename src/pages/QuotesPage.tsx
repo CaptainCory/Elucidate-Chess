@@ -30,6 +30,7 @@ export default function QuotesPage() {
             <NavLink to='/play'>Play</NavLink>
             <NavLink to='/how-it-works'>How It Works</NavLink>
             <NavLink to='/vocabulary'>Vocabulary</NavLink>
+<NavLink to='/quotes'>Quotes</NavLink>
             <NavLink to='/leaderboard'>Leaderboard</NavLink>
             <UserMenu />
           </div>
