@@ -52,6 +52,14 @@ export function MobileNav({ user, onSignIn }: MobileNavProps) {
               Vocabulary
             </Link>
             <Link
+              to="/quotes"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-secondary transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              <Quote className="w-4 h-4 text-primary" />
+              Quotes
+            </Link>
+            <Link
               to="/add-puzzle"
               onClick={() => setOpen(false)}
               className="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-secondary transition-colors text-sm font-medium text-muted-foreground hover:text-foreground"
