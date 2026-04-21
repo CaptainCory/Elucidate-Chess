@@ -119,9 +119,9 @@ export default function LandingPage() {
                 custom={0}
                 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 leading-[1.1]"
               >
-                Train Your Chess Thinking,{' '}
+                A Method to{' '}
                 <span className="text-primary relative">
-                  Not Just Your Moves
+                  Actually Improve
                   <motion.span
                     className="absolute -bottom-1 left-0 right-0 h-[3px] bg-primary/40 rounded-full"
                     initial={{ scaleX: 0 }}
@@ -129,7 +129,8 @@ export default function LandingPage() {
                     transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     style={{ originX: 0 }}
                   />
-                </span>
+                </span>{' '}
+                at Chess
               </motion.h1>
               <motion.p
                 variants={fadeUp}
