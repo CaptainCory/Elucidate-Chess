@@ -101,6 +101,41 @@ function Dashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [liveVisitors, setLiveVisitors] = useState<number>(0);
+  const [livePaths, setLivePaths] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const channel = supabase.channel('global-presence', {
+      config: { presence: { key: `admin-${Math.random().toString(36).slice(2, 10)}` } },
+    });
+
+    const updateFromState = () => {
+      const state = channel.presenceState() as Record<string, Array<{ path?: string }>>;
+      const keys = Object.keys(state);
+      setLiveVisitors(keys.length);
+      const paths: Record<string, number> = {};
+      keys.forEach((k) => {
+        const entries = state[k] || [];
+        const p = entries[0]?.path || '/';
+        paths[p] = (paths[p] || 0) + 1;
+      });
+      setLivePaths(paths);
+    };
+
+    channel
+      .on('presence', { event: 'sync' }, updateFromState)
+      .on('presence', { event: 'join' }, updateFromState)
+      .on('presence', { event: 'leave' }, updateFromState)
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await channel.track({ path: '/admin', joined_at: new Date().toISOString() });
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
