@@ -200,6 +200,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     handleMove,
     handleSubmit,
     handleNext,
+    handleRetry,
     isPremium,
     isNavigating,
   };
