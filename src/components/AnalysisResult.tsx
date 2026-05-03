@@ -34,6 +34,7 @@ export interface AnalysisData {
   moveCorrect: boolean;
   userMove: string;
   bestMove: string;
+  feedbackTitle?: string;
   reasoningFeedback: string;
   keyInsights: string[];
   improvement: string;
