@@ -241,7 +241,8 @@ Respond with a JSON object:
 {
   "score": <number 0-100>,
   "moveCorrect": <boolean>,
-  "reasoningFeedback": "<2-4 sentences of clear, constructive feedback in natural language>",
+  "feedbackTitle": "<a punchy one-sentence takeaway (max ~8 words) that names the chess concept or principle being demonstrated — e.g. 'Check for opponent threats first' or 'Control the center before attacking'>",
+  "reasoningFeedback": "<2-4 sentences of clear, constructive feedback in natural language. Do NOT repeat the title.>",
   "keyInsights": ["<insight 1>", "<insight 2>"],
   "improvement": "<one concise tip>"
 }

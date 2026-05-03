@@ -82,6 +82,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
         moveCorrect: data.moveCorrect,
         userMove: selectedMove,
         bestMove: puzzle.bestMove,
+        feedbackTitle: data.feedbackTitle,
         reasoningFeedback: data.reasoningFeedback,
         keyInsights: data.keyInsights || [],
         improvement: data.improvement || '',

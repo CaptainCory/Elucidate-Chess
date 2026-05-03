@@ -34,6 +34,7 @@ export interface AnalysisData {
   moveCorrect: boolean;
   userMove: string;
   bestMove: string;
+  feedbackTitle?: string;
   reasoningFeedback: string;
   keyInsights: string[];
   improvement: string;
@@ -171,6 +172,11 @@ export function AnalysisResult({ analysis, onNext, onRetry, puzzleContext }: Ana
           <Target className="w-5 h-5 text-primary" />
           <h3 className="font-semibold font-display">Analysis Feedback</h3>
         </div>
+        {analysis.feedbackTitle && (
+          <p className="font-display text-lg md:text-xl font-semibold text-primary leading-snug">
+            {analysis.feedbackTitle}
+          </p>
+        )}
         <div className="text-foreground prose prose-sm max-w-none [&_p]:text-foreground [&_li]:text-foreground [&_strong]:text-primary">
           <ReactMarkdown>{analysis.reasoningFeedback}</ReactMarkdown>
         </div>
