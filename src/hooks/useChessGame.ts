@@ -129,6 +129,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
         void queryClient.invalidateQueries({ queryKey: ['profile', user.id] });
       }
 
+      setAnalyzeStage('done');
       setGameState('result');
 
       // Progress cliff: after 10 beginner puzzles, prompt free users to upgrade
