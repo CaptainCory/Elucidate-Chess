@@ -27,6 +27,7 @@ export default function AddPuzzlePage() {
   const navigate = useNavigate();
   const [showSignIn, setShowSignIn] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [celebrate, setCelebrate] = useState<null | string>(null);
 
   // Gate states
   const [codeInput, setCodeInput] = useState('');
