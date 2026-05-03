@@ -221,6 +221,7 @@ export default function AddPuzzlePage() {
               <Brain className="w-6 h-6 text-primary" />
               <span className="font-bold text-foreground hidden sm:inline">Elucidate Chess</span>
             </Link>
+            <LiveVisitorsBadge />
             <span className="text-muted-foreground">/</span>
             <span className="text-sm font-medium text-foreground">Puzzle Editor</span>
           </div>

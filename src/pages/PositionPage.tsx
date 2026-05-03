@@ -156,6 +156,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
               >
                 Elucidate Chess
               </Link>
+              <LiveVisitorsBadge />
               <Sparkles className="w-5 h-5 lg:w-8 lg:h-8 text-accent hidden sm:block" />
             </div>
             {/* Desktop nav links + auth */}

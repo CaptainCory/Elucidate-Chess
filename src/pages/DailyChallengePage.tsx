@@ -228,6 +228,7 @@ export default function DailyChallengePage() {
           <div className="flex items-center gap-2">
             <Calendar className="w-6 h-6 text-primary" />
             <h1 className="text-xl font-bold font-display text-foreground">Daily Challenge</h1>
+            <LiveVisitorsBadge />
           </div>
           <CountdownTimer />
         </header>
