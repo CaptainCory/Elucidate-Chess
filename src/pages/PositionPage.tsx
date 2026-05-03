@@ -1,3 +1,4 @@
+import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
 import { useState, useEffect, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';

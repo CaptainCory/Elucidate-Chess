@@ -1,3 +1,4 @@
+import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
 import { useState } from 'react';
 import { chessQuotes } from '@/data/chessQuotes';
 import { useAuth } from '@/contexts/AuthContext';

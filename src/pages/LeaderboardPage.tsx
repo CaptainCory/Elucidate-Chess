@@ -1,3 +1,4 @@
+import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
 import { Link } from 'react-router-dom';
 import { Leaderboard } from '@/components/Leaderboard';
 import { PlanBadge } from '@/components/PlanBadge';

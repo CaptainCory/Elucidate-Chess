@@ -1,3 +1,4 @@
+import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
 import { useState, useMemo, useEffect } from 'react';
 import { Chess } from 'chess.js';
 import { useQuery } from '@tanstack/react-query';
