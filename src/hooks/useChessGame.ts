@@ -147,6 +147,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     } catch (error) {
       console.error('Analysis error:', error);
       toast.error('Failed to analyze your response. Please try again.');
+      setAnalyzeStage('idle');
       setGameState('thinking');
     }
   }, [puzzle, selectedMove, scores, user, isPremium, isDifficultyLocked, queryClient]);
