@@ -206,7 +206,7 @@ export default function AddPuzzlePage() {
       if (error) throw error;
 
       toast({ title: 'Puzzle saved!', description: 'Redirecting to your new puzzle...' });
-      navigate(`/position/${puzzleId}`);
+      setCelebrate(puzzleId);
     } catch (err: any) {
       toast({ title: 'Error saving puzzle', description: err.message, variant: 'destructive' });
     } finally {
