@@ -325,6 +325,9 @@ export default function AddPuzzlePage() {
         </div>
       </div>
       <ChessQuoteFooter />
+      {celebrate && (
+        <PuzzleSavedCelebration onDone={() => navigate(`/position/${celebrate}`)} />
+      )}
     </div>
   );
 }
