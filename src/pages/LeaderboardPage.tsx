@@ -1,3 +1,4 @@
+import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
 import { Link } from 'react-router-dom';
 import { Leaderboard } from '@/components/Leaderboard';
 import { PlanBadge } from '@/components/PlanBadge';
@@ -27,6 +28,7 @@ const LeaderboardPage = () => {
           <div className="flex items-center gap-2">
             <Crown className="w-6 h-6 text-primary" />
             <a href="/" className="text-lg font-bold font-display text-foreground hover:text-primary transition-colors cursor-pointer">Elucidate Chess</a>
+            <LiveVisitorsBadge />
           </div>
           <div className="flex items-center gap-3">
             <PlanBadge />

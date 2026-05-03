@@ -1,3 +1,4 @@
+import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
 import { useState } from 'react';
 import { chessQuotes } from '@/data/chessQuotes';
 import { useAuth } from '@/contexts/AuthContext';
@@ -22,9 +23,12 @@ export default function QuotesPage() {
       {/* Navigation */}
       <nav className='border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50'>
         <div className='max-w-7xl mx-auto px-4 h-16 flex items-center justify-between'>
-          <NavLink to='/' className='text-xl font-bold font-display'>
-            Elucidate
-          </NavLink>
+          <div className='flex items-center gap-2'>
+            <NavLink to='/' className='text-xl font-bold font-display'>
+              Elucidate
+            </NavLink>
+            <LiveVisitorsBadge />
+          </div>
 
           <div className='hidden md:flex items-center gap-6'>
             <NavLink to='/play'>Play</NavLink>

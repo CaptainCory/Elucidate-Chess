@@ -1,3 +1,4 @@
+import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
 import { useState, useEffect, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
@@ -156,6 +157,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
               >
                 Elucidate Chess
               </Link>
+              <LiveVisitorsBadge />
               <Sparkles className="w-5 h-5 lg:w-8 lg:h-8 text-accent hidden sm:block" />
             </div>
             {/* Desktop nav links + auth */}

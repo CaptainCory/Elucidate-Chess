@@ -1,3 +1,4 @@
+import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
 import { Link } from 'react-router-dom';
 import { PageSEO } from '@/components/PageSEO';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
@@ -227,6 +228,7 @@ export default function VocabularyPage() {
           <div className="flex items-center gap-2">
             <Crown className="w-6 h-6 text-primary" />
             <span className="text-lg font-bold font-display text-foreground">Elucidate Chess</span>
+            <LiveVisitorsBadge />
           </div>
           <div className="flex items-center gap-3">
             <Link to="/landing">
