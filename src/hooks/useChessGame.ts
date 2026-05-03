@@ -142,6 +142,13 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
 
   const [isNavigating, setIsNavigating] = useState(false);
 
+  const handleRetry = useCallback(() => {
+    setAnalysis(null);
+    setSelectedMove(null);
+    setGameState('thinking');
+    onReset?.();
+  }, [onReset]);
+
   const handleNext = useCallback(async () => {
     if (isNavigating) return;
     setIsNavigating(true);
