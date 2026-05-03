@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 
 export type GameState = 'thinking' | 'analyzing' | 'result';
+export type AnalyzeStage = 'idle' | 'sending' | 'thinking' | 'finalizing' | 'done';
 
 export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const { user, isPremium } = useAuth();
