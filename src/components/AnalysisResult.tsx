@@ -43,6 +43,7 @@ export interface AnalysisData {
 interface AnalysisResultProps {
   analysis: AnalysisData;
   onNext: () => void;
+  onRetry?: () => void;
   puzzleContext?: {
     fen: string;
     bestMove: string;
@@ -50,7 +51,7 @@ interface AnalysisResultProps {
   };
 }
 
-export function AnalysisResult({ analysis, onNext, puzzleContext }: AnalysisResultProps) {
+export function AnalysisResult({ analysis, onNext, onRetry, puzzleContext }: AnalysisResultProps) {
   const { playScoreSound } = useSoundEffects();
 
   // Play score sound on mount
