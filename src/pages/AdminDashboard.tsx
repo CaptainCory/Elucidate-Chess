@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Users, Crown, Puzzle, TrendingUp, Activity, RefreshCw, Lock } from 'lucide-react';
+import { Users, Crown, Puzzle, TrendingUp, Activity, RefreshCw, Lock, Radio } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface DashboardStats {
