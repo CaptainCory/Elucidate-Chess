@@ -157,6 +157,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const handleRetry = useCallback(() => {
     setAnalysis(null);
     setSelectedMove(null);
+    setAnalyzeStage('idle');
     setGameState('thinking');
     onReset?.();
   }, [onReset]);
