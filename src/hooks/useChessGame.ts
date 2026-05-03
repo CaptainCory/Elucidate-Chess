@@ -53,8 +53,12 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       return;
     }
     setGameState('analyzing');
+    setAnalyzeStage('sending');
 
     try {
+      // Once the request is in flight, mark engine "thinking"
+      const thinkingTimer = setTimeout(() => setAnalyzeStage('thinking'), 350);
+
       const { data, error } = await supabase.functions.invoke('analyze-chess', {
         body: {
           fen: puzzle.fen,
@@ -66,6 +70,9 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
           puzzleId: puzzle.id,
         },
       });
+
+      clearTimeout(thinkingTimer);
+      setAnalyzeStage('finalizing');
 
       if (error) throw error;
 
