@@ -228,6 +228,40 @@ function Dashboard() {
           </Button>
         </div>
 
+        {/* Live visitors */}
+        <Card className="border-primary/30">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Radio className="h-5 w-5 text-primary" />
+                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Live Visitors</p>
+                  <p className="text-2xl font-bold">{liveVisitors}</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 max-w-full">
+                {Object.entries(livePaths).length === 0 ? (
+                  <span className="text-xs text-muted-foreground">No active visitors</span>
+                ) : (
+                  Object.entries(livePaths)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([path, count]) => (
+                      <span key={path} className="text-xs px-2 py-1 rounded-md bg-muted text-muted-foreground">
+                        <span className="font-mono">{path}</span> · {count}
+                      </span>
+                    ))
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Stat cards */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <StatCard title="Total Users" value={stats.totalUsers} icon={Users} color="bg-primary/10 text-primary" />
