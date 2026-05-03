@@ -216,5 +216,6 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     handleRetry,
     isPremium,
     isNavigating,
+    analyzeStage,
   };
 }
