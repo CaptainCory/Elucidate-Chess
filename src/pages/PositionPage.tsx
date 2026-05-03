@@ -314,7 +314,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   <ThinkingInput onSubmit={game.handleSubmit} isLoading={false} moveSelected={!!game.selectedMove} />
                 )}
 
-                {game.gameState === 'analyzing' && <AnalyzingSequence />}
+                {game.gameState === 'analyzing' && <AnalyzingSequence stage={game.analyzeStage} />}
 
                 {game.gameState === 'result' && game.analysis && (
                   <AnalysisResult

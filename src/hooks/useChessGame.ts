@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 
 export type GameState = 'thinking' | 'analyzing' | 'result';
+export type AnalyzeStage = 'idle' | 'sending' | 'thinking' | 'finalizing' | 'done';
 
 export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const { user, isPremium } = useAuth();
@@ -22,6 +23,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const [isDifficultyLocked, setIsDifficultyLocked] = useState(false);
   const [graduatedTo, setGraduatedTo] = useState<string | null>(null);
   const [newAchievements, setNewAchievements] = useState<string[]>([]);
+  const [analyzeStage, setAnalyzeStage] = useState<AnalyzeStage>('idle');
 
   const averageScore = scores.length > 0
     ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
@@ -51,8 +53,12 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       return;
     }
     setGameState('analyzing');
+    setAnalyzeStage('sending');
 
     try {
+      // Once the request is in flight, mark engine "thinking"
+      const thinkingTimer = setTimeout(() => setAnalyzeStage('thinking'), 350);
+
       const { data, error } = await supabase.functions.invoke('analyze-chess', {
         body: {
           fen: puzzle.fen,
@@ -64,6 +70,9 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
           puzzleId: puzzle.id,
         },
       });
+
+      clearTimeout(thinkingTimer);
+      setAnalyzeStage('finalizing');
 
       if (error) throw error;
 
@@ -120,6 +129,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
         void queryClient.invalidateQueries({ queryKey: ['profile', user.id] });
       }
 
+      setAnalyzeStage('done');
       setGameState('result');
 
       // Progress cliff: after 10 beginner puzzles, prompt free users to upgrade
@@ -137,6 +147,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     } catch (error) {
       console.error('Analysis error:', error);
       toast.error('Failed to analyze your response. Please try again.');
+      setAnalyzeStage('idle');
       setGameState('thinking');
     }
   }, [puzzle, selectedMove, scores, user, isPremium, isDifficultyLocked, queryClient]);
@@ -146,6 +157,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const handleRetry = useCallback(() => {
     setAnalysis(null);
     setSelectedMove(null);
+    setAnalyzeStage('idle');
     setGameState('thinking');
     onReset?.();
   }, [onReset]);
@@ -204,5 +216,6 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     handleRetry,
     isPremium,
     isNavigating,
+    analyzeStage,
   };
 }
