@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
+import { PuzzleSavedCelebration } from '@/components/PuzzleSavedCelebration';
 import { MobileNav } from '@/components/MobileNav';
 import { UserMenu } from '@/components/UserMenu';
 import { AuthModal } from '@/components/AuthModal';
@@ -26,6 +27,7 @@ export default function AddPuzzlePage() {
   const navigate = useNavigate();
   const [showSignIn, setShowSignIn] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [celebrate, setCelebrate] = useState<null | string>(null);
 
   // Gate states
   const [codeInput, setCodeInput] = useState('');
@@ -204,7 +206,7 @@ export default function AddPuzzlePage() {
       if (error) throw error;
 
       toast({ title: 'Puzzle saved!', description: 'Redirecting to your new puzzle...' });
-      navigate(`/position/${puzzleId}`);
+      setCelebrate(puzzleId);
     } catch (err: any) {
       toast({ title: 'Error saving puzzle', description: err.message, variant: 'destructive' });
     } finally {
@@ -323,6 +325,9 @@ export default function AddPuzzlePage() {
         </div>
       </div>
       <ChessQuoteFooter />
+      {celebrate && (
+        <PuzzleSavedCelebration onDone={() => navigate(`/position/${celebrate}`)} />
+      )}
     </div>
   );
 }
