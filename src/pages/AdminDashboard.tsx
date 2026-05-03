@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Users, Crown, Puzzle, TrendingUp, Activity, RefreshCw, Lock } from 'lucide-react';
+import { Users, Crown, Puzzle, TrendingUp, Activity, RefreshCw, Lock, Radio } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface DashboardStats {
@@ -101,6 +101,41 @@ function Dashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [liveVisitors, setLiveVisitors] = useState<number>(0);
+  const [livePaths, setLivePaths] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const channel = supabase.channel('global-presence', {
+      config: { presence: { key: `admin-${Math.random().toString(36).slice(2, 10)}` } },
+    });
+
+    const updateFromState = () => {
+      const state = channel.presenceState() as Record<string, Array<{ path?: string }>>;
+      const keys = Object.keys(state);
+      setLiveVisitors(keys.length);
+      const paths: Record<string, number> = {};
+      keys.forEach((k) => {
+        const entries = state[k] || [];
+        const p = entries[0]?.path || '/';
+        paths[p] = (paths[p] || 0) + 1;
+      });
+      setLivePaths(paths);
+    };
+
+    channel
+      .on('presence', { event: 'sync' }, updateFromState)
+      .on('presence', { event: 'join' }, updateFromState)
+      .on('presence', { event: 'leave' }, updateFromState)
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await channel.track({ path: '/admin', joined_at: new Date().toISOString() });
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
@@ -192,6 +227,40 @@ function Dashboard() {
             Refresh
           </Button>
         </div>
+
+        {/* Live visitors */}
+        <Card className="border-primary/30">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Radio className="h-5 w-5 text-primary" />
+                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Live Visitors</p>
+                  <p className="text-2xl font-bold">{liveVisitors}</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 max-w-full">
+                {Object.entries(livePaths).length === 0 ? (
+                  <span className="text-xs text-muted-foreground">No active visitors</span>
+                ) : (
+                  Object.entries(livePaths)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([path, count]) => (
+                      <span key={path} className="text-xs px-2 py-1 rounded-md bg-muted text-muted-foreground">
+                        <span className="font-mono">{path}</span> · {count}
+                      </span>
+                    ))
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Stat cards */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">

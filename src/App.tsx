@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AmazonSticker } from "@/components/AmazonSticker";
+import { PresenceTracker } from "@/components/PresenceTracker";
 import Index from "./pages/Index";
 import LandingPage from "./pages/LandingPage";
 import PositionPage from "./pages/PositionPage";
@@ -29,6 +30,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <AmazonSticker />
+        <PresenceTracker />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
