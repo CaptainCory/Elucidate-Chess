@@ -324,6 +324,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   <AnalysisResult
                     analysis={game.analysis}
                     onNext={game.handleNext}
+                    onRetry={game.handleRetry}
                     puzzleContext={{
                       fen: puzzle.fen,
                       bestMove: puzzle.bestMove,
