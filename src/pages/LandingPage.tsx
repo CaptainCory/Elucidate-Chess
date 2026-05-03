@@ -63,6 +63,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <Crown className="w-6 h-6 text-primary" />
             <span className="text-lg font-bold font-display text-foreground">Elucidate Chess</span>
+            <LiveVisitorsBadge className="ml-1" />
           </div>
           <div className="flex items-center gap-4">
             <Link to="/how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
