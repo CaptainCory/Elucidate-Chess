@@ -171,10 +171,30 @@ export function AnalysisResult({ analysis, onNext, onRetry, puzzleContext }: Ana
           <Target className="w-5 h-5 text-primary" />
           <h3 className="font-semibold font-display">Analysis Feedback</h3>
         </div>
-        <div className="text-muted-foreground prose prose-sm max-w-none [&_p]:text-muted-foreground [&_strong]:text-foreground">
+        <div className="text-foreground prose prose-sm max-w-none [&_p]:text-foreground [&_li]:text-foreground [&_strong]:text-primary">
           <ReactMarkdown>{analysis.reasoningFeedback}</ReactMarkdown>
         </div>
       </motion.div>
+
+      {/* Retry button — when score is below 75% */}
+      {analysis.score < 75 && onRetry && (
+        <motion.div variants={fadeUp}>
+          <motion.div
+            animate={{ scale: [1, 1.03, 1] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <Button
+              onClick={onRetry}
+              variant="outline"
+              className="w-full py-6 text-lg font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground shadow-[0_0_0_0_hsl(var(--primary)/0.5)] hover:shadow-[0_0_24px_2px_hsl(var(--primary)/0.4)] transition-shadow"
+              size="lg"
+            >
+              <RotateCcw className="w-5 h-5 mr-2" />
+              Try This Position Again
+            </Button>
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Follow-up Chat */}
       {puzzleContext && (
