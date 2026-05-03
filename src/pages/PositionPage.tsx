@@ -313,12 +313,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   <ThinkingInput onSubmit={game.handleSubmit} isLoading={false} moveSelected={!!game.selectedMove} />
                 )}
 
-                {game.gameState === 'analyzing' && (
-                  <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                    <div className="w-16 h-16 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-                    <p className="text-muted-foreground">Analyzing your chess thinking...</p>
-                  </div>
-                )}
+                {game.gameState === 'analyzing' && <AnalyzingSequence />}
 
                 {game.gameState === 'result' && game.analysis && (
                   <AnalysisResult
