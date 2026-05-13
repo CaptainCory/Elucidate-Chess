@@ -262,7 +262,44 @@ export default function AddPuzzlePage() {
           <div className="space-y-4">
 
             <div className="space-y-2">
-              <Label htmlFor="name">Puzzle Name</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="name">Puzzle Name</Label>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2 text-xs text-primary hover:text-primary hover:bg-primary/10"
+                  disabled={suggestingName || form.explanation.trim().length < 15}
+                  title={form.explanation.trim().length < 15 ? 'Write the explanation first' : 'Suggest a name based on the explanation'}
+                  onClick={async () => {
+                    setSuggestingName(true);
+                    try {
+                      const { data, error } = await supabase.functions.invoke('suggest-puzzle-name', {
+                        body: {
+                          explanation: form.explanation,
+                          bestMove: form.bestMove,
+                          difficulty: form.difficulty,
+                        },
+                      });
+                      if (error) throw error;
+                      const suggested = (data as any)?.name as string | undefined;
+                      if (suggested) {
+                        updateField('name', suggested);
+                        toast({ title: 'Name suggested', description: 'Edit it or keep it as-is.' });
+                      } else {
+                        toast({ title: 'No suggestion returned', variant: 'destructive' });
+                      }
+                    } catch (err: any) {
+                      toast({ title: 'Could not suggest a name', description: err.message, variant: 'destructive' });
+                    } finally {
+                      setSuggestingName(false);
+                    }
+                  }}
+                >
+                  {suggestingName ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 mr-1" />}
+                  {suggestingName ? 'Thinking…' : 'Suggest'}
+                </Button>
+              </div>
               <Input id="name" placeholder="e.g. Knight Fork Tactic" value={form.name} onChange={(e) => updateField('name', e.target.value)} />
             </div>
 
