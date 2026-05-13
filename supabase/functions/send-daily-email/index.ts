@@ -67,7 +67,7 @@ serve(async (req) => {
       });
     }
 
-    const siteUrl = 'https://think-chess-wise.lovable.app';
+    const siteUrl = 'https://elucidatechess.com';
     const puzzleName = puzzle?.name ?? 'Daily Position';
     const difficulty = puzzle?.difficulty ?? 'beginner';
     const themes = puzzle?.themes?.join(', ') ?? '';
