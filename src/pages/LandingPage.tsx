@@ -56,7 +56,65 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
-      <PageSEO title="Elucidate Chess — AI Chess Trainer That Coaches Your Thinking" />
+      <PageSEO
+        title="Elucidate Chess — AI Chess Trainer That Coaches Your Thinking"
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'What is Elucidate Chess?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Elucidate Chess is an AI-powered chess puzzle trainer that scores your reasoning, not just your moves. You write what you see in a position and an AI coach evaluates your thinking.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'How is this different from other chess puzzle apps?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Most chess puzzle trainers only check whether you found the right move. Elucidate analyzes the explanation you write and grades the quality of your chess thinking, helping you build real intuition instead of memorizing patterns.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Is Elucidate Chess free?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes — the Basic plan is free and includes 3 chess positions per day with full AI coaching feedback. Premium unlocks unlimited positions across all difficulty levels.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'What chess skill levels does Elucidate support?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Beginner, intermediate, advanced, and master. The trainer adapts to your level based on your reasoning scores and proficiency over time.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Do I need an account to try it?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'No account is needed to try chess positions as a guest. Creating a free account lets you track progress, streaks, and achievements.',
+                },
+              },
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Course',
+            name: 'Chess Reasoning Training',
+            description: 'Practice-based chess training that scores your written reasoning on tactical positions across beginner to master difficulty.',
+            provider: { '@type': 'Organization', name: 'Elucidate Chess', url: 'https://elucidatechess.com' },
+          },
+        ]}
+        jsonLdId="landing"
+      />
 
       {/* Nav */}
       <header className="border-b border-border/50 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
