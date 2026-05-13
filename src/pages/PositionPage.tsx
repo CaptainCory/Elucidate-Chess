@@ -108,8 +108,25 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
     enabled: !!user,
   });
 
+  const themesText = puzzle.themes?.length ? puzzle.themes.join(', ') : 'tactical';
+  const seoTitle = `${puzzle.name} — ${puzzle.difficulty.charAt(0).toUpperCase() + puzzle.difficulty.slice(1)} Chess Position`;
+  const seoDesc = `Solve "${puzzle.name}" — a ${puzzle.difficulty} chess position featuring ${themesText}. Explain your reasoning and get AI coaching feedback.`;
+  const positionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Quiz',
+    name: puzzle.name,
+    about: { '@type': 'Thing', name: 'Chess tactics' },
+    educationalLevel: puzzle.difficulty,
+    learningResourceType: 'Chess puzzle',
+    keywords: [puzzle.difficulty, 'chess puzzle', 'chess tactics', ...(puzzle.themes || [])].join(', '),
+    inLanguage: 'en',
+    url: `https://elucidatechess.com/position/${puzzle.id}`,
+    isPartOf: { '@type': 'WebSite', name: 'Elucidate Chess', url: 'https://elucidatechess.com' },
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <PageSEO title={seoTitle} description={seoDesc} jsonLd={positionJsonLd} jsonLdId={`puzzle-${puzzle.id}`} />
       {/* Ambient glow */}
       <div
         className="fixed inset-0 pointer-events-none opacity-30"
