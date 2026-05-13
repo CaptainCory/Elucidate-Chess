@@ -30,6 +30,7 @@ import { GraduationProgress } from '@/components/GraduationProgress';
 import { GraduationCelebration } from '@/components/GraduationCelebration';
 import { AchievementToast } from '@/components/AchievementToast';
 import { EmailCaptureModal } from '@/components/EmailCaptureModal';
+import { PageSEO } from '@/components/PageSEO';
 
 const PositionPage = () => {
   const { id } = useParams<{ id: string }>();
