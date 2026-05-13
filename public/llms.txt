@@ -27,7 +27,7 @@ Elucidate Chess is an AI-powered chess puzzle trainer that coaches your thinking
 - Premium ($9/month): Unlimited puzzles, all difficulty levels, advanced analysis
 
 ## URL
-https://think-chess-wise.lovable.app
+https://elucidatechess.com
 
 ## Philosophy
 The name "Elucidate" comes from the Latin "elucidare" — to bring light, to make clear. The philosophy is that chess improvement comes from clarity of thinking, not memorization of lines. When you understand the reason a move is strong, you can find similar moves in your own games without ever having studied that exact position.

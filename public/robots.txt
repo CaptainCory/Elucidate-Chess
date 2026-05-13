@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://think-chess-wise.lovable.app/sitemap.xml
+Sitemap: https://elucidatechess.com/sitemap.xml
