@@ -30,7 +30,7 @@ const staticEntries: SitemapEntry[] = [
 async function fetchPuzzleEntries(): Promise<SitemapEntry[]> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/puzzles?select=id,updated_at&order=created_at.desc&limit=5000`,
+      `${SUPABASE_URL}/rest/v1/puzzles?select=id&limit=5000`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -42,10 +42,9 @@ async function fetchPuzzleEntries(): Promise<SitemapEntry[]> {
       console.warn(`sitemap: skipping puzzles (status ${res.status})`);
       return [];
     }
-    const rows = (await res.json()) as Array<{ id: string; updated_at?: string }>;
+    const rows = (await res.json()) as Array<{ id: string }>;
     return rows.map((r) => ({
       path: `/position/${r.id}`,
-      lastmod: r.updated_at ? r.updated_at.slice(0, 10) : undefined,
       changefreq: "monthly" as const,
       priority: "0.6",
     }));
