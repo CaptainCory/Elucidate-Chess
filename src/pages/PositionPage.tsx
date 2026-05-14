@@ -295,6 +295,8 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                         return puzzle.fen;
                       }
                     })()}
+                    initialFen={puzzle.fen}
+                    initialMoveSan={game.selectedMove ?? undefined}
                     orientation={boardOrientation}
                   />
                 ) : (
