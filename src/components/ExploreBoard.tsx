@@ -131,7 +131,9 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
   }, []);
 
   const tryMove = useCallback((from: string, to: string) => {
+    // Only allow the user to move on their own turn.
     const g = new Chess(fen);
+    if (g.turn() !== userColor) return false;
     try {
       const move = g.move({ from: from as Square, to: to as Square, promotion: 'q' });
       if (move) {
@@ -147,13 +149,14 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
       }
     } catch {}
     return false;
-  }, [fen, playClick]);
+  }, [fen, playClick, userColor]);
 
   const handleDrop = useCallback(({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string }) => {
     tryMove(sourceSquare, targetSquare);
   }, [tryMove]);
 
   const showMoves = useCallback((square: string) => {
+    if (game.turn() !== userColor) return false;
     const piece = game.get(square as Square);
     if (!piece || piece.color !== game.turn()) return false;
     const moves = game.moves({ square: square as Square, verbose: true });
@@ -166,9 +169,10 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
     setSelectedSquare(square);
     setHighlights(h);
     return true;
-  }, [game]);
+  }, [game, userColor]);
 
   const handleSquareClick = useCallback((square: string) => {
+    if (game.turn() !== userColor) return;
     if (selectedSquare) {
       if (tryMove(selectedSquare, square)) return;
       if (!showMoves(square)) {
@@ -178,23 +182,35 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
     } else {
       showMoves(square);
     }
-  }, [selectedSquare, tryMove, showMoves]);
+  }, [selectedSquare, tryMove, showMoves, game, userColor]);
 
   const undo = () => {
     if (history.length <= 1) return;
-    setHistory(h => h.slice(0, -1));
-    setMoveSans(m => m.slice(0, -1));
+    requestIdRef.current++; // cancel any in-flight engine reply
+    // Step back one move; if that lands on the engine's turn, step back again
+    // so the user resumes from their own turn.
+    let stepsBack = 1;
+    if (history.length - 1 >= 2) {
+      try {
+        const candidate = history[history.length - 2];
+        if (new Chess(candidate).turn() !== userColor) stepsBack = 2;
+      } catch {}
+    }
+    setHistory(h => h.slice(0, Math.max(1, h.length - stepsBack)));
+    setMoveSans(m => m.slice(0, Math.max(0, m.length - stepsBack)));
     setSelectedSquare(null);
     setHighlights({});
   };
 
   const reset = () => {
+    requestIdRef.current++;
     const baseFen = initialFen || startFen;
     setHistory([baseFen]);
     setMoveSans([]);
     setSelectedSquare(null);
     setHighlights({});
   };
+
 
   const turn = game.turn() === 'w' ? 'White' : 'Black';
 
