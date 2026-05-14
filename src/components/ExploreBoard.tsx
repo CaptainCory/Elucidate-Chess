@@ -224,12 +224,12 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
       <div className="flex items-center justify-between mb-3">
         <div className="inline-flex items-center gap-2 text-sm font-medium text-foreground">
           <Compass className="w-4 h-4 text-primary" />
-          <span>Explore continuations</span>
+          <span>Play vs engine (~2000)</span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={undo}
-            disabled={history.length <= 1}
+            disabled={history.length <= 1 || isEngineThinking}
             className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             <Undo2 className="w-3.5 h-3.5" /> Undo
@@ -244,11 +244,11 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
         </div>
       </div>
 
-      <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border">
+      <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border relative">
         <Chessboard
           position={fen}
           orientation={orientation}
-          draggable={!game.isGameOver()}
+          draggable={!game.isGameOver() && game.turn() === userColor && !isEngineThinking}
           onDrop={handleDrop}
           onSquareClick={handleSquareClick}
           transitionDuration={250}
@@ -266,11 +266,29 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
             ])
           )}
         />
+        {isEngineThinking && (
+          <div className="absolute top-2 right-2 inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-background/90 backdrop-blur-sm text-xs font-medium text-foreground shadow ring-1 ring-border">
+            <Loader2 className="w-3 h-3 animate-spin text-primary" />
+            Engine thinking…
+          </div>
+        )}
       </div>
 
       <div className="mt-3 flex items-center justify-between text-xs">
         <span className="text-muted-foreground">
-          {status ? <span className="font-semibold text-primary">{status}</span> : <>{turn} to move</>}
+          {status ? (
+            <span className="font-semibold text-primary">{status}</span>
+          ) : engineState === 'loading' ? (
+            'Loading engine…'
+          ) : engineState === 'error' ? (
+            <span className="text-destructive">Engine unavailable — free play mode</span>
+          ) : isEngineThinking ? (
+            'Engine is thinking…'
+          ) : game.turn() === userColor ? (
+            'Your move'
+          ) : (
+            `${turn} to move`
+          )}
         </span>
         {moveSans.length > 0 && (
           <span className="font-mono text-muted-foreground truncate max-w-[60%] text-right">
@@ -278,6 +296,7 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
           </span>
         )}
       </div>
+
     </motion.div>
   );
 }
