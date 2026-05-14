@@ -22,25 +22,36 @@ const pieceImages: Record<string, string> = {
 interface ExploreBoardProps {
   startFen: string;
   orientation?: 'white' | 'black';
+  /** Original puzzle FEN to rewind to via undo/reset. Defaults to startFen. */
+  initialFen?: string;
+  /** SAN of the move that led from initialFen to startFen, shown in history. */
+  initialMoveSan?: string;
 }
 
 /**
  * Free-play board for exploring continuations after a puzzle is solved.
  * Enforces chess rules, alternates turns, supports undo and reset.
  */
-export function ExploreBoard({ startFen, orientation = 'white' }: ExploreBoardProps) {
-  const [history, setHistory] = useState<string[]>([startFen]);
+export function ExploreBoard({ startFen, orientation = 'white', initialFen, initialMoveSan }: ExploreBoardProps) {
+  const buildInitialHistory = () =>
+    initialFen && initialFen !== startFen ? [initialFen, startFen] : [startFen];
+  const buildInitialSans = () =>
+    initialFen && initialFen !== startFen && initialMoveSan ? [initialMoveSan] : [];
+
+  const [history, setHistory] = useState<string[]>(buildInitialHistory);
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const [highlights, setHighlights] = useState<Record<string, React.CSSProperties>>({});
-  const [moveSans, setMoveSans] = useState<string[]>([]);
+  const [moveSans, setMoveSans] = useState<string[]>(buildInitialSans);
 
   // Reset internal state if the starting position changes
   useEffect(() => {
-    setHistory([startFen]);
+    setHistory(buildInitialHistory());
     setSelectedSquare(null);
     setHighlights({});
-    setMoveSans([]);
-  }, [startFen]);
+    setMoveSans(buildInitialSans());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startFen, initialFen, initialMoveSan]);
+
 
   const fen = history[history.length - 1];
   const game = useMemo(() => {
