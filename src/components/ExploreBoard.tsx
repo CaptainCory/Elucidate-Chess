@@ -1,8 +1,9 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Chessboard from 'chessboardjsx';
 import { Chess, Square } from 'chess.js';
-import { RotateCcw, Undo2, Compass } from 'lucide-react';
+import { RotateCcw, Undo2, Compass, Loader2 } from 'lucide-react';
+import { useStockfish } from '@/hooks/useStockfish';
 
 const pieceImages: Record<string, string> = {
   wK: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg',
