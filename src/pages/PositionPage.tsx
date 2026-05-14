@@ -9,6 +9,7 @@ import type { ChessPuzzle } from '@/data/chessPuzzles';
 import { mapDbPuzzle } from '@/data/chessPuzzles';
 import { supabase } from '@/integrations/supabase/client';
 import { ChessBoard } from '@/components/ChessBoard';
+import { ExploreBoard } from '@/components/ExploreBoard';
 import { TurnIndicator } from '@/components/TurnIndicator';
 import { ThinkingInput } from '@/components/ThinkingInput';
 import { HintTimer } from '@/components/HintTimer';
