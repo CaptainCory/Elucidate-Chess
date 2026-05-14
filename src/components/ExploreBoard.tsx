@@ -54,10 +54,12 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
   }, [startFen, initialFen, initialMoveSan]);
 
 
-  // The user plays whichever side is to move at the start of exploration.
+  // The user plays the side they solved the puzzle as (the side to move in the
+  // original puzzle position). The engine plays the opposing side.
   const userColor: 'w' | 'b' = useMemo(() => {
-    try { return new Chess(startFen).turn(); } catch { return 'w'; }
-  }, [startFen]);
+    const fenForColor = initialFen || startFen;
+    try { return new Chess(fenForColor).turn(); } catch { return 'w'; }
+  }, [initialFen, startFen]);
 
   const fen = history[history.length - 1];
   const game = useMemo(() => {
