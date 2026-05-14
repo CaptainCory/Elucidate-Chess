@@ -9,6 +9,7 @@ import type { ChessPuzzle } from '@/data/chessPuzzles';
 import { mapDbPuzzle } from '@/data/chessPuzzles';
 import { supabase } from '@/integrations/supabase/client';
 import { ChessBoard } from '@/components/ChessBoard';
+import { ExploreBoard } from '@/components/ExploreBoard';
 import { TurnIndicator } from '@/components/TurnIndicator';
 import { ThinkingInput } from '@/components/ThinkingInput';
 import { HintTimer } from '@/components/HintTimer';
@@ -283,13 +284,28 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                   <ShareButton puzzleId={puzzle.id} puzzleName={puzzle.name} />
                 </div>
 
-                <ChessBoard
-                  fen={puzzle.fen}
-                  previousFen={puzzle.previousFen}
-                  orientation={boardOrientation}
-                  interactive={game.gameState === 'thinking' && !game.isDifficultyLocked}
-                  onMove={game.handleMove}
-                />
+                {game.gameState === 'result' ? (
+                  <ExploreBoard
+                    startFen={(() => {
+                      try {
+                        const g = new Chess(puzzle.fen);
+                        if (game.selectedMove) g.move(game.selectedMove);
+                        return g.fen();
+                      } catch {
+                        return puzzle.fen;
+                      }
+                    })()}
+                    orientation={boardOrientation}
+                  />
+                ) : (
+                  <ChessBoard
+                    fen={puzzle.fen}
+                    previousFen={puzzle.previousFen}
+                    orientation={boardOrientation}
+                    interactive={game.gameState === 'thinking' && !game.isDifficultyLocked}
+                    onMove={game.handleMove}
+                  />
+                )}
 
                 <HintTimer
                   active={
