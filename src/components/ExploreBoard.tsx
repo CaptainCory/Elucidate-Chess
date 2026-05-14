@@ -1,8 +1,9 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Chessboard from 'chessboardjsx';
 import { Chess, Square } from 'chess.js';
-import { RotateCcw, Undo2, Compass } from 'lucide-react';
+import { RotateCcw, Undo2, Compass, Loader2 } from 'lucide-react';
+import { useStockfish } from '@/hooks/useStockfish';
 
 const pieceImages: Record<string, string> = {
   wK: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg',
@@ -53,6 +54,11 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
   }, [startFen, initialFen, initialMoveSan]);
 
 
+  // The user plays whichever side is to move at the start of exploration.
+  const userColor: 'w' | 'b' = useMemo(() => {
+    try { return new Chess(startFen).turn(); } catch { return 'w'; }
+  }, [startFen]);
+
   const fen = history[history.length - 1];
   const game = useMemo(() => {
     try { return new Chess(fen); } catch { return new Chess(); }
@@ -65,6 +71,47 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
     if (game.inCheck()) return 'Check';
     return null;
   }, [game]);
+
+  const { state: engineState, getBestMove } = useStockfish(2000);
+  const requestIdRef = useRef(0);
+  const isEngineTurn = !game.isGameOver() && game.turn() !== userColor;
+  const isEngineThinking = engineState === 'thinking';
+
+  // When it becomes the engine's turn, fetch and play its move.
+  useEffect(() => {
+    if (!isEngineTurn) return;
+    if (engineState !== 'ready') return;
+
+    const reqId = ++requestIdRef.current;
+    const fenAtRequest = fen;
+
+    (async () => {
+      const best = await getBestMove(fenAtRequest, 800);
+      // Ignore if state changed (undo/reset) while thinking
+      if (reqId !== requestIdRef.current) return;
+      if (!best || best.length < 4) return;
+
+      const from = best.slice(0, 2);
+      const to = best.slice(2, 4);
+      const promotion = best.length >= 5 ? best[4] : 'q';
+
+      const g = new Chess(fenAtRequest);
+      try {
+        const move = g.move({ from: from as Square, to: to as Square, promotion });
+        if (move) {
+          playClick();
+          setHistory(h => (h[h.length - 1] === fenAtRequest ? [...h, g.fen()] : h));
+          setMoveSans(m => [...m, move.san]);
+          setHighlights({
+            [from]: { backgroundColor: 'hsla(220, 70%, 55%, 0.35)' },
+            [to]: { backgroundColor: 'hsla(220, 80%, 55%, 0.55)' },
+          });
+        }
+      } catch {}
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fen, isEngineTurn, engineState]);
+
 
   const playClick = useCallback(() => {
     try {
@@ -84,7 +131,9 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
   }, []);
 
   const tryMove = useCallback((from: string, to: string) => {
+    // Only allow the user to move on their own turn.
     const g = new Chess(fen);
+    if (g.turn() !== userColor) return false;
     try {
       const move = g.move({ from: from as Square, to: to as Square, promotion: 'q' });
       if (move) {
@@ -100,13 +149,14 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
       }
     } catch {}
     return false;
-  }, [fen, playClick]);
+  }, [fen, playClick, userColor]);
 
   const handleDrop = useCallback(({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string }) => {
     tryMove(sourceSquare, targetSquare);
   }, [tryMove]);
 
   const showMoves = useCallback((square: string) => {
+    if (game.turn() !== userColor) return false;
     const piece = game.get(square as Square);
     if (!piece || piece.color !== game.turn()) return false;
     const moves = game.moves({ square: square as Square, verbose: true });
@@ -119,9 +169,10 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
     setSelectedSquare(square);
     setHighlights(h);
     return true;
-  }, [game]);
+  }, [game, userColor]);
 
   const handleSquareClick = useCallback((square: string) => {
+    if (game.turn() !== userColor) return;
     if (selectedSquare) {
       if (tryMove(selectedSquare, square)) return;
       if (!showMoves(square)) {
@@ -131,23 +182,35 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
     } else {
       showMoves(square);
     }
-  }, [selectedSquare, tryMove, showMoves]);
+  }, [selectedSquare, tryMove, showMoves, game, userColor]);
 
   const undo = () => {
     if (history.length <= 1) return;
-    setHistory(h => h.slice(0, -1));
-    setMoveSans(m => m.slice(0, -1));
+    requestIdRef.current++; // cancel any in-flight engine reply
+    // Step back one move; if that lands on the engine's turn, step back again
+    // so the user resumes from their own turn.
+    let stepsBack = 1;
+    if (history.length - 1 >= 2) {
+      try {
+        const candidate = history[history.length - 2];
+        if (new Chess(candidate).turn() !== userColor) stepsBack = 2;
+      } catch {}
+    }
+    setHistory(h => h.slice(0, Math.max(1, h.length - stepsBack)));
+    setMoveSans(m => m.slice(0, Math.max(0, m.length - stepsBack)));
     setSelectedSquare(null);
     setHighlights({});
   };
 
   const reset = () => {
+    requestIdRef.current++;
     const baseFen = initialFen || startFen;
     setHistory([baseFen]);
     setMoveSans([]);
     setSelectedSquare(null);
     setHighlights({});
   };
+
 
   const turn = game.turn() === 'w' ? 'White' : 'Black';
 
@@ -161,12 +224,12 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
       <div className="flex items-center justify-between mb-3">
         <div className="inline-flex items-center gap-2 text-sm font-medium text-foreground">
           <Compass className="w-4 h-4 text-primary" />
-          <span>Explore continuations</span>
+          <span>Play vs engine (~2000)</span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={undo}
-            disabled={history.length <= 1}
+            disabled={history.length <= 1 || isEngineThinking}
             className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             <Undo2 className="w-3.5 h-3.5" /> Undo
@@ -181,11 +244,11 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
         </div>
       </div>
 
-      <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border">
+      <div className="rounded-xl overflow-hidden shadow-lg ring-1 ring-border relative">
         <Chessboard
           position={fen}
           orientation={orientation}
-          draggable={!game.isGameOver()}
+          draggable={!game.isGameOver() && game.turn() === userColor && !isEngineThinking}
           onDrop={handleDrop}
           onSquareClick={handleSquareClick}
           transitionDuration={250}
@@ -203,11 +266,29 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
             ])
           )}
         />
+        {isEngineThinking && (
+          <div className="absolute top-2 right-2 inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-background/90 backdrop-blur-sm text-xs font-medium text-foreground shadow ring-1 ring-border">
+            <Loader2 className="w-3 h-3 animate-spin text-primary" />
+            Engine thinking…
+          </div>
+        )}
       </div>
 
       <div className="mt-3 flex items-center justify-between text-xs">
         <span className="text-muted-foreground">
-          {status ? <span className="font-semibold text-primary">{status}</span> : <>{turn} to move</>}
+          {status ? (
+            <span className="font-semibold text-primary">{status}</span>
+          ) : engineState === 'loading' ? (
+            'Loading engine…'
+          ) : engineState === 'error' ? (
+            <span className="text-destructive">Engine unavailable — free play mode</span>
+          ) : isEngineThinking ? (
+            'Engine is thinking…'
+          ) : game.turn() === userColor ? (
+            'Your move'
+          ) : (
+            `${turn} to move`
+          )}
         </span>
         {moveSans.length > 0 && (
           <span className="font-mono text-muted-foreground truncate max-w-[60%] text-right">
@@ -215,6 +296,7 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
           </span>
         )}
       </div>
+
     </motion.div>
   );
 }
