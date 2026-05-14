@@ -142,7 +142,8 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
   };
 
   const reset = () => {
-    setHistory([startFen]);
+    const baseFen = initialFen || startFen;
+    setHistory([baseFen]);
     setMoveSans([]);
     setSelectedSquare(null);
     setHighlights({});
