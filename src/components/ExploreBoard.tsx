@@ -54,6 +54,11 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
   }, [startFen, initialFen, initialMoveSan]);
 
 
+  // The user plays whichever side is to move at the start of exploration.
+  const userColor: 'w' | 'b' = useMemo(() => {
+    try { return new Chess(startFen).turn(); } catch { return 'w'; }
+  }, [startFen]);
+
   const fen = history[history.length - 1];
   const game = useMemo(() => {
     try { return new Chess(fen); } catch { return new Chess(); }
@@ -66,6 +71,47 @@ export function ExploreBoard({ startFen, orientation = 'white', initialFen, init
     if (game.inCheck()) return 'Check';
     return null;
   }, [game]);
+
+  const { state: engineState, getBestMove } = useStockfish(2000);
+  const requestIdRef = useRef(0);
+  const isEngineTurn = !game.isGameOver() && game.turn() !== userColor;
+  const isEngineThinking = engineState === 'thinking';
+
+  // When it becomes the engine's turn, fetch and play its move.
+  useEffect(() => {
+    if (!isEngineTurn) return;
+    if (engineState !== 'ready') return;
+
+    const reqId = ++requestIdRef.current;
+    const fenAtRequest = fen;
+
+    (async () => {
+      const best = await getBestMove(fenAtRequest, 800);
+      // Ignore if state changed (undo/reset) while thinking
+      if (reqId !== requestIdRef.current) return;
+      if (!best || best.length < 4) return;
+
+      const from = best.slice(0, 2);
+      const to = best.slice(2, 4);
+      const promotion = best.length >= 5 ? best[4] : 'q';
+
+      const g = new Chess(fenAtRequest);
+      try {
+        const move = g.move({ from: from as Square, to: to as Square, promotion });
+        if (move) {
+          playClick();
+          setHistory(h => (h[h.length - 1] === fenAtRequest ? [...h, g.fen()] : h));
+          setMoveSans(m => [...m, move.san]);
+          setHighlights({
+            [from]: { backgroundColor: 'hsla(220, 70%, 55%, 0.35)' },
+            [to]: { backgroundColor: 'hsla(220, 80%, 55%, 0.55)' },
+          });
+        }
+      } catch {}
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fen, isEngineTurn, engineState]);
+
 
   const playClick = useCallback(() => {
     try {
