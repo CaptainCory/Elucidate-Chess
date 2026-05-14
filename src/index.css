@@ -245,4 +245,18 @@
     animation: focusGuide 3.5s ease-in-out infinite;
     border-radius: var(--radius);
   }
+
+  /* Chessboardjsx coordinate labels (files a-h and ranks 1-8) */
+  [data-testid^="column-"],
+  [data-testid^="bottom-left-"] {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    -webkit-text-stroke: 0.6px #000 !important;
+    text-shadow:
+      -1px 0 0 #000,
+      1px 0 0 #000,
+      0 -1px 0 #000,
+      0 1px 0 #000 !important;
+  }
 }
+
