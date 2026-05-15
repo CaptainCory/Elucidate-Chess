@@ -46,6 +46,7 @@ const App = () => (
             <Route path="/manage-puzzles" element={<ManagePuzzlesPage />} />
             <Route path="/vocabulary" element={<VocabularyPage />} />
 <Route path="/daily" element={<DailyChallengePage />} />
+            <Route path="/positions/theme/:slug" element={<PositionsByThemePage />} />
             <Route path="/quotes" element={<QuotesPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/seo" element={<SeoAdminPage />} />
