@@ -252,7 +252,7 @@ const Membership = () => {
             </Button>
           </div>
         )}
-      </div>
+      </main>
       <ChessQuoteFooter />
     </div>
   );
