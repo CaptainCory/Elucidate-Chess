@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Lock, RefreshCw, AlertTriangle, CheckCircle2, ExternalLink } from 'lucide-react';
+import { Lock, RefreshCw, AlertTriangle, CheckCircle2, ExternalLink, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { PageSEO } from '@/components/PageSEO';
@@ -239,10 +239,84 @@ export default function SeoAdminPage() {
                 </CardContent>
               </Card>
             </div>
+
+            <TargetKeywordsCard topQueries={data.topQueries} />
           </>
         )}
       </div>
     </div>
+  );
+}
+
+// Target keywords — picked via Semrush (US database) for a new, low-authority site
+// where the product is "AI coach that scores your reasoning on chess puzzles".
+// Picks favor low difficulty + on-brand intent over raw volume.
+const TARGET_KEYWORDS: { term: string; volume: number; kdi: number; why: string; tier: 'quick win' | 'core' | 'stretch' }[] = [
+  { term: 'chess coach ai', volume: 20, kdi: 0, tier: 'quick win', why: 'Exact product match. Trivial to rank.' },
+  { term: 'chess thinking process', volume: 20, kdi: 0, tier: 'quick win', why: 'On-brand — we score reasoning.' },
+  { term: 'chess reasoning', volume: 20, kdi: 0, tier: 'quick win', why: 'Core differentiator term.' },
+  { term: 'chess calculation training', volume: 20, kdi: 0, tier: 'quick win', why: 'Matches our drill loop.' },
+  { term: 'chess tactics trainer', volume: 70, kdi: 19, tier: 'quick win', why: 'Easy KDI, real intent.' },
+  { term: 'chess pattern recognition', volume: 40, kdi: 24, tier: 'core', why: 'Vocabulary page is a fit.' },
+  { term: 'chess improvement', volume: 70, kdi: 33, tier: 'core', why: 'Broad — anchor LandingPage copy.' },
+  { term: 'chess puzzle solver', volume: 720, kdi: 46, tier: 'stretch', why: '/play page — biggest realistic prize.' },
+  { term: 'chess puzzle of the day', volume: 480, kdi: 50, tier: 'stretch', why: 'We have /daily — schema + linking can win this.' },
+];
+
+function TargetKeywordsCard({ topQueries }: { topQueries: GscResponse['topQueries'] }) {
+  const ranked = new Set((topQueries ?? []).map((r) => r.keys[0]?.toLowerCase()));
+  const tierColor = (t: string) =>
+    t === 'quick win' ? 'text-emerald-600' : t === 'core' ? 'text-amber-600' : 'text-muted-foreground';
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base flex items-center gap-2">
+          <Target className="h-4 w-4" /> Target keywords
+        </CardTitle>
+        <p className="text-xs text-muted-foreground mt-1">
+          Picked via Semrush (US). Quick wins first — KDI under 25 with on-brand intent. Volumes are monthly Google searches.
+        </p>
+      </CardHeader>
+      <CardContent>
+        <div className="overflow-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Keyword</TableHead>
+                <TableHead className="text-right">Vol/mo</TableHead>
+                <TableHead className="text-right">KDI</TableHead>
+                <TableHead>Tier</TableHead>
+                <TableHead>Why</TableHead>
+                <TableHead className="text-right">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {TARGET_KEYWORDS.map((k) => {
+                const live = ranked.has(k.term.toLowerCase());
+                return (
+                  <TableRow key={k.term}>
+                    <TableCell className="text-sm font-medium">{k.term}</TableCell>
+                    <TableCell className="text-right text-sm">{fmtNum(k.volume)}</TableCell>
+                    <TableCell className="text-right text-sm">{k.kdi}</TableCell>
+                    <TableCell className={`text-xs font-medium ${tierColor(k.tier)}`}>{k.tier}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground max-w-[260px]">{k.why}</TableCell>
+                    <TableCell className="text-right text-xs">
+                      {live ? (
+                        <span className="text-emerald-600 inline-flex items-center gap-1">
+                          <CheckCircle2 className="h-3 w-3" /> ranking
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">not yet</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
