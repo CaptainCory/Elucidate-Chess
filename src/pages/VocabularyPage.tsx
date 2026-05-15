@@ -220,7 +220,28 @@ export default function VocabularyPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSEO title="Chess Vocabulary — Tactical Themes & Patterns | Elucidate Chess" />
+      <PageSEO
+        title="Chess Vocabulary — Tactical Themes"
+        description="Master the building blocks of chess tactics. Browse pins, forks, skewers, discovered attacks, and other patterns with illustrated board diagrams."
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Chess Vocabulary — Tactical Themes & Patterns',
+          description: 'Curated collection of chess tactical themes and patterns with illustrated board diagrams.',
+          url: 'https://elucidatechess.com/vocabulary',
+          isPartOf: { '@type': 'WebSite', name: 'Elucidate Chess', url: 'https://elucidatechess.com' },
+          mainEntity: {
+            '@type': 'ItemList',
+            itemListElement: VOCAB.map((v, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              name: v.name,
+              description: v.short,
+            })),
+          },
+        }}
+        jsonLdId="vocabulary"
+      />
 
       {/* Nav */}
       <header className="border-b border-border/50 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
