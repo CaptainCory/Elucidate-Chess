@@ -245,7 +245,16 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
           )}
         </header>
 
-
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" className="mb-3 text-xs text-muted-foreground flex items-center gap-1.5 flex-wrap justify-center lg:justify-start">
+          <Link to="/" className="hover:text-primary">Home</Link>
+          <ChevronRight className="w-3 h-3" />
+          <Link to="/play" className="hover:text-primary">Positions</Link>
+          <ChevronRight className="w-3 h-3" />
+          <span className="capitalize text-foreground/70">{puzzle.difficulty}</span>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-foreground truncate max-w-[200px]">{puzzle.name}</span>
+        </nav>
 
 
         {/* Graduation Progress */}
