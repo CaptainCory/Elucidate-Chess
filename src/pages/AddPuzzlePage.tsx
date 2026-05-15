@@ -353,6 +353,11 @@ export default function AddPuzzlePage() {
               />
               <p className="text-xs text-muted-foreground text-right">{form.explanation.length}/500</p>
             </div>
+
+            <div className="space-y-2">
+              <Label>Themes</Label>
+              <ThemeMultiSelect value={themes} onChange={setThemes} />
+            </div>
           </div>
         </div>
 
