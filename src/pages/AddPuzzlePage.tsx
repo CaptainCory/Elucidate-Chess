@@ -17,6 +17,7 @@ import { PlanBadge } from '@/components/PlanBadge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import type { ChessPuzzle } from '@/data/chessPuzzles';
+import { ThemeMultiSelect } from '@/components/ThemeMultiSelect';
 
 const ACCESS_CODE = 'PAULMORPHY';
 
