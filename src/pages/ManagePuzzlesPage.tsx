@@ -29,6 +29,7 @@ interface Puzzle {
   best_move: string;
   difficulty: string;
   explanation: string;
+  themes: string[];
 }
 
 export default function ManagePuzzlesPage() {
