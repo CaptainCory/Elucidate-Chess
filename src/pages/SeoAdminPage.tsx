@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Lock, RefreshCw, AlertTriangle, CheckCircle2, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import PageSEO from '@/components/PageSEO';
+import { PageSEO } from '@/components/PageSEO';
 
 interface GscResponse {
   site: string;
@@ -108,7 +108,7 @@ export default function SeoAdminPage() {
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
-      <PageSEO title="SEO Admin · Elucidate Chess" description="Search Console performance and indexing status." noindex />
+      <PageSEO title="SEO Admin · Elucidate Chess" description="Search Console performance and indexing status." />
       <div className="max-w-6xl mx-auto space-y-6">
         <motion.div
           initial={{ opacity: 0, y: -10 }}

@@ -17,6 +17,7 @@ import AddPuzzlePage from "./pages/AddPuzzlePage";
 import ManagePuzzlesPage from "./pages/ManagePuzzlesPage";
 import VocabularyPage from "./pages/VocabularyPage";
 import AdminDashboard from "./pages/AdminDashboard";
+import SeoAdminPage from "./pages/SeoAdminPage";
 import DailyChallengePage from "./pages/DailyChallengePage";
 import QuotesPage from "./pages/QuotesPage";
 import NotFound from "./pages/NotFound";
@@ -46,6 +47,7 @@ const App = () => (
 <Route path="/daily" element={<DailyChallengePage />} />
             <Route path="/quotes" element={<QuotesPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/seo" element={<SeoAdminPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
