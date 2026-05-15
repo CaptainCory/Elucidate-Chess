@@ -63,7 +63,6 @@ export default function PositionsByThemePage() {
       <PageSEO
         title={title}
         description={description}
-        canonical={`https://elucidatechess.com/positions/theme/${slug}`}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'CollectionPage',
