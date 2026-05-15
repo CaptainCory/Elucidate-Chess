@@ -214,11 +214,11 @@ export default function ManagePuzzlesPage() {
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+      <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Puzzle Catalog</h1>
-            <p className="text-sm text-muted-foreground mt-1">{puzzles.length} puzzles · Click edit to modify</p>
+            <p className="text-sm text-muted-foreground mt-1">{puzzles.length} puzzles total · Click edit to modify</p>
           </div>
           <Link to="/play"><Button variant="outline" size="sm"><ArrowLeft className="w-4 h-4 mr-1" /> Back</Button></Link>
         </div>
@@ -228,31 +228,46 @@ export default function ManagePuzzlesPage() {
         ) : puzzles.length === 0 ? (
           <div className="text-center py-20 text-muted-foreground">No puzzles found.</div>
         ) : (
-          <div className="space-y-3">
-            {puzzles.map(puzzle => (
-              <div key={puzzle.id} className="chess-card p-4 rounded-xl flex items-center gap-4">
-                <a href={`/position/${puzzle.id}`} className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors flex items-center justify-center cursor-pointer" title={`Go to puzzle ${puzzle.id}`}>
-                  <span className="font-mono font-bold text-primary text-sm">{puzzle.id}</span>
-                </a>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-foreground truncate">{puzzle.name}</span>
-                    <span className={`text-xs font-medium capitalize ${difficultyColor(puzzle.difficulty)}`}>{puzzle.difficulty}</span>
+          <div className="space-y-8">
+            {DIFFICULTIES.map(diff => {
+              const group = puzzles.filter(p => p.difficulty === diff);
+              if (group.length === 0) return null;
+              return (
+                <div key={diff} className="space-y-3">
+                  <div className="flex items-center gap-2 pb-2 border-b border-border">
+                    <span className={`text-xs font-bold uppercase tracking-wider ${difficultyColor(diff)}`}>{diff}</span>
+                    <span className="text-xs text-muted-foreground">({group.length})</span>
                   </div>
-                  <p className="text-xs text-muted-foreground truncate mt-0.5">
-                    {puzzle.best_move} · {puzzle.explanation.slice(0, 80)}{puzzle.explanation.length > 80 ? '…' : ''}
-                  </p>
+                  <div className="space-y-2">
+                    {group.map((puzzle, idx) => (
+                      <div key={puzzle.id} className="chess-card p-3 rounded-xl flex items-center gap-3">
+                        <a href={`/position/${puzzle.id}`} className="flex-shrink-0 w-14 h-14 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors flex flex-col items-center justify-center cursor-pointer" title={`Go to puzzle ${puzzle.id}`}>
+                          <span className="font-mono font-bold text-primary text-xs">#{idx + 1}</span>
+                          <span className="font-mono text-[10px] text-muted-foreground">{puzzle.id}</span>
+                        </a>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-foreground truncate">{puzzle.name}</span>
+                            <span className={`text-[10px] font-medium uppercase tracking-wider ${difficultyColor(puzzle.difficulty)}`}>{puzzle.difficulty}</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate mt-0.5">
+                            {puzzle.best_move} · {puzzle.explanation.slice(0, 80)}{puzzle.explanation.length > 80 ? '…' : ''}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <Button variant="outline" size="sm" onClick={() => handleEdit(puzzle)}>
+                            <Pencil className="w-3.5 h-3.5 mr-1" /> Edit
+                          </Button>
+                          <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setDeleteTarget(puzzle)}>
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <Button variant="outline" size="sm" onClick={() => handleEdit(puzzle)}>
-                    <Pencil className="w-3.5 h-3.5 mr-1" /> Edit
-                  </Button>
-                  <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setDeleteTarget(puzzle)}>
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </Button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
