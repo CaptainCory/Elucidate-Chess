@@ -396,6 +396,53 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
           );
         })()}
 
+        {/* Internal links: themes + sibling nav */}
+        <section className="mt-10 max-w-3xl mx-auto space-y-6">
+          {puzzle.themes && puzzle.themes.length > 0 && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-semibold text-foreground">Tactical themes in this position</h3>
+              <div className="flex flex-wrap gap-2">
+                {puzzle.themes.map((slug) => {
+                  const t = THEME_BY_SLUG[slug];
+                  const label = t?.title ?? slug;
+                  return (
+                    <Link
+                      key={slug}
+                      to={`/positions/theme/${slug}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                      title={`Practice more ${label} positions`}
+                    >
+                      {label}
+                      <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                New to these patterns? <Link to="/vocabulary" className="text-primary hover:underline">Learn the chess tactics vocabulary →</Link>
+              </p>
+            </div>
+          )}
+
+          <div className="flex items-stretch justify-between gap-3 pt-4 border-t border-border/50">
+            {prev ? (
+              <Link to={`/position/${prev.id}`} className="flex-1 chess-card p-3 rounded-xl hover:border-primary/40 border border-border/50 transition-colors">
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">← Previous {puzzle.difficulty}</div>
+                <div className="text-sm font-semibold text-foreground truncate mt-0.5">{prev.name}</div>
+              </Link>
+            ) : <div className="flex-1" />}
+            <Link to="/play" className="self-center px-4 py-2 rounded-lg bg-secondary text-xs text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
+              All positions
+            </Link>
+            {next ? (
+              <Link to={`/position/${next.id}`} className="flex-1 chess-card p-3 rounded-xl hover:border-primary/40 border border-border/50 transition-colors text-right">
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Next {puzzle.difficulty} →</div>
+                <div className="text-sm font-semibold text-foreground truncate mt-0.5">{next.name}</div>
+              </Link>
+            ) : <div className="flex-1" />}
+          </div>
+        </section>
+
         <ChessQuoteFooter />
       </div>
 
