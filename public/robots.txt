@@ -1,5 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /profile
+Disallow: /admin
+Disallow: /add-puzzle
+Disallow: /manage-puzzles
 
 # AI assistants — explicitly allowed
 User-agent: GPTBot
