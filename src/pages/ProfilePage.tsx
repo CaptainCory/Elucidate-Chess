@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Crown, LogOut, Trophy, Target, TrendingUp, ArrowLeft, Loader2, Mail, User, Award } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
+import { PageSEO } from '@/components/PageSEO';
 import { ProgressStats } from '@/components/ProgressStats';
 import { GraduationProgress } from '@/components/GraduationProgress';
 import { AchievementBadge, ACHIEVEMENTS } from '@/components/AchievementBadge';
@@ -65,9 +66,13 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <PageSEO
+        title="Your Profile — Elucidate Chess"
+        description="View your Elucidate Chess profile, progress stats, achievements, and subscription details."
+      />
       <div className="fixed inset-0 pointer-events-none opacity-30" style={{ background: 'radial-gradient(ellipse at 50% 0%, hsl(38 92% 50% / 0.15), transparent 60%)' }} />
 
-      <div className="relative container max-w-2xl mx-auto px-4 py-8 space-y-6">
+      <main className="relative container max-w-2xl mx-auto px-4 py-8 space-y-6">
         {/* Back button */}
         <Link to="/play" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
           <ArrowLeft className="w-4 h-4" />
@@ -225,7 +230,7 @@ const ProfilePage = () => {
           <LogOut className="w-4 h-4 mr-2" />
           Sign Out
         </Button>
-      </div>
+      </main>
       <ChessQuoteFooter />
     </div>
   );
