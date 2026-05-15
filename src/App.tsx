@@ -20,6 +20,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import SeoAdminPage from "./pages/SeoAdminPage";
 import DailyChallengePage from "./pages/DailyChallengePage";
 import QuotesPage from "./pages/QuotesPage";
+import PositionsByThemePage from "./pages/PositionsByThemePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
