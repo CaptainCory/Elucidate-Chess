@@ -57,7 +57,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       <PageSEO
-        title="Elucidate Chess — AI Chess Trainer That Coaches Your Thinking"
+        title="Elucidate Chess — AI Chess Trainer for Your Reasoning"
         jsonLd={[
           {
             '@context': 'https://schema.org',
