@@ -232,11 +232,11 @@ export default function VocabularyPage() {
           isPartOf: { '@type': 'WebSite', name: 'Elucidate Chess', url: 'https://elucidatechess.com' },
           mainEntity: {
             '@type': 'ItemList',
-            itemListElement: VOCAB.map((v, i) => ({
+            itemListElement: vocabulary.map((v, i) => ({
               '@type': 'ListItem',
               position: i + 1,
-              name: v.name,
-              description: v.short,
+              name: v.title,
+              description: v.summary,
             })),
           },
         }}
