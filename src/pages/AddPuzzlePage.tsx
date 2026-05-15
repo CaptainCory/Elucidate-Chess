@@ -202,7 +202,7 @@ export default function AddPuzzlePage() {
         best_move: form.bestMove,
         difficulty: form.difficulty,
         explanation: form.explanation,
-        themes: [],
+        themes,
         created_by: user!.id,
       });
 
