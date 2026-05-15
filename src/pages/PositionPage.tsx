@@ -111,6 +111,23 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
     enabled: !!user,
   });
 
+  // Sibling positions within same difficulty (for prev/next links)
+  const { data: siblings } = useQuery({
+    queryKey: ['siblings', puzzle.difficulty],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('puzzles')
+        .select('id, name')
+        .eq('difficulty', puzzle.difficulty)
+        .order('id');
+      return (data || []) as Array<{ id: string; name: string }>;
+    },
+  });
+
+  const idx = siblings?.findIndex((s) => s.id === puzzle.id) ?? -1;
+  const prev = idx > 0 ? siblings![idx - 1] : null;
+  const next = idx >= 0 && siblings && idx < siblings.length - 1 ? siblings[idx + 1] : null;
+
   const themesText = puzzle.themes?.length ? puzzle.themes.join(', ') : 'tactical';
   const seoTitle = `${puzzle.name} — ${puzzle.difficulty.charAt(0).toUpperCase() + puzzle.difficulty.slice(1)} Chess Position`;
   const seoDesc = `Solve "${puzzle.name}" — a ${puzzle.difficulty} chess position featuring ${themesText}. Explain your reasoning and get AI coaching feedback.`;
