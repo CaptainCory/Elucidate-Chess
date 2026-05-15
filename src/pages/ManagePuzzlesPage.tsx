@@ -16,6 +16,7 @@ import { UserMenu } from '@/components/UserMenu';
 import { AuthModal } from '@/components/AuthModal';
 import { PlanBadge } from '@/components/PlanBadge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { ThemeMultiSelect } from '@/components/ThemeMultiSelect';
 
 const ACCESS_CODE = 'PAULMORPHY';
 const DIFFICULTIES = ['beginner', 'intermediate', 'advanced', 'master'] as const;
@@ -28,6 +29,7 @@ interface Puzzle {
   best_move: string;
   difficulty: string;
   explanation: string;
+  themes: string[];
 }
 
 export default function ManagePuzzlesPage() {
@@ -49,7 +51,7 @@ export default function ManagePuzzlesPage() {
     setFetching(true);
     const { data, error } = await supabase
       .from('puzzles')
-      .select('id, name, fen, previous_fen, best_move, difficulty, explanation')
+      .select('id, name, fen, previous_fen, best_move, difficulty, explanation, themes')
       .order('difficulty')
       .order('id');
     if (error) {
@@ -151,7 +153,7 @@ export default function ManagePuzzlesPage() {
 
   const handleSave = async () => {
     if (!editingPuzzle) return;
-    const { id, name, fen, previous_fen, best_move, difficulty, explanation } = editingPuzzle;
+    const { id, name, fen, previous_fen, best_move, difficulty, explanation, themes } = editingPuzzle;
     if (!name || !fen || !previous_fen || !best_move || !difficulty || !explanation) {
       toast({ title: 'Missing fields', description: 'All fields are required.', variant: 'destructive' });
       return;
@@ -159,7 +161,7 @@ export default function ManagePuzzlesPage() {
     setSaving(true);
     const { error } = await supabase
       .from('puzzles')
-      .update({ name, fen, previous_fen, best_move, difficulty, explanation })
+      .update({ name, fen, previous_fen, best_move, difficulty, explanation, themes: themes || [] })
       .eq('id', id);
     if (error) {
       toast({ title: 'Error saving', description: error.message, variant: 'destructive' });
@@ -253,6 +255,15 @@ export default function ManagePuzzlesPage() {
                           <p className="text-xs text-muted-foreground truncate mt-0.5">
                             {puzzle.best_move} · {puzzle.explanation.slice(0, 80)}{puzzle.explanation.length > 80 ? '…' : ''}
                           </p>
+                          {puzzle.themes && puzzle.themes.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {puzzle.themes.map((t) => (
+                                <span key={t} className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">
+                                  {t}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <Button variant="outline" size="sm" onClick={() => handleEdit(puzzle)}>
@@ -317,6 +328,13 @@ export default function ManagePuzzlesPage() {
                   maxLength={500}
                 />
                 <p className="text-xs text-muted-foreground text-right">{editingPuzzle.explanation.length}/500</p>
+              </div>
+              <div className="space-y-2">
+                <Label>Themes</Label>
+                <ThemeMultiSelect
+                  value={editingPuzzle.themes || []}
+                  onChange={(next) => setEditingPuzzle({ ...editingPuzzle, themes: next })}
+                />
               </div>
             </div>
           )}

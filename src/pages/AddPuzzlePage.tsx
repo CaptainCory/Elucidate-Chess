@@ -17,6 +17,7 @@ import { PlanBadge } from '@/components/PlanBadge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import type { ChessPuzzle } from '@/data/chessPuzzles';
+import { ThemeMultiSelect } from '@/components/ThemeMultiSelect';
 
 const ACCESS_CODE = 'PAULMORPHY';
 
@@ -45,6 +46,7 @@ export default function AddPuzzlePage() {
     difficulty: '' as ChessPuzzle['difficulty'] | '',
     explanation: '',
   });
+  const [themes, setThemes] = useState<string[]>([]);
 
   if (loading) {
     return (
@@ -200,7 +202,7 @@ export default function AddPuzzlePage() {
         best_move: form.bestMove,
         difficulty: form.difficulty,
         explanation: form.explanation,
-        themes: [],
+        themes,
         created_by: user!.id,
       });
 
@@ -350,6 +352,11 @@ export default function AddPuzzlePage() {
                 maxLength={500}
               />
               <p className="text-xs text-muted-foreground text-right">{form.explanation.length}/500</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Themes</Label>
+              <ThemeMultiSelect value={themes} onChange={setThemes} />
             </div>
           </div>
         </div>

@@ -20,6 +20,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import SeoAdminPage from "./pages/SeoAdminPage";
 import DailyChallengePage from "./pages/DailyChallengePage";
 import QuotesPage from "./pages/QuotesPage";
+import PositionsByThemePage from "./pages/PositionsByThemePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/manage-puzzles" element={<ManagePuzzlesPage />} />
             <Route path="/vocabulary" element={<VocabularyPage />} />
 <Route path="/daily" element={<DailyChallengePage />} />
+            <Route path="/positions/theme/:slug" element={<PositionsByThemePage />} />
             <Route path="/quotes" element={<QuotesPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/seo" element={<SeoAdminPage />} />
