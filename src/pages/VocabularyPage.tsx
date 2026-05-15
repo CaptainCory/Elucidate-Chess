@@ -364,6 +364,12 @@ export default function VocabularyPage() {
                               externalSquareStyles={entry.highlights}
                             />
                           </div>
+                          <Link
+                            to={`/positions/theme/${entry.slug}`}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 text-sm font-medium transition-colors"
+                          >
+                            Practice {entry.title} positions →
+                          </Link>
                         </div>
                       </motion.div>
                     )}
