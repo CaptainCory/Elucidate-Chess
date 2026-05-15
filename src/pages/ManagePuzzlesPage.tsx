@@ -51,7 +51,7 @@ export default function ManagePuzzlesPage() {
     setFetching(true);
     const { data, error } = await supabase
       .from('puzzles')
-      .select('id, name, fen, previous_fen, best_move, difficulty, explanation')
+      .select('id, name, fen, previous_fen, best_move, difficulty, explanation, themes')
       .order('difficulty')
       .order('id');
     if (error) {
