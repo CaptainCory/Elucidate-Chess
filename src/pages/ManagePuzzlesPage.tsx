@@ -16,6 +16,7 @@ import { UserMenu } from '@/components/UserMenu';
 import { AuthModal } from '@/components/AuthModal';
 import { PlanBadge } from '@/components/PlanBadge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { ThemeMultiSelect } from '@/components/ThemeMultiSelect';
 
 const ACCESS_CODE = 'PAULMORPHY';
 const DIFFICULTIES = ['beginner', 'intermediate', 'advanced', 'master'] as const;
