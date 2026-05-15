@@ -27,6 +27,18 @@ const staticEntries: SitemapEntry[] = [
   { path: "/membership", changefreq: "monthly", priority: "0.7" },
 ];
 
+const THEME_SLUGS = [
+  'fork','pin','skewer','discovered-attack','back-rank-mate','smothered-mate',
+  'deflection','decoy','overloading','zwischenzug','sacrifice','battery',
+  'ladder-mate','x-ray','promotion','attraction',
+];
+
+const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({
+  path: `/positions/theme/${slug}`,
+  changefreq: 'weekly' as const,
+  priority: '0.7',
+}));
+
 async function fetchPuzzleEntries(): Promise<SitemapEntry[]> {
   try {
     const res = await fetch(
