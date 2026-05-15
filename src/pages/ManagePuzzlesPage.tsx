@@ -153,7 +153,7 @@ export default function ManagePuzzlesPage() {
 
   const handleSave = async () => {
     if (!editingPuzzle) return;
-    const { id, name, fen, previous_fen, best_move, difficulty, explanation } = editingPuzzle;
+    const { id, name, fen, previous_fen, best_move, difficulty, explanation, themes } = editingPuzzle;
     if (!name || !fen || !previous_fen || !best_move || !difficulty || !explanation) {
       toast({ title: 'Missing fields', description: 'All fields are required.', variant: 'destructive' });
       return;
@@ -161,7 +161,7 @@ export default function ManagePuzzlesPage() {
     setSaving(true);
     const { error } = await supabase
       .from('puzzles')
-      .update({ name, fen, previous_fen, best_move, difficulty, explanation })
+      .update({ name, fen, previous_fen, best_move, difficulty, explanation, themes: themes || [] })
       .eq('id', id);
     if (error) {
       toast({ title: 'Error saving', description: error.message, variant: 'destructive' });
