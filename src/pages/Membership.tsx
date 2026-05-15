@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
+import { PageSEO } from '@/components/PageSEO';
 
 const Membership = () => {
   const { user, isPremium, subscriptionEnd, loading, checkSubscription } = useAuth();
@@ -102,6 +103,10 @@ const Membership = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <PageSEO
+        title="Membership — Elucidate Chess Premium"
+        description="Manage your Elucidate Chess Premium plan. Unlock unlimited chess positions, all difficulty levels, and advanced AI analysis."
+      />
       <div
         className="fixed inset-0 pointer-events-none opacity-30"
         style={{
@@ -109,7 +114,7 @@ const Membership = () => {
         }}
       />
 
-      <div className="relative container max-w-2xl mx-auto px-4 py-8">
+      <main className="relative container max-w-2xl mx-auto px-4 py-8">
         <button
           onClick={() => navigate('/')}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
