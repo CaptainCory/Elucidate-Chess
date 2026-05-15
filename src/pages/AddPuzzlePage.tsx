@@ -46,6 +46,7 @@ export default function AddPuzzlePage() {
     difficulty: '' as ChessPuzzle['difficulty'] | '',
     explanation: '',
   });
+  const [themes, setThemes] = useState<string[]>([]);
 
   if (loading) {
     return (
