@@ -255,6 +255,15 @@ export default function ManagePuzzlesPage() {
                           <p className="text-xs text-muted-foreground truncate mt-0.5">
                             {puzzle.best_move} · {puzzle.explanation.slice(0, 80)}{puzzle.explanation.length > 80 ? '…' : ''}
                           </p>
+                          {puzzle.themes && puzzle.themes.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {puzzle.themes.map((t) => (
+                                <span key={t} className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">
+                                  {t}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <Button variant="outline" size="sm" onClick={() => handleEdit(puzzle)}>
