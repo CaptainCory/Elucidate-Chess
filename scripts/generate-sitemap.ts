@@ -90,7 +90,7 @@ function generateSitemap(entries: SitemapEntry[]) {
 
 (async () => {
   const puzzleEntries = await fetchPuzzleEntries();
-  const entries = [...staticEntries, ...puzzleEntries];
+  const entries = [...staticEntries, ...themeEntries, ...puzzleEntries];
   writeFileSync(resolve("public/sitemap.xml"), generateSitemap(entries));
-  console.log(`sitemap.xml written (${entries.length} entries: ${staticEntries.length} static + ${puzzleEntries.length} positions)`);
+  console.log(`sitemap.xml written (${entries.length} entries: ${staticEntries.length} static + ${themeEntries.length} themes + ${puzzleEntries.length} positions)`);
 })();
