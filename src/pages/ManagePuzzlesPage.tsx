@@ -320,6 +320,13 @@ export default function ManagePuzzlesPage() {
                 />
                 <p className="text-xs text-muted-foreground text-right">{editingPuzzle.explanation.length}/500</p>
               </div>
+              <div className="space-y-2">
+                <Label>Themes</Label>
+                <ThemeMultiSelect
+                  value={editingPuzzle.themes || []}
+                  onChange={(next) => setEditingPuzzle({ ...editingPuzzle, themes: next })}
+                />
+              </div>
             </div>
           )}
           <DialogFooter className="gap-2">
