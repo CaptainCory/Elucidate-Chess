@@ -304,11 +304,13 @@ export default function VocabularyPage() {
               return (
                 <motion.div
                   key={entry.slug}
+                  id={entry.slug}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.15 }}
                   variants={fadeUp}
                   custom={0}
+                  className="scroll-mt-24"
                 >
                   <div
                     onClick={() => setExpandedSlug(isExpanded ? null : entry.slug)}
