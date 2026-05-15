@@ -18,6 +18,24 @@ export default function QuotesPage() {
       <PageSEO
         title='Chess Wisdom Collection'
         description='Browse our curated collection of 101 chess quotes from grandmasters, world champions, and chess legends throughout history.'
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Chess Wisdom Collection',
+          description: 'Curated collection of chess quotes from grandmasters, world champions, and chess legends.',
+          url: 'https://elucidatechess.com/quotes',
+          isPartOf: { '@type': 'WebSite', name: 'Elucidate Chess', url: 'https://elucidatechess.com' },
+          mainEntity: {
+            '@type': 'ItemList',
+            numberOfItems: chessQuotes.length,
+            itemListElement: chessQuotes.slice(0, 20).map((q, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              item: { '@type': 'Quotation', text: q.text, creator: { '@type': 'Person', name: q.author } },
+            })),
+          },
+        }}
+        jsonLdId='quotes'
       />
 
       {/* Navigation */}

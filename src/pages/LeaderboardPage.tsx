@@ -6,12 +6,17 @@ import { UserMenu } from '@/components/UserMenu';
 import { useAuth } from '@/contexts/AuthContext';
 import { Crown, Sparkles, ArrowLeft } from 'lucide-react';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
+import { PageSEO } from '@/components/PageSEO';
 
 const LeaderboardPage = () => {
   const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-background">
+      <PageSEO
+        title="Leaderboard — Elucidate Chess"
+        description="Top Elucidate Chess players ranked by total solves, average reasoning score, and current streak."
+      />
       <div
         className="fixed inset-0 pointer-events-none opacity-30"
         style={{
@@ -19,7 +24,7 @@ const LeaderboardPage = () => {
         }}
       />
 
-      <div className="relative container max-w-3xl mx-auto px-4 py-8">
+      <main className="relative container max-w-3xl mx-auto px-4 py-8">
         <header className="flex items-center justify-between mb-8">
           <Link to="/play" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-4 h-4" />
@@ -38,7 +43,7 @@ const LeaderboardPage = () => {
 
         <Leaderboard />
         <ChessQuoteFooter />
-      </div>
+      </main>
     </div>
   );
 };

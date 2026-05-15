@@ -57,7 +57,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       <PageSEO
-        title="Elucidate Chess — AI Chess Trainer That Coaches Your Thinking"
+        title="Elucidate Chess — AI Chess Trainer for Your Reasoning"
         jsonLd={[
           {
             '@context': 'https://schema.org',
@@ -154,6 +154,7 @@ export default function LandingPage() {
         </nav>
       </header>
 
+      <main>
       {/* Hero */}
       <section className="relative overflow-hidden">
         {/* Ambient glow layers */}
@@ -415,6 +416,7 @@ export default function LandingPage() {
           </motion.div>
         </motion.div>
       </section>
+      </main>
 
       <ChessQuoteFooter />
       <AuthModal open={showAuth} onOpenChange={setShowAuth} />

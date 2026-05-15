@@ -228,6 +228,21 @@ export default function HowItWorks() {
       <PageSEO
         title="How It Works — Elucidate Chess Method"
         description="Walk through a real chess position step-by-step. Learn the Elucidate method: observe, count material, evaluate king safety, find tactics, and explain your thinking."
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'HowTo',
+          name: 'The Elucidate Chess Method',
+          description: 'A five-step method for analyzing any chess position: observe, count material, evaluate king safety, find tactics, and explain your reasoning.',
+          totalTime: 'PT5M',
+          step: [
+            { '@type': 'HowToStep', position: 1, name: 'Observe the position', text: 'Take in the whole board before considering any moves.' },
+            { '@type': 'HowToStep', position: 2, name: 'Count material', text: 'Note any material imbalance to inform candidate moves.' },
+            { '@type': 'HowToStep', position: 3, name: 'Evaluate king safety', text: 'Identify weak squares around each king and any immediate threats.' },
+            { '@type': 'HowToStep', position: 4, name: 'Find candidate tactics', text: 'Look for forks, pins, skewers, discovered attacks, and mating nets.' },
+            { '@type': 'HowToStep', position: 5, name: 'Explain your reasoning', text: 'Write down WHY your chosen move is strong before submitting it.' },
+          ],
+        }}
+        jsonLdId="how-it-works"
       />
 
       <style>{`
