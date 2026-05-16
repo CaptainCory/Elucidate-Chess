@@ -183,7 +183,7 @@ serve(async (req) => {
   }
 
   try {
-    const { fen, userThinking, userMove, bestMove, puzzleExplanation, puzzleDifficulty, puzzleId }: AnalysisRequest & { puzzleId?: string } = await req.json();
+    const { fen, userThinking, userMove, bestMove, puzzleExplanation, puzzleDifficulty, puzzleId, engine }: AnalysisRequest & { puzzleId?: string } = await req.json();
 
     // --- SERVER-SIDE ACCESS ENFORCEMENT ---
     const supabase = createClient(
