@@ -65,9 +65,54 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     setAnalyzeStage('sending');
 
     try {
-      // Once the request is in flight, mark engine "thinking"
-      const thinkingTimer = setTimeout(() => setAnalyzeStage('thinking'), 350);
+      // --- 1. Engine analysis (best-effort, runs in browser) ---
+      let enginePayload: {
+        bestMove: string | null;
+        evalBefore: EngineEval;
+        evalAfter: EngineEval;
+        cpl: number;
+        moveScore: number;
+      } | null = null;
 
+      try {
+        if (engineState !== 'error') {
+          setAnalyzeStage('thinking');
+          const sideToMove: 'w' | 'b' = puzzle.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+
+          // Apply the user's SAN move with chess.js to get the resulting FEN
+          const chess = new Chess(puzzle.fen);
+          let fenAfter: string | null = null;
+          try {
+            const applied = chess.move(selectedMove, { strict: false });
+            if (applied) fenAfter = chess.fen();
+          } catch {
+            fenAfter = null;
+          }
+
+          const [rawBefore, rawAfter] = await Promise.all([
+            engineEvaluate(puzzle.fen, 14),
+            fenAfter ? engineEvaluate(fenAfter, 14) : Promise.resolve(null),
+          ]);
+
+          if (rawBefore && rawAfter) {
+            const beforeWhite = normalizeEvalToWhite(rawBefore, sideToMove);
+            const afterWhite = normalizeEvalToWhite(rawAfter, sideToMove === 'w' ? 'b' : 'w');
+            const cpl = centipawnLoss(beforeWhite, afterWhite, sideToMove);
+            const moveScore = cplToScore(cpl);
+            enginePayload = {
+              bestMove: rawBefore.bestMove,
+              evalBefore: { ...rawBefore },
+              evalAfter: { ...rawAfter },
+              cpl,
+              moveScore,
+            };
+          }
+        }
+      } catch (engErr) {
+        console.warn('Engine analysis failed, falling back to AI-only scoring:', engErr);
+      }
+
+      // --- 2. AI analysis (reasoning + feedback) ---
       const { data, error } = await supabase.functions.invoke('analyze-chess', {
         body: {
           fen: puzzle.fen,
@@ -77,6 +122,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
           puzzleExplanation: puzzle.explanation,
           puzzleDifficulty: puzzle.difficulty,
           puzzleId: puzzle.id,
+          engine: enginePayload,
         },
       });
 
