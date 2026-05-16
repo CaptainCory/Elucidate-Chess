@@ -280,6 +280,17 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'd4xe5 attacks the d5 queen and frees up the d-file pressure at the same time — two threats from one quiet pawn move.',
     highlights: { d4: hl.move, e5: hl.target, d5: hl.target },
   },
+  {
+    slug: 'back-rank',
+    title: 'Back Rank',
+    summary: 'A weak back rank where the king is hemmed in by its own pawns.',
+    description:
+      'A "back rank" theme covers any tactic or threat that exploits a king stuck on its starting rank behind its own pawns. It includes back-rank mate ideas, but also threats like luring defenders away, deflections, and quiet moves that prepare a future invasion on the 1st or 8th rank.',
+    fen: '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1',
+    orientation: 'white',
+    keySquares: 'The rook eyes d8 with nothing in the way — Black\'s f7/g7/h7 pawns lock the king on the 8th rank, so any quiet rook lift to the back rank is decisive.',
+    highlights: { d1: hl.attacker, g8: hl.target, d8: hl.move },
+  },
 ];
 
 const fadeUp = {

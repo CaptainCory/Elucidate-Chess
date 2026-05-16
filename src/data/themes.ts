@@ -31,6 +31,7 @@ export const THEMES: ThemeOption[] = [
   { slug: 'perpetual-check', title: 'Perpetual Check', summary: 'A repeating sequence of checks that forces a draw.' },
   { slug: 'check', title: 'Check', summary: 'A direct attack on the enemy king that must be answered immediately.' },
   { slug: 'double-attack', title: 'Double Attack', summary: 'A single move that creates two threats at once.' },
+  { slug: 'back-rank', title: 'Back Rank', summary: 'A weak back rank where the king is hemmed in by its own pawns — fertile ground for threats and tactics.' },
 ];
 
 export const THEME_BY_SLUG: Record<string, ThemeOption> = Object.fromEntries(
