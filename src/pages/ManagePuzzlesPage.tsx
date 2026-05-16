@@ -276,7 +276,8 @@ export default function ManagePuzzlesPage() {
                           </Button>
                         </div>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               );
