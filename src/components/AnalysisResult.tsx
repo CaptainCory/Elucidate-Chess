@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, ArrowRight, Trophy, Target, RotateCcw } from 'lucide-react';
+import { CheckCircle, XCircle, ArrowRight, Trophy, Target, RotateCcw, Cpu } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { FollowUpChat } from '@/components/FollowUpChat';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { AnimatedScore } from '@/components/AnimatedScore';
+import { formatEval, type EngineEval } from '@/lib/engineScore';
 
 export interface PositionPiece {
   square: string;
@@ -29,6 +30,14 @@ export interface PositionVerification {
   bestMoveLeadsToMate: boolean;
 }
 
+export interface EngineAnalysis {
+  bestMove: string | null;
+  evalBefore: EngineEval;
+  evalAfter: EngineEval;
+  cpl: number;
+  moveScore: number;
+}
+
 export interface AnalysisData {
   score: number;
   moveCorrect: boolean;
@@ -39,6 +48,7 @@ export interface AnalysisData {
   keyInsights: string[];
   improvement: string;
   positionVerification?: PositionVerification;
+  engine?: EngineAnalysis;
 }
 
 interface AnalysisResultProps {
@@ -153,6 +163,39 @@ export function AnalysisResult({ analysis, onNext, onRetry, puzzleContext }: Ana
           <code className="px-2 py-1 bg-primary/20 rounded font-mono text-primary">{analysis.bestMove}</code>
         </div>
       </motion.div>
+
+      {/* Engine analysis panel */}
+      {analysis.engine && (
+        <motion.div variants={fadeUp} className="chess-card p-4 space-y-2 border-primary/20">
+          <div className="flex items-center gap-2 text-foreground">
+            <Cpu className="w-5 h-5 text-primary" />
+            <h3 className="font-semibold font-display">Engine Analysis</h3>
+            <span className="ml-auto text-sm font-mono text-muted-foreground">
+              Accuracy {analysis.engine.moveScore}%
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground">Engine pick:</span>
+              <code className="px-1.5 py-0.5 bg-primary/10 rounded font-mono text-primary">
+                {analysis.engine.bestMove ?? '—'}
+              </code>
+            </div>
+            <div className="flex items-center gap-2 justify-end">
+              <span className="text-muted-foreground">CPL:</span>
+              <code className="font-mono">{Math.round(analysis.engine.cpl)}</code>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground">Eval before:</span>
+              <code className="font-mono">{formatEval(analysis.engine.evalBefore)}</code>
+            </div>
+            <div className="flex items-center gap-2 justify-end">
+              <span className="text-muted-foreground">After move:</span>
+              <code className="font-mono">{formatEval(analysis.engine.evalAfter)}</code>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* Next Position (top) */}
       <motion.div variants={fadeUp}>

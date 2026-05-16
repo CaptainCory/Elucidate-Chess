@@ -1,11 +1,19 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Chess } from 'chess.js';
 import { ChessPuzzle } from '@/data/chessPuzzles';
 import { AnalysisData } from '@/components/AnalysisResult';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import { useStockfish } from '@/hooks/useStockfish';
+import {
+  centipawnLoss,
+  cplToScore,
+  normalizeEvalToWhite,
+  type EngineEval,
+} from '@/lib/engineScore';
 
 export type GameState = 'thinking' | 'analyzing' | 'result';
 export type AnalyzeStage = 'idle' | 'sending' | 'thinking' | 'finalizing' | 'done';
@@ -24,6 +32,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
   const [graduatedTo, setGraduatedTo] = useState<string | null>(null);
   const [newAchievements, setNewAchievements] = useState<string[]>([]);
   const [analyzeStage, setAnalyzeStage] = useState<AnalyzeStage>('idle');
+  const { getEvaluation: engineEvaluate, state: engineState } = useStockfish(3000);
 
   const averageScore = scores.length > 0
     ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
@@ -56,9 +65,54 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
     setAnalyzeStage('sending');
 
     try {
-      // Once the request is in flight, mark engine "thinking"
-      const thinkingTimer = setTimeout(() => setAnalyzeStage('thinking'), 350);
+      // --- 1. Engine analysis (best-effort, runs in browser) ---
+      let enginePayload: {
+        bestMove: string | null;
+        evalBefore: EngineEval;
+        evalAfter: EngineEval;
+        cpl: number;
+        moveScore: number;
+      } | null = null;
 
+      try {
+        if (engineState !== 'error') {
+          setAnalyzeStage('thinking');
+          const sideToMove: 'w' | 'b' = puzzle.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+
+          // Apply the user's SAN move with chess.js to get the resulting FEN
+          const chess = new Chess(puzzle.fen);
+          let fenAfter: string | null = null;
+          try {
+            const applied = chess.move(selectedMove, { strict: false });
+            if (applied) fenAfter = chess.fen();
+          } catch {
+            fenAfter = null;
+          }
+
+          const [rawBefore, rawAfter] = await Promise.all([
+            engineEvaluate(puzzle.fen, 14),
+            fenAfter ? engineEvaluate(fenAfter, 14) : Promise.resolve(null),
+          ]);
+
+          if (rawBefore && rawAfter) {
+            const beforeWhite = normalizeEvalToWhite(rawBefore, sideToMove);
+            const afterWhite = normalizeEvalToWhite(rawAfter, sideToMove === 'w' ? 'b' : 'w');
+            const cpl = centipawnLoss(beforeWhite, afterWhite, sideToMove);
+            const moveScore = cplToScore(cpl);
+            enginePayload = {
+              bestMove: rawBefore.bestMove,
+              evalBefore: { ...rawBefore },
+              evalAfter: { ...rawAfter },
+              cpl,
+              moveScore,
+            };
+          }
+        }
+      } catch (engErr) {
+        console.warn('Engine analysis failed, falling back to AI-only scoring:', engErr);
+      }
+
+      // --- 2. AI analysis (reasoning + feedback) ---
       const { data, error } = await supabase.functions.invoke('analyze-chess', {
         body: {
           fen: puzzle.fen,
@@ -68,10 +122,10 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
           puzzleExplanation: puzzle.explanation,
           puzzleDifficulty: puzzle.difficulty,
           puzzleId: puzzle.id,
+          engine: enginePayload,
         },
       });
 
-      clearTimeout(thinkingTimer);
       setAnalyzeStage('finalizing');
 
       if (error) throw error;
@@ -96,6 +150,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
         keyInsights: data.keyInsights || [],
         improvement: data.improvement || '',
         positionVerification: data.positionVerification,
+        engine: data.engine ?? enginePayload ?? undefined,
       };
 
       setAnalysis(analysisResult);
@@ -150,7 +205,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       setAnalyzeStage('idle');
       setGameState('thinking');
     }
-  }, [puzzle, selectedMove, scores, user, isPremium, isDifficultyLocked, queryClient]);
+  }, [puzzle, selectedMove, scores, user, isPremium, isDifficultyLocked, queryClient, engineEvaluate, engineState]);
 
   const [isNavigating, setIsNavigating] = useState(false);
 

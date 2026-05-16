@@ -7,6 +7,20 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+interface EngineEval {
+  cp: number | null;
+  mate: number | null;
+  bestMove: string | null;
+}
+
+interface EnginePayload {
+  bestMove: string | null;
+  evalBefore: EngineEval;
+  evalAfter: EngineEval;
+  cpl: number;
+  moveScore: number;
+}
+
 interface AnalysisRequest {
   fen: string;
   userThinking: string;
@@ -14,6 +28,7 @@ interface AnalysisRequest {
   bestMove: string;
   puzzleExplanation: string;
   puzzleDifficulty: string;
+  engine?: EnginePayload | null;
 }
 
 type PieceKind = 'King' | 'Queen' | 'Rook' | 'Bishop' | 'Knight' | 'Pawn';
@@ -168,7 +183,7 @@ serve(async (req) => {
   }
 
   try {
-    const { fen, userThinking, userMove, bestMove, puzzleExplanation, puzzleDifficulty, puzzleId }: AnalysisRequest & { puzzleId?: string } = await req.json();
+    const { fen, userThinking, userMove, bestMove, puzzleExplanation, puzzleDifficulty, puzzleId, engine }: AnalysisRequest & { puzzleId?: string } = await req.json();
 
     // --- SERVER-SIDE ACCESS ENFORCEMENT ---
     const supabase = createClient(
@@ -290,8 +305,17 @@ ${userThinking}
 """
 
 === GROUND TRUTH ===
-Best Move: ${bestMove}
+Best Move (author's intended): ${bestMove}
 Correct Explanation: ${puzzleExplanation}
+${engine ? `
+=== ENGINE ANALYSIS (Stockfish, authoritative for move quality) ===
+Engine's best move (UCI): ${engine.bestMove ?? 'n/a'}
+Eval before move (centipawns from side-to-move): ${engine.evalBefore?.mate !== null && engine.evalBefore?.mate !== undefined ? `mate in ${engine.evalBefore.mate}` : engine.evalBefore?.cp}
+Eval after student's move: ${engine.evalAfter?.mate !== null && engine.evalAfter?.mate !== undefined ? `mate in ${engine.evalAfter.mate}` : engine.evalAfter?.cp}
+Centipawn loss caused by student's move: ${Math.round(engine.cpl)}
+Engine-derived move accuracy (0-100): ${engine.moveScore}
+
+The engine has already objectively scored the move's quality. Focus your evaluation on the QUALITY OF THE STUDENT'S REASONING — did they correctly identify the tactical/positional ideas? Did they see threats? Don't re-litigate whether the move was best; trust the engine for that.` : ''}
 
 Now analyze the student's response, grounding every claim in the actual pieces present in the FEN above. Provide structured feedback.`;
 
@@ -348,9 +372,21 @@ Now analyze the student's response, grounding every claim in the actual pieces p
     }
 
     const analysis = JSON.parse(jsonStr.trim());
+
+    // Blend AI reasoning score with engine move score when engine data is available.
+    // Reasoning 60% + objective move accuracy 40% (matches prior 60/40 weighting).
+    if (engine && typeof analysis.score === 'number') {
+      const reasoningScore = Math.max(0, Math.min(100, analysis.score));
+      const blended = Math.round(reasoningScore * 0.6 + engine.moveScore * 0.4);
+      analysis.reasoningScore = reasoningScore;
+      analysis.score = blended;
+      analysis.moveCorrect = engine.cpl <= 15;
+    }
+
     const responsePayload = {
       ...analysis,
       positionVerification,
+      engine: engine ?? null,
     };
 
     return new Response(JSON.stringify(responsePayload), {
