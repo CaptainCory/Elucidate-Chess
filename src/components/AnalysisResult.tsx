@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, ArrowRight, Trophy, Target, RotateCcw } from 'lucide-react';
+import { CheckCircle, XCircle, ArrowRight, Trophy, Target, RotateCcw, Cpu } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { FollowUpChat } from '@/components/FollowUpChat';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { AnimatedScore } from '@/components/AnimatedScore';
+import { formatEval, type EngineEval } from '@/lib/engineScore';
 
 export interface PositionPiece {
   square: string;
