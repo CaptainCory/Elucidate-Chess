@@ -29,6 +29,8 @@ export const THEMES: ThemeOption[] = [
   { slug: 'trapped-piece', title: 'Trapped Piece', summary: 'A piece has no safe squares and will be lost.' },
   { slug: 'mating-net', title: 'Mating Net', summary: 'A web of threats from which the king cannot escape.' },
   { slug: 'perpetual-check', title: 'Perpetual Check', summary: 'A repeating sequence of checks that forces a draw.' },
+  { slug: 'check', title: 'Check', summary: 'A direct attack on the enemy king that must be answered immediately.' },
+  { slug: 'double-attack', title: 'Double Attack', summary: 'A single move that creates two threats at once.' },
 ];
 
 export const THEME_BY_SLUG: Record<string, ThemeOption> = Object.fromEntries(
