@@ -33,6 +33,7 @@ const THEME_SLUGS = [
   'ladder-mate','x-ray','promotion','attraction',
   'double-check','windmill','trapped-piece','mating-net','perpetual-check',
   'check','double-attack','back-rank',
+  'removing-the-defender',
 ];
 
 const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({
