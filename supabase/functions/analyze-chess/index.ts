@@ -372,9 +372,21 @@ Now analyze the student's response, grounding every claim in the actual pieces p
     }
 
     const analysis = JSON.parse(jsonStr.trim());
+
+    // Blend AI reasoning score with engine move score when engine data is available.
+    // Reasoning 60% + objective move accuracy 40% (matches prior 60/40 weighting).
+    if (engine && typeof analysis.score === 'number') {
+      const reasoningScore = Math.max(0, Math.min(100, analysis.score));
+      const blended = Math.round(reasoningScore * 0.6 + engine.moveScore * 0.4);
+      analysis.reasoningScore = reasoningScore;
+      analysis.score = blended;
+      analysis.moveCorrect = engine.cpl <= 15;
+    }
+
     const responsePayload = {
       ...analysis,
       positionVerification,
+      engine: engine ?? null,
     };
 
     return new Response(JSON.stringify(responsePayload), {
