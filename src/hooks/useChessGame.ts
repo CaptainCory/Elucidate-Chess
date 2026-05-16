@@ -1,11 +1,19 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Chess } from 'chess.js';
 import { ChessPuzzle } from '@/data/chessPuzzles';
 import { AnalysisData } from '@/components/AnalysisResult';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import { useStockfish } from '@/hooks/useStockfish';
+import {
+  centipawnLoss,
+  cplToScore,
+  normalizeEvalToWhite,
+  type EngineEval,
+} from '@/lib/engineScore';
 
 export type GameState = 'thinking' | 'analyzing' | 'result';
 export type AnalyzeStage = 'idle' | 'sending' | 'thinking' | 'finalizing' | 'done';
