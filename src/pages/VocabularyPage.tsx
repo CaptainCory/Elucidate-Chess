@@ -258,6 +258,28 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'Qd8+ Kh7, Qd3+ Kg8, Qd8+ — the king shuttles between g8 and h7 forever. It\'s a draw.',
     highlights: { d1: hl.attacker, g8: hl.target, d8: hl.move },
   },
+  {
+    slug: 'check',
+    title: 'Check',
+    summary: 'A direct attack on the enemy king that must be answered immediately.',
+    description:
+      'A check is any move that attacks the opposing king. The defender must respond right away — block the check, capture the checking piece, or move the king. Checks are forcing moves, which makes them powerful building blocks for tactics and attacks.',
+    fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 2 3',
+    orientation: 'white',
+    keySquares: 'Qxf7+ delivers check directly on the f7 pawn next to the black king — Black must respond on the very next move.',
+    highlights: { f3: hl.attacker, c4: hl.attacker, f7: hl.move, e8: hl.target },
+  },
+  {
+    slug: 'double-attack',
+    title: 'Double Attack',
+    summary: 'A single move that creates two threats at once.',
+    description:
+      'A double attack is the umbrella idea behind forks and discovered attacks: one move generates two simultaneous threats. The defender can usually only address one, so the other lands. Spotting double attacks is a core tactical skill.',
+    fen: 'r3k2r/ppp2ppp/2n5/3qp3/3P4/2N5/PPP2PPP/R2QKB1R w KQkq - 0 1',
+    orientation: 'white',
+    keySquares: 'd4xe5 attacks the d5 queen and frees up the d-file pressure at the same time — two threats from one quiet pawn move.',
+    highlights: { d4: hl.move, e5: hl.target, d5: hl.target },
+  },
 ];
 
 const fadeUp = {
