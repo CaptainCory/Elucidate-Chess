@@ -241,11 +241,13 @@ export default function ManagePuzzlesPage() {
                     <span className="text-xs text-muted-foreground">({group.length})</span>
                   </div>
                   <div className="space-y-2">
-                    {group.map((puzzle, idx) => (
+                    {group.map((puzzle, idx) => {
+                      const label = `${diff.charAt(0)}${idx + 1}`;
+                      return (
                       <div key={puzzle.id} className="chess-card p-3 rounded-xl flex items-center gap-3">
                         <a href={`/position/${puzzle.id}`} className="flex-shrink-0 w-14 h-14 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors flex flex-col items-center justify-center cursor-pointer" title={`Go to puzzle ${puzzle.id}`}>
-                          <span className="font-mono font-bold text-primary text-xs">#{idx + 1}</span>
-                          <span className="font-mono text-[10px] text-muted-foreground">{puzzle.id}</span>
+                          <span className="font-mono font-bold text-primary text-sm">{label}</span>
+                          <span className="font-mono text-[9px] text-muted-foreground truncate max-w-[48px]">{puzzle.id}</span>
                         </a>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
@@ -274,7 +276,8 @@ export default function ManagePuzzlesPage() {
                           </Button>
                         </div>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               );
