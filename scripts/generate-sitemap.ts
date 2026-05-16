@@ -31,6 +31,7 @@ const THEME_SLUGS = [
   'fork','pin','skewer','discovered-attack','back-rank-mate','smothered-mate',
   'deflection','decoy','overloading','zwischenzug','sacrifice','battery',
   'ladder-mate','x-ray','promotion','attraction',
+  'double-check','windmill','trapped-piece','mating-net','perpetual-check',
 ];
 
 const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({
