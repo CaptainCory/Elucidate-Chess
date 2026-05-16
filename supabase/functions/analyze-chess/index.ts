@@ -305,8 +305,17 @@ ${userThinking}
 """
 
 === GROUND TRUTH ===
-Best Move: ${bestMove}
+Best Move (author's intended): ${bestMove}
 Correct Explanation: ${puzzleExplanation}
+${engine ? `
+=== ENGINE ANALYSIS (Stockfish, authoritative for move quality) ===
+Engine's best move (UCI): ${engine.bestMove ?? 'n/a'}
+Eval before move (centipawns from side-to-move): ${engine.evalBefore?.mate !== null && engine.evalBefore?.mate !== undefined ? `mate in ${engine.evalBefore.mate}` : engine.evalBefore?.cp}
+Eval after student's move: ${engine.evalAfter?.mate !== null && engine.evalAfter?.mate !== undefined ? `mate in ${engine.evalAfter.mate}` : engine.evalAfter?.cp}
+Centipawn loss caused by student's move: ${Math.round(engine.cpl)}
+Engine-derived move accuracy (0-100): ${engine.moveScore}
+
+The engine has already objectively scored the move's quality. Focus your evaluation on the QUALITY OF THE STUDENT'S REASONING — did they correctly identify the tactical/positional ideas? Did they see threats? Don't re-litigate whether the move was best; trust the engine for that.` : ''}
 
 Now analyze the student's response, grounding every claim in the actual pieces present in the FEN above. Provide structured feedback.`;
 
