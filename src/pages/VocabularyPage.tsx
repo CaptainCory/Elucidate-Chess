@@ -203,6 +203,61 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'Qe6! forces the king toward the corner. After Kf8 or Kd8, Qe8# or Rh8# delivers checkmate — the king was attracted to a fatal square.',
     highlights: { e2: hl.attacker, e6: hl.move, e8: hl.target, h1: hl.line },
   },
+  {
+    slug: 'double-check',
+    title: 'Double Check',
+    summary: 'Two pieces give check at the same time — the king must move.',
+    description:
+      'A double check happens when a single move gives check from two pieces at once. Because you can\'t block or capture two attackers in one move, the king is forced to move. Double checks are devastating and often lead to forced mates.',
+    fen: 'r3k3/ppp5/1NR5/8/B7/8/8/4K3 w q - 0 1',
+    orientation: 'white',
+    keySquares: 'Nd7 would be a discovered check from the bishop on a4 AND a check from the knight itself. The king on e8 has nowhere to hide — it must move.',
+    highlights: { b6: hl.attacker, a4: hl.attacker, e8: hl.target, d7: hl.move },
+  },
+  {
+    slug: 'windmill',
+    title: 'Windmill',
+    summary: 'Repeating discovered checks that scoop up material every cycle.',
+    description:
+      'A windmill is a tactical sequence of repeated discovered checks. One piece shuffles back and forth, revealing a check each time and grabbing material on every move. Your opponent is forced to keep responding to checks while you clean up the board.',
+    fen: '6k1/5ppp/8/8/8/8/4RPPP/6K1 w - - 0 1',
+    orientation: 'white',
+    keySquares: 'A rook on the 7th rank paired with a bishop can swing in and out — each swing checks the king and grabs another pawn or piece.',
+    highlights: { e2: hl.attacker, g7: hl.target, g8: hl.target },
+  },
+  {
+    slug: 'trapped-piece',
+    title: 'Trapped Piece',
+    summary: 'A piece has no safe squares and will be lost.',
+    description:
+      'A trapped piece is one that has run out of safe places to go. Even if it isn\'t attacked yet, you can corner it with a slow squeeze — taking away escape squares one by one until it falls.',
+    fen: '4k3/8/8/8/b7/8/1P6/N3K3 w - - 0 1',
+    orientation: 'white',
+    keySquares: 'The bishop on a4 looks active, but b3 traps it — every retreat square is covered. Next move it\'s gone.',
+    highlights: { a4: hl.target, b2: hl.attacker },
+  },
+  {
+    slug: 'mating-net',
+    title: 'Mating Net',
+    summary: 'A web of threats from which the enemy king cannot escape.',
+    description:
+      'A mating net is a slower kind of checkmate. Instead of a single forcing combination, you weave multiple pieces around the enemy king, cutting off escape squares one at a time until mate is unavoidable.',
+    fen: '6k1/5ppp/8/8/8/5N2/5PPP/3Q2K1 w - - 0 1',
+    orientation: 'white',
+    keySquares: 'The knight on f3 and queen on d1 coordinate to cover every escape — Qd8+ followed by Ng5 closes the net around the g8 king.',
+    highlights: { d1: hl.attacker, f3: hl.attacker, g8: hl.target, d8: hl.move },
+  },
+  {
+    slug: 'perpetual-check',
+    title: 'Perpetual Check',
+    summary: 'A repeating sequence of checks that forces a draw.',
+    description:
+      'Perpetual check is a rescue tool. When you\'re losing, finding a series of checks the opponent can\'t escape forces a draw by repetition. The opposing king is safe but stuck dancing between the same squares forever.',
+    fen: '6k1/5ppp/8/8/8/8/5PPP/3Q2K1 w - - 0 1',
+    orientation: 'white',
+    keySquares: 'Qd8+ Kh7, Qd3+ Kg8, Qd8+ — the king shuttles between g8 and h7 forever. It\'s a draw.',
+    highlights: { d1: hl.attacker, g8: hl.target, d8: hl.move },
+  },
 ];
 
 const fadeUp = {
