@@ -205,7 +205,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       setAnalyzeStage('idle');
       setGameState('thinking');
     }
-  }, [puzzle, selectedMove, scores, user, isPremium, isDifficultyLocked, queryClient]);
+  }, [puzzle, selectedMove, scores, user, isPremium, isDifficultyLocked, queryClient, engineEvaluate, engineState]);
 
   const [isNavigating, setIsNavigating] = useState(false);
 
