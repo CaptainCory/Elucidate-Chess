@@ -30,6 +30,14 @@ export interface PositionVerification {
   bestMoveLeadsToMate: boolean;
 }
 
+export interface EngineAnalysis {
+  bestMove: string | null;
+  evalBefore: EngineEval;
+  evalAfter: EngineEval;
+  cpl: number;
+  moveScore: number;
+}
+
 export interface AnalysisData {
   score: number;
   moveCorrect: boolean;
@@ -40,6 +48,7 @@ export interface AnalysisData {
   keyInsights: string[];
   improvement: string;
   positionVerification?: PositionVerification;
+  engine?: EngineAnalysis;
 }
 
 interface AnalysisResultProps {
