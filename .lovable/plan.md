@@ -1,49 +1,133 @@
-## Goal
-Replace the plain spinner during AI analysis with a chess-themed "thinking interlude" that builds anticipation and keeps the user engaged.
+# Engine Analysis Pipeline
 
-## Where it lives
-`src/pages/PositionPage.tsx`, the `gameState === 'analyzing'` branch currently shows a generic spinning ring + "Analyzing your chess thinking..." line. We'll replace it with a richer, chess-flavored sequence.
+Today `analyze-chess` asks an LLM to compare the user's move against a hand-authored `bestMove` and score the whole submission. There is no true engine in the loop — the "best move" is whatever was saved with the puzzle, and "accuracy" is the LLM's vibe. This plan adds a real Stockfish pipeline that produces an objective move score, then combines it with the reasoning score the LLM is already good at.
 
-## New component: `src/components/AnalyzingSequence.tsx`
+## Goals
 
-Three stacked, chess-specific elements rendered in the same vertical space the spinner uses today:
+- Compute an **engine best move** and **centipawn evaluation** for the current FEN.
+- Evaluate the position **after the user's move** and derive a **centipawn loss (CPL)**.
+- Convert CPL into a **move accuracy score (0–100)**.
+- Keep the LLM responsible for **reasoning quality** only, then blend both into the final score the UI already renders.
+- Surface engine data (best move, eval, CPL, mate-in-N) to the result screen and follow-up chat.
 
-### 1. Mini animated chess scene
-A small (roughly 96×96) inline SVG showing a 4×4 cream/walnut checker fragment with **a single knight piece** (reuse the same Wikipedia SVG URLs already used by `ChessBoard`, per the piece-rendering memory). The knight "hops" between squares in an L-pattern on a loop using framer-motion `animate` on `x`/`y` with `ease: [0.4, 0, 0.2, 1]`, ~700ms per hop, brief pause, then next hop. Soft drop shadow under the piece scales down on landing for a tactile feel. Conveys "the engine is calculating moves."
+## Architecture
 
-### 2. Cycling chess-flavored status lines
-Below the scene, rotate evocative phrases every ~1.5s with `AnimatePresence mode="wait"` (fade + 4px slide):
-- "Reading the position..."
-- "Counting material and tempo..."
-- "Looking for tactics..."
-- "Checking candidate moves..."
-- "Weighing your reasoning..."
-- "Comparing to the strongest line..."
-- "Drafting your feedback..."
-
-Loops if analysis runs long. Uses `font-display` serif, `text-muted-foreground`. Strictly no war/military metaphors (per Core memory).
-
-### 3. Pawn-march progress strip
-A thin horizontal track styled like a single board rank (8 cream/walnut squares, ~6px tall total bar height with subtle square dividers). A tiny pawn glyph (Unicode ♙ or reused SVG) advances square-by-square left→right, ~250ms per square, then resets. Acts as an indeterminate progress indicator that's unmistakably chess.
-
-All three pieces share the existing palette tokens (`--board-light`, `--board-dark`, `text-primary`) — no new colors. Respects `prefers-reduced-motion`: framer-motion handles automatically; the knight stops hopping and the pawn fades between squares instead of sliding.
-
-## Wiring in PositionPage.tsx
-Replace these ~6 lines in the `analyzing` branch:
-
-```tsx
-<div className="w-16 h-16 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-<p className="text-muted-foreground">Analyzing your chess thinking...</p>
+```text
+ChessBoard submit
+   │
+   ▼
+useChessGame.handleSubmit(thinking)
+   │  1. run engine locally (useStockfish)
+   │     - bestMoveEngine, evalBefore  @ fen
+   │     - evalAfter                   @ fen + userMove
+   │     - cpl = sideAdjusted(evalBefore - evalAfter)
+   │     - moveScore = cplToScore(cpl)
+   │
+   ├──▶ supabase.functions.invoke('analyze-chess', { ...existing, engine })
+   │       server uses engine.bestMove as ground truth (overrides stored bestMove
+   │       when it differs), asks LLM ONLY for reasoning score + feedback
+   │
+   ▼
+finalScore = round(0.6 * reasoningScore + 0.4 * moveScore)
 ```
 
-with:
+Engine runs in the browser (Stockfish 10 asm.js already wired in `useStockfish`). No new infra, no API keys.
 
-```tsx
-<AnalyzingSequence />
+## Changes
+
+### 1. Engine wrapper — `src/hooks/useStockfish.ts`
+
+Extend the hook (or add `useEngineAnalysis`) so it can:
+
+- `getBestMove(fen, movetimeMs)` — already exists.
+- `getEvaluation(fen, depth)` — parse `info ... score cp <n>` / `score mate <n>` from UCI output and return `{ cp: number | null, mate: number | null, bestMove: string }` from the deepest `info` line before `bestmove`.
+- Normalize evaluation to **White's perspective** (UCI returns side-to-move relative).
+
+Use `go depth 14` (≈300–600 ms on modern laptops) as the default; expose `movetimeMs` override.
+
+### 2. New utility — `src/lib/engineScore.ts`
+
+```ts
+// Map centipawn loss to an accuracy score in [0,100].
+// Tuned to match common "accuracy" curves: 0 cpl → 100, 20 → ~92,
+// 50 → ~78, 100 → ~60, 200 → ~35, 400+ → <15.
+export function cplToScore(cpl: number): number;
+
+// Handle mate scores: missing a forced mate is heavy CPL;
+// finding the only mate is 100.
+export function evalDelta(before: Eval, after: Eval, sideToMove: 'w' | 'b'): number;
 ```
 
-The header text above ("Analyzing your response...") stays. No state/logic changes — animations auto-cycle via internal intervals cleared on unmount, ending naturally when `gameState` flips to `'result'`.
+Pure functions, unit-testable. Add a vitest file.
 
-## Files
-- **create** `src/components/AnalyzingSequence.tsx`
-- **edit** `src/pages/PositionPage.tsx` (swap the analyzing block)
+### 3. Game flow — `src/hooks/useChessGame.ts`
+
+- Instantiate the engine on mount (lazy-load worker).
+- In `handleSubmit`, before invoking the edge function:
+  1. `evalBefore = engine.getEvaluation(puzzle.fen)`
+  2. Apply `selectedMove` with chess.js to get `fenAfter`.
+  3. `evalAfter = engine.getEvaluation(fenAfter)`
+  4. Compute `cpl` and `moveScore`.
+- Pass `engine: { bestMove, evalBefore, evalAfter, cpl, moveScore }` to the edge function.
+- If engine fails (worker error / timeout > 6 s), fall back to the existing flow with `engine: null` so the LLM scores both axes like today.
+
+### 4. Edge function — `supabase/functions/analyze-chess/index.ts`
+
+- Accept new optional `engine` payload.
+- When present:
+  - Override `bestMove` ground truth with `engine.bestMove` (still show puzzle's stored move in the prompt as "author's intended move" for context).
+  - Ask the LLM for `reasoningScore` (0–100) + textual feedback only; drop `moveCorrect`/`score` from its responsibility.
+  - Compute final `score = round(0.6 * reasoningScore + 0.4 * engine.moveScore)`.
+  - `moveCorrect = engine.cpl <= 15` (within engine noise).
+- Return engine fields in the response so the UI can display them.
+
+### 5. UI — `src/components/AnalysisResult.tsx`
+
+Add a small engine panel under "Move Comparison":
+
+- Engine best move (badge).
+- Eval before → after (e.g. `+0.4 → −1.8`, or `Mate in 3`).
+- Centipawn loss + move-accuracy sub-score.
+- Keep the existing big score circle (now the blended score).
+
+### 6. Types
+
+- Extend `AnalysisData` with `engine?: { bestMove; evalBefore; evalAfter; cpl; moveScore }`.
+- Extend `AnalysisRequest` on the function side to match.
+
+## Scoring details
+
+Reasoning weight stays at 60% (matches the existing memory note `60/40 scoring weighting`), move weight 40% — but **move score is now objective**, not LLM-guessed.
+
+CPL → score curve (logistic, tuned):
+
+```text
+score = 100 * exp(-cpl / 120)   // clamped to [0, 100]
+```
+
+Mate handling:
+
+- User plays the mate the engine sees → moveScore = 100.
+- Engine sees mate-in-N, user misses it → treat as CPL = 600 (≈8 score).
+- User walks into being mated → CPL = 1000 (≈0 score).
+
+## Performance
+
+- Engine worker is created once per session, reused across positions.
+- Two evals per submit at `depth 14` ≈ 0.6–1.2 s on a laptop, hidden behind the existing "Analyzing…" sequence.
+- Mobile fallback: if first eval takes > 3 s, drop to `depth 10` for the second one.
+
+## Out of scope
+
+- Server-side Stockfish (Deno edge functions can't host the WASM worker realistically).
+- Re-grading historical attempts.
+- Showing a full PV / arrows on the board (could be a follow-up).
+
+## Files touched
+
+- `src/hooks/useStockfish.ts` (extend)
+- `src/lib/engineScore.ts` (new) + test
+- `src/hooks/useChessGame.ts`
+- `src/components/AnalysisResult.tsx`
+- `supabase/functions/analyze-chess/index.ts`
+- `src/components/AnalyzingSequence.tsx` (minor: add an "engine thinking" step)
