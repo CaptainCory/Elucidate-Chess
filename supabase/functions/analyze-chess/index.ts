@@ -7,6 +7,20 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+interface EngineEval {
+  cp: number | null;
+  mate: number | null;
+  bestMove: string | null;
+}
+
+interface EnginePayload {
+  bestMove: string | null;
+  evalBefore: EngineEval;
+  evalAfter: EngineEval;
+  cpl: number;
+  moveScore: number;
+}
+
 interface AnalysisRequest {
   fen: string;
   userThinking: string;
@@ -14,6 +28,7 @@ interface AnalysisRequest {
   bestMove: string;
   puzzleExplanation: string;
   puzzleDifficulty: string;
+  engine?: EnginePayload | null;
 }
 
 type PieceKind = 'King' | 'Queen' | 'Rook' | 'Bishop' | 'Knight' | 'Pawn';
