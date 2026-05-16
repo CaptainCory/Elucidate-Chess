@@ -127,8 +127,16 @@ const vocabulary: VocabEntry[] = [
     highlights: { e5: hl.attacker, f7: hl.move, e7: hl.target, d8: hl.line, d1: hl.line },
   },
   {
-    slug: 'zwischenzug',
-    title: 'Zwischenzug (In-Between Move)',
+    slug: 'removing-the-defender',
+    title: 'Removing the Defender',
+    summary: 'Capture or deflect the piece guarding a key square or target.',
+    description:
+      'Removing the defender means getting rid of a piece that is protecting something important. Once the defender is gone — whether captured, traded off, or deflected away — the target it was guarding becomes exposed. This is one of the most reliable ways to turn a defended position into a winning one.',
+    fen: '3r2k1/4qppp/8/4N3/8/8/5PPP/3R2K1 w - - 0 1',
+    orientation: 'white',
+    keySquares: 'Nxf7+! removes the queen, which defends the rook on d8. Once the queen is gone, Rxd8+ wins the rook and the game.',
+    highlights: { e5: hl.attacker, f7: hl.move, e7: hl.target, d8: hl.line },
+  },
     summary: 'An unexpected intermediate move inserted before the expected continuation.',
     description:
       'A zwischenzug (German for "in-between move") is a surprise move you sneak in before doing what your opponent expects. Instead of recapturing right away, you throw in a check or threat first, then come back to recapture with an extra advantage.',
