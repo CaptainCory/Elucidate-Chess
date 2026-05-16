@@ -32,7 +32,7 @@ const THEME_SLUGS = [
   'deflection','decoy','overloading','zwischenzug','sacrifice','battery',
   'ladder-mate','x-ray','promotion','attraction',
   'double-check','windmill','trapped-piece','mating-net','perpetual-check',
-  'check','double-attack',
+  'check','double-attack','back-rank',
 ];
 
 const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({
