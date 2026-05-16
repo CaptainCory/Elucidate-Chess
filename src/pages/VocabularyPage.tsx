@@ -137,6 +137,9 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'Nxf7+! removes the queen, which defends the rook on d8. Once the queen is gone, Rxd8+ wins the rook and the game.',
     highlights: { e5: hl.attacker, f7: hl.move, e7: hl.target, d8: hl.line },
   },
+  {
+    slug: 'zwischenzug',
+    title: 'Zwischenzug (In-Between Move)',
     summary: 'An unexpected intermediate move inserted before the expected continuation.',
     description:
       'A zwischenzug (German for "in-between move") is a surprise move you sneak in before doing what your opponent expects. Instead of recapturing right away, you throw in a check or threat first, then come back to recapture with an extra advantage.',
