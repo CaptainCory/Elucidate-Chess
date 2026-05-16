@@ -126,7 +126,6 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
         },
       });
 
-      clearTimeout(thinkingTimer);
       setAnalyzeStage('finalizing');
 
       if (error) throw error;
@@ -151,6 +150,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
         keyInsights: data.keyInsights || [],
         improvement: data.improvement || '',
         positionVerification: data.positionVerification,
+        engine: data.engine ?? enginePayload ?? undefined,
       };
 
       setAnalysis(analysisResult);
