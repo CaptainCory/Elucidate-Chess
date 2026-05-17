@@ -34,6 +34,7 @@ const THEME_SLUGS = [
   'double-check','windmill','trapped-piece','mating-net','perpetual-check',
   'check','double-attack','back-rank',
   'removing-the-defender',
+  'fortress','umbrella-pawn',
 ];
 
 const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({

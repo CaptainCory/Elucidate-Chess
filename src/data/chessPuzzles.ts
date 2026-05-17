@@ -30,7 +30,9 @@ export type ChessTheme =
   | 'check'
   | 'captures'
   | 'attacks'
-  | 'double-attack';
+  | 'double-attack'
+  | 'fortress'
+  | 'umbrella-pawn';
 
 export interface ChessPuzzle {
   id: string;

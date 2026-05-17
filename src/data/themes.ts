@@ -30,6 +30,8 @@ export const THEMES: ThemeOption[] = [
   { slug: 'trapped-piece', title: 'Trapped Piece', summary: 'A piece has no safe squares and will be lost.' },
   { slug: 'mating-net', title: 'Mating Net', summary: 'A web of threats from which the king cannot escape.' },
   { slug: 'perpetual-check', title: 'Perpetual Check', summary: 'A repeating sequence of checks that forces a draw.' },
+  { slug: 'fortress', title: 'Fortress', summary: 'A defensive setup that the opponent cannot break through, securing a draw.' },
+  { slug: 'umbrella-pawn', title: 'Umbrella Pawn', summary: 'A pawn shelter that protects the king from checks and attacks, common in endgames.' },
   { slug: 'check', title: 'Check', summary: 'A direct attack on the enemy king that must be answered immediately.' },
   { slug: 'double-attack', title: 'Double Attack', summary: 'A single move that creates two threats at once.' },
   { slug: 'back-rank', title: 'Back Rank', summary: 'A weak back rank where the king is hemmed in by its own pawns — fertile ground for threats and tactics.' },
