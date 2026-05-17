@@ -324,6 +324,17 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'The pawns on f2, g2, and h2 form an umbrella shelter over the white king on g1, protecting it from checks along the g-file and h-file.',
     highlights: { g1: hl.target, f2: hl.attacker, g2: hl.attacker, h2: hl.attacker },
   },
+  {
+    slug: 'checkmate',
+    title: 'Checkmate',
+    summary: 'The ultimate goal — trap the enemy king so it has no escape and the game ends.',
+    description:
+      'Checkmate is the end of the game. The king is under attack and has no legal moves — it cannot capture the attacker, block the attack, or flee to safety. Every tactic and strategy leads toward this moment.',
+    fen: '7k/6Q1/6K1/8/8/8/8/8 b - - 0 1',
+    orientation: 'white',
+    keySquares: 'Qg7# is checkmate. The queen covers g8 and h7, and the white king on g6 protects the queen. The black king has nowhere to go.',
+    highlights: { g7: hl.attacker, h8: hl.target, g8: hl.line, h7: hl.line },
+  },
 ];
 
 const fadeUp = {
