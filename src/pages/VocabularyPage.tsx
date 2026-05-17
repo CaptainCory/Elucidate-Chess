@@ -302,6 +302,28 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'The rook eyes d8 with nothing in the way — Black\'s f7/g7/h7 pawns lock the king on the 8th rank, so any quiet rook lift to the back rank is decisive.',
     highlights: { d1: hl.attacker, g8: hl.target, d8: hl.move },
   },
+  {
+    slug: 'fortress',
+    title: 'Fortress',
+    summary: 'A defensive setup that the opponent cannot break through, securing a draw.',
+    description:
+      'A fortress is a position where the weaker side creates an impenetrable defensive shell. Even with less material, the defender arranges their pieces so the stronger side has no way to break in. Common fortresses involve a king tucked safely in the corner with a minor piece, or a rook that keeps giving checks from behind.',
+    fen: '8/8/8/8/8/5k2/6b1/7K w - - 0 1',
+    orientation: 'white',
+    keySquares: 'The white king is safe on h1 because the black bishop on g2 is a light-squared bishop and cannot attack the dark-squared h1 corner. The king has built an impregnable fortress.',
+    highlights: { h1: hl.target, g2: hl.attacker, f3: hl.attacker },
+  },
+  {
+    slug: 'umbrella-pawn',
+    title: 'Umbrella Pawn',
+    summary: 'A pawn shelter that protects the king from checks and attacks, common in endgames.',
+    description:
+      'An umbrella pawn is a defensive formation where pawns on the 2nd rank (for White) or 7th rank (for Black) create a protective canopy over the king. This structure is especially valuable in rook endgames, where the pawns shield the king from frontal checks and allow the defender to hold a draw.',
+    fen: '6k1/8/8/8/8/8/5PPP/6K1 w - - 0 1',
+    orientation: 'white',
+    keySquares: 'The pawns on f2, g2, and h2 form an umbrella shelter over the white king on g1, protecting it from checks along the g-file and h-file.',
+    highlights: { g1: hl.target, f2: hl.attacker, g2: hl.attacker, h2: hl.attacker },
+  },
 ];
 
 const fadeUp = {

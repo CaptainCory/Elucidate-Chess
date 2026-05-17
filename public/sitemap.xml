@@ -121,12 +121,62 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://elucidatechess.com/position/I3</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://elucidatechess.com/positions/theme/double-check</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://elucidatechess.com/position/B1</loc>
+    <loc>https://elucidatechess.com/positions/theme/windmill</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/positions/theme/trapped-piece</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/positions/theme/mating-net</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/positions/theme/perpetual-check</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/positions/theme/check</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/positions/theme/double-attack</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/positions/theme/back-rank</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/positions/theme/removing-the-defender</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/positions/theme/fortress</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/positions/theme/umbrella-pawn</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/position/I3</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -202,6 +252,11 @@
   </url>
   <url>
     <loc>https://elucidatechess.com/position/B4</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/position/B1</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -762,6 +817,11 @@
   </url>
   <url>
     <loc>https://elucidatechess.com/position/I43</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/position/I44</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
