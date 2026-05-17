@@ -35,6 +35,7 @@ const THEME_SLUGS = [
   'check','double-attack','back-rank',
   'removing-the-defender',
   'fortress','umbrella-pawn',
+  'checkmate',
 ];
 
 const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({
