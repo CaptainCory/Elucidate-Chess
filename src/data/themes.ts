@@ -18,7 +18,7 @@ export const THEMES: ThemeOption[] = [
   { slug: 'decoy', title: 'Decoy', summary: 'Lure a piece to a bad square.' },
   { slug: 'overloading', title: 'Overloading', summary: 'A piece has too many defensive duties at once.' },
   { slug: 'removing-the-defender', title: 'Removing the Defender', summary: 'Capture or deflect the piece guarding a key square or target.' },
-  { slug: 'zwischenzug', title: 'Zwischenzug', summary: 'An unexpected in-between move that changes the evaluation.' },
+  { slug: 'zwischenzug', title: 'Intermezzo (Zwischenzug)', summary: 'An unexpected in-between move — also called intermezzo — that changes the evaluation before the expected reply.' },
   { slug: 'sacrifice', title: 'Sacrifice', summary: 'Give up material for a greater positional or tactical gain.' },
   { slug: 'battery', title: 'Battery', summary: 'Two pieces aligned on the same line to amplify pressure.' },
   { slug: 'ladder-mate', title: 'Ladder Mate', summary: 'Two heavy pieces walk the king to the edge for mate.' },
