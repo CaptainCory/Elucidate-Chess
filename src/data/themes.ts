@@ -36,6 +36,7 @@ export const THEMES: ThemeOption[] = [
   { slug: 'check', title: 'Check', summary: 'A direct attack on the enemy king that must be answered immediately.' },
   { slug: 'double-attack', title: 'Double Attack', summary: 'A single move that creates two threats at once.' },
   { slug: 'back-rank', title: 'Back Rank', summary: 'A weak back rank where the king is hemmed in by its own pawns — fertile ground for threats and tactics.' },
+  { slug: 'material-advantage', title: 'Material Advantage', summary: 'Win decisive material — sometimes the goal is mate, sometimes it is simply gaining a piece or pawns that wins the game.' },
 ];
 
 export const THEME_BY_SLUG: Record<string, ThemeOption> = Object.fromEntries(

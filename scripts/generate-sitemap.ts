@@ -36,6 +36,7 @@ const THEME_SLUGS = [
   'removing-the-defender',
   'fortress','umbrella-pawn',
   'checkmate',
+  'material-advantage',
 ];
 
 const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({

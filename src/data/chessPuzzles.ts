@@ -16,6 +16,7 @@ export type ChessTheme =
   | 'back-rank'
   | 'smothered-mate'
   | 'checkmate'
+  | 'material-advantage'
   | 'sacrifice'
   | 'hanging-piece'
   | 'x-ray'
