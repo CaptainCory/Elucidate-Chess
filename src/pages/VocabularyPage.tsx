@@ -335,6 +335,17 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'Qg7# is checkmate. The queen covers g8 and h7, and the white king on g6 protects the queen. The black king has nowhere to go.',
     highlights: { g7: hl.attacker, h8: hl.target, g8: hl.line, h7: hl.line },
   },
+  {
+    slug: 'material-advantage',
+    title: 'Material Advantage',
+    summary: 'Win decisive material — sometimes the goal is mate, sometimes it is simply gaining a piece or pawns that wins the game.',
+    description:
+      'Not every tactic ends in checkmate. Often the goal is to win material — a piece, an exchange, or enough pawns to convert into a winning endgame. Recognizing when to settle for material instead of chasing mate is a key practical skill.',
+    fen: 'r3k3/8/8/8/8/8/4N3/4K3 w - - 0 1',
+    orientation: 'white',
+    keySquares: 'Nc3 forks the king and rook — winning the rook gives a decisive material advantage even without immediate mate.',
+    highlights: { e2: hl.attacker, a8: hl.target, e8: hl.line },
+  },
 ];
 
 const fadeUp = {
