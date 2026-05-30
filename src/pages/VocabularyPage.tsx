@@ -208,7 +208,7 @@ const vocabulary: VocabEntry[] = [
     title: 'Attraction',
     summary: 'Force an enemy piece to a square where it can be attacked or leads to a winning tactic.',
     description:
-      'Attraction is when you force an opponent\'s piece — usually the king — to move to a specific square where it becomes vulnerable. This is often done with a check or a sacrifice that the opponent must accept, pulling them into danger.',
+      'Attraction lures a piece (often the king) to a vulnerable square where it becomes a target — typically setting up a fork, mating net, or other tactical blow.',
     fen: '4k3/4p3/8/8/8/8/4Q3/4K2R w K - 0 1',
     orientation: 'white',
     keySquares: 'Qe6! forces the king toward the corner. After Kf8 or Kd8, Qe8# or Rh8# delivers checkmate — the king was attracted to a fatal square.',
