@@ -37,6 +37,7 @@ const THEME_SLUGS = [
   'fortress','umbrella-pawn',
   'checkmate',
   'material-advantage',
+  'pawn-break',
 ];
 
 const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({
