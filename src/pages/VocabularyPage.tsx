@@ -357,6 +357,17 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'Black has just played ...c5, the signature pawn break in the French Defense. By challenging d4, Black aims to dissolve White\'s central pawn chain and open the c-file for the rook.',
     highlights: { c5: hl.move, d4: hl.target, d5: hl.line },
   },
+  {
+    slug: 'king-in-the-center',
+    title: 'King in the Center',
+    summary: 'The king failed to castle and remains exposed in the center.',
+    description:
+      'When a king never castles, it gets stuck in the middle of the board where files and diagonals tend to open. That creates a recurring set of testable conditions — open e-file pressure, a queen swinging to a central square, sacrifices to rip open the center, and tactics that exploit the lack of a pawn shield.',
+    fen: 'r1bqk2r/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 1',
+    orientation: 'white',
+    keySquares: 'White has castled; Black\'s king is still on e8 with the e-file ready to open. Any trade on e4/e5 leaves Black\'s king staring down a rook — a classic king-in-the-center setup.',
+    highlights: { e8: hl.target, e1: hl.attacker, e4: hl.line, e5: hl.line },
+  },
 ];
 
 const fadeUp = {

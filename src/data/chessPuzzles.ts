@@ -40,7 +40,8 @@ export type ChessTheme =
   | 'attacks'
   | 'double-attack'
   | 'fortress'
-  | 'umbrella-pawn';
+  | 'umbrella-pawn'
+  | 'king-in-the-center';
 
 export interface ChessPuzzle {
   id: string;

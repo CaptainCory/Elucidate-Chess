@@ -38,6 +38,7 @@ const THEME_SLUGS = [
   'checkmate',
   'material-advantage',
   'pawn-break',
+  'king-in-the-center',
 ];
 
 const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({

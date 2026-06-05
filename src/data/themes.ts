@@ -38,6 +38,7 @@ export const THEMES: ThemeOption[] = [
   { slug: 'back-rank', title: 'Back Rank', summary: 'A weak back rank where the king is hemmed in by its own pawns — fertile ground for threats and tactics.' },
   { slug: 'material-advantage', title: 'Material Advantage', summary: 'Win decisive material — sometimes the goal is mate, sometimes it is simply gaining a piece or pawns that wins the game.' },
   { slug: 'pawn-break', title: 'Pawn Break', summary: 'A pawn push that challenges the opponent\'s pawn structure and opens lines.' },
+  { slug: 'king-in-the-center', title: 'King in the Center', summary: 'The king failed to castle and remains exposed in the center — open files and diagonals make it a target.' },
 ];
 
 export const THEME_BY_SLUG: Record<string, ThemeOption> = Object.fromEntries(
