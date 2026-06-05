@@ -346,6 +346,17 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'Nc3 forks the king and rook — winning the rook gives a decisive material advantage even without immediate mate.',
     highlights: { e2: hl.attacker, a8: hl.target, e8: hl.line },
   },
+  {
+    slug: 'pawn-break',
+    title: 'Pawn Break',
+    summary: 'A pawn push that challenges the opponent\'s pawn structure and opens lines.',
+    description:
+      'A pawn break is a strategic pawn advance that attacks an enemy pawn or opens a file or diagonal that was previously blocked. It is one of the main ways to turn a quiet position into a dynamic one, activating pieces that were sitting behind pawns.',
+    fen: 'rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq c6 0 4',
+    orientation: 'white',
+    keySquares: 'Black has just played ...c5, the signature pawn break in the French Defense. By challenging d4, Black aims to dissolve White\'s central pawn chain and open the c-file for the rook.',
+    highlights: { c5: hl.move, d4: hl.target, d5: hl.line },
+  },
 ];
 
 const fadeUp = {
