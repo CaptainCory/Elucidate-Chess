@@ -39,6 +39,7 @@ const THEME_SLUGS = [
   'material-advantage',
   'pawn-break',
   'king-in-the-center',
+  'loose-piece',
 ];
 
 const themeEntries: SitemapEntry[] = THEME_SLUGS.map((slug) => ({

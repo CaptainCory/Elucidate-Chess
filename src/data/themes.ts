@@ -39,6 +39,7 @@ export const THEMES: ThemeOption[] = [
   { slug: 'material-advantage', title: 'Material Advantage', summary: 'Win decisive material — sometimes the goal is mate, sometimes it is simply gaining a piece or pawns that wins the game.' },
   { slug: 'pawn-break', title: 'Pawn Break', summary: 'A pawn push that challenges the opponent\'s pawn structure and opens lines.' },
   { slug: 'king-in-the-center', title: 'King in the Center', summary: 'The king failed to castle and remains exposed in the center — open files and diagonals make it a target.' },
+  { slug: 'loose-piece', title: 'Loose Piece', summary: 'An undefended piece that can be captured for free.' },
 ];
 
 export const THEME_BY_SLUG: Record<string, ThemeOption> = Object.fromEntries(
