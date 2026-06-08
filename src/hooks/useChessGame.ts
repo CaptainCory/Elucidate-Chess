@@ -89,10 +89,11 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
             fenAfter = null;
           }
 
-          const [rawBefore, rawAfter] = await Promise.all([
-            engineEvaluate(puzzle.fen, 14),
-            fenAfter ? engineEvaluate(fenAfter, 14) : Promise.resolve(null),
-          ]);
+          // Run sequentially — the Stockfish worker can only handle one
+          // evaluation at a time; parallel calls clobber each other's
+          // pending resolver and the first one ends up timing out.
+          const rawBefore = await engineEvaluate(puzzle.fen, 14);
+          const rawAfter = fenAfter ? await engineEvaluate(fenAfter, 14) : null;
 
           if (rawBefore && rawAfter) {
             const beforeWhite = normalizeEvalToWhite(rawBefore, sideToMove);
