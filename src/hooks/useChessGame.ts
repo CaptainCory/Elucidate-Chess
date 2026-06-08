@@ -158,6 +158,17 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       setScores(newScores);
 
       if (user) {
+        const { error: attemptError } = await supabase
+          .from('puzzle_attempts')
+          .insert({
+            user_id: user.id,
+            puzzle_id: puzzle.id,
+          });
+
+        if (attemptError) {
+          console.error('Failed to record puzzle attempt:', attemptError);
+        }
+
         const { data: rpcResult, error: rpcError } = await supabase
           .rpc('increment_puzzle_stats', {
             p_user_id: user.id,
