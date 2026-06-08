@@ -196,6 +196,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://elucidatechess.com/positions/theme/loose-piece</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://elucidatechess.com/position/I3</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
