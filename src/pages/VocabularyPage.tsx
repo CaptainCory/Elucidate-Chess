@@ -368,6 +368,17 @@ const vocabulary: VocabEntry[] = [
     keySquares: 'White has castled; Black\'s king is still on e8 with the e-file ready to open. Any trade on e4/e5 leaves Black\'s king staring down a rook — a classic king-in-the-center setup.',
     highlights: { e8: hl.target, e1: hl.attacker, e4: hl.line, e5: hl.line },
   },
+  {
+    slug: 'loose-piece',
+    title: 'Loose Piece',
+    summary: 'An undefended piece that can be captured for free.',
+    description:
+      'A loose piece is any piece that has no friendly defender. It does not matter how valuable it is — if it is undefended, it is vulnerable. The simplest tactics in chess often boil down to spotting a loose piece and taking it before your opponent notices.',
+    fen: 'rnbqkbnr/ppp2ppp/8/3pp3/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 0 1',
+    orientation: 'white',
+    keySquares: 'Black just played ...d5, and the white bishop on c4 has no defender. The d5 pawn attacks c4, so White must retreat the bishop or lose it.',
+    highlights: { d5: hl.attacker, c4: hl.target },
+  },
 ];
 
 const fadeUp = {

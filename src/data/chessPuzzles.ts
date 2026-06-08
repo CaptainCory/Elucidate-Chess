@@ -41,7 +41,8 @@ export type ChessTheme =
   | 'double-attack'
   | 'fortress'
   | 'umbrella-pawn'
-  | 'king-in-the-center';
+  | 'king-in-the-center'
+  | 'loose-piece';
 
 export interface ChessPuzzle {
   id: string;
