@@ -140,53 +140,11 @@ function Dashboard() {
   const fetchStats = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch all profiles
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('display_name, puzzles_solved, average_score, is_premium, beginner_solved, intermediate_solved, advanced_solved');
-
-      // Fetch recent attempts
-      const { data: attempts } = await supabase
-        .from('puzzle_attempts')
-        .select('puzzle_id, attempted_at, user_id')
-        .order('attempted_at', { ascending: false })
-        .limit(20);
-
-      // Fetch total attempt count
-      const { count: totalAttempts } = await supabase
-        .from('puzzle_attempts')
-        .select('*', { count: 'exact', head: true });
-
-      const allProfiles = profiles || [];
-      const totalUsers = allProfiles.length;
-      const premiumUsers = allProfiles.filter(p => p.is_premium).length;
-      const freeUsers = totalUsers - premiumUsers;
-      const totalPuzzlesSolved = allProfiles.reduce((sum, p) => sum + p.puzzles_solved, 0);
-      const avgScore = totalUsers > 0
-        ? Math.round(allProfiles.reduce((sum, p) => sum + p.average_score, 0) / totalUsers)
-        : 0;
-
-      const topUsers = [...allProfiles]
-        .sort((a, b) => b.puzzles_solved - a.puzzles_solved)
-        .slice(0, 10);
-
-      const difficultyBreakdown = {
-        beginner: allProfiles.reduce((s, p) => s + p.beginner_solved, 0),
-        intermediate: allProfiles.reduce((s, p) => s + p.intermediate_solved, 0),
-        advanced: allProfiles.reduce((s, p) => s + p.advanced_solved, 0),
-      };
-
-      setStats({
-        totalUsers,
-        freeUsers,
-        premiumUsers,
-        totalPuzzlesSolved,
-        totalAttempts: totalAttempts || 0,
-        avgScore,
-        recentAttempts: attempts || [],
-        topUsers,
-        difficultyBreakdown,
+      const { data, error } = await supabase.functions.invoke('admin-stats', {
+        body: { password: 'lasker' },
       });
+      if (error) throw error;
+      setStats(data as DashboardStats);
       setLastRefresh(new Date());
     } catch (e) {
       console.error('Failed to fetch admin stats:', e);
@@ -194,6 +152,7 @@ function Dashboard() {
       setLoading(false);
     }
   }, []);
+
 
   useEffect(() => {
     fetchStats();
