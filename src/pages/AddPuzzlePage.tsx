@@ -18,24 +18,20 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import type { ChessPuzzle } from '@/data/chessPuzzles';
 import { ThemeMultiSelect } from '@/components/ThemeMultiSelect';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
 
-const ACCESS_CODE = 'PAULMORPHY';
+
 
 const DIFFICULTIES: ChessPuzzle['difficulty'][] = ['beginner', 'intermediate', 'advanced', 'master'];
 
 export default function AddPuzzlePage() {
   const { user, loading, isPremium } = useAuth();
+  const { isAdmin, loading: adminLoading } = useIsAdmin();
   const navigate = useNavigate();
   const [showSignIn, setShowSignIn] = useState(false);
   const [saving, setSaving] = useState(false);
   const [celebrate, setCelebrate] = useState<null | string>(null);
   const [suggestingName, setSuggestingName] = useState(false);
-
-  // Gate states
-  const [codeInput, setCodeInput] = useState('');
-  const [authenticated, setAuthenticated] = useState(false);
-  const [codeError, setCodeError] = useState(false);
-  const [showCode, setShowCode] = useState(false);
 
   // Form state
   const [form, setForm] = useState({
@@ -48,7 +44,8 @@ export default function AddPuzzlePage() {
   });
   const [themes, setThemes] = useState<string[]>([]);
 
-  if (loading) {
+  if (loading || adminLoading) {
+
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Brain className="w-8 h-8 animate-spin text-primary" />
