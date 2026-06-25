@@ -17,8 +17,8 @@ import { AuthModal } from '@/components/AuthModal';
 import { PlanBadge } from '@/components/PlanBadge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { ThemeMultiSelect } from '@/components/ThemeMultiSelect';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
 
-const ACCESS_CODE = 'PAULMORPHY';
 const DIFFICULTIES = ['beginner', 'intermediate', 'advanced', 'master'] as const;
 
 interface Puzzle {
@@ -34,11 +34,8 @@ interface Puzzle {
 
 export default function ManagePuzzlesPage() {
   const { user, loading, isPremium } = useAuth();
+  const { isAdmin, loading: adminLoading } = useIsAdmin();
   const [showSignIn, setShowSignIn] = useState(false);
-  const [codeInput, setCodeInput] = useState('');
-  const [authenticated, setAuthenticated] = useState(false);
-  const [codeError, setCodeError] = useState(false);
-  const [showCode, setShowCode] = useState(false);
 
   const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
   const [fetching, setFetching] = useState(true);
