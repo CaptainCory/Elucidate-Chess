@@ -59,6 +59,33 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
     }
   };
 
+  if (skipTyping) {
+    return (
+      <motion.div
+        ref={containerRef}
+        className="space-y-4"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+      >
+        <div className="rounded-xl border border-primary/30 bg-primary/5 p-5 text-center space-y-2">
+          <div className="inline-flex items-center gap-2 text-primary">
+            <Sparkles className="w-4 h-4" />
+            <span className="text-sm font-semibold uppercase tracking-wide">Express Mode</span>
+          </div>
+          <p className="text-sm text-foreground">
+            {moveSelected
+              ? 'Got it — sending your move to the coach now…'
+              : 'Just drag a piece. We\'ll skip the typing on your first position.'}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            From the next puzzle on, you\u2019ll explain your reasoning to get full coaching.
+          </p>
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div
       ref={containerRef}
