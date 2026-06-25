@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, MessageCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ReactMarkdown from 'react-markdown';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -11,7 +13,7 @@ interface Message {
 interface FollowUpChatProps {
   fen: string;
   userMove: string;
-  bestMove: string;
+  puzzleId?: string;
   puzzleExplanation: string;
   analysisScore: number;
   analysisFeedback: string;
@@ -22,11 +24,12 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chess-follow
 export function FollowUpChat({
   fen,
   userMove,
-  bestMove,
+  puzzleId,
   puzzleExplanation,
   analysisScore,
   analysisFeedback,
 }: FollowUpChatProps) {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +39,9 @@ export function FollowUpChat({
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Hide chat entirely for guests — chess-followup now requires an account
+  if (!user) return null;
 
   const sendMessage = async () => {
     const text = input.trim();
@@ -50,17 +56,22 @@ export function FollowUpChat({
     let assistantSoFar = '';
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const accessToken = session?.access_token;
+      if (!accessToken) throw new Error('Not signed in');
+
       const resp = await fetch(CHAT_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${accessToken}`,
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
         },
         body: JSON.stringify({
           messages: updatedMessages,
           fen,
           userMove,
-          bestMove,
+          puzzleId,
           puzzleExplanation,
           analysisScore,
           analysisFeedback,
@@ -70,6 +81,7 @@ export function FollowUpChat({
       if (!resp.ok || !resp.body) {
         throw new Error('Failed to get response');
       }
+
 
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
