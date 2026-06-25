@@ -2,10 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Users, Crown, Puzzle, TrendingUp, Activity, RefreshCw, Lock, Radio } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
 
 interface DashboardStats {
   totalUsers: number;
@@ -19,49 +21,19 @@ interface DashboardStats {
   difficultyBreakdown: { beginner: number; intermediate: number; advanced: number };
 }
 
-function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password === 'lasker') {
-      sessionStorage.setItem('admin_unlocked', 'true');
-      onUnlock();
-    } else {
-      setError(true);
-      setTimeout(() => setError(false), 1500);
-    }
-  };
-
+function AccessDenied({ reason }: { reason: string }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Card className="w-full max-w-sm">
-          <CardHeader className="text-center">
-            <Lock className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
-            <CardTitle className="text-lg">Admin Access</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={error ? 'border-destructive' : ''}
-                autoFocus
-              />
-              {error && <p className="text-sm text-destructive">Incorrect password</p>}
-              <Button type="submit" className="w-full">Unlock</Button>
-            </form>
-          </CardContent>
-        </Card>
-      </motion.div>
+      <Card className="w-full max-w-sm">
+        <CardHeader className="text-center">
+          <Lock className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+          <CardTitle className="text-lg">Admin Access Required</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3 text-center">
+          <p className="text-sm text-muted-foreground">{reason}</p>
+          <Link to="/play" className="text-sm text-primary hover:underline">← Back to puzzles</Link>
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -140,9 +112,7 @@ function Dashboard() {
   const fetchStats = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('admin-stats', {
-        body: { password: 'lasker' },
-      });
+      const { data, error } = await supabase.functions.invoke('admin-stats');
       if (error) throw error;
       setStats(data as DashboardStats);
       setLastRefresh(new Date());
@@ -156,7 +126,7 @@ function Dashboard() {
 
   useEffect(() => {
     fetchStats();
-    const interval = setInterval(fetchStats, 30_000); // Auto-refresh every 30s
+    const interval = setInterval(fetchStats, 30_000);
     return () => clearInterval(interval);
   }, [fetchStats]);
 
@@ -173,7 +143,6 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-6">
-        {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
@@ -187,7 +156,6 @@ function Dashboard() {
           </Button>
         </div>
 
-        {/* Live visitors */}
         <Card className="border-primary/30">
           <CardContent className="p-5">
             <div className="flex items-center justify-between flex-wrap gap-4">
@@ -221,7 +189,6 @@ function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Stat cards */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <StatCard title="Total Users" value={stats.totalUsers} icon={Users} color="bg-primary/10 text-primary" />
           <StatCard title="Free Users" value={stats.freeUsers} icon={Users} color="bg-secondary text-secondary-foreground" />
@@ -230,7 +197,6 @@ function Dashboard() {
           <StatCard title="Avg Score" value={`${stats.avgScore}%`} icon={TrendingUp} color="bg-accent text-accent-foreground" />
         </div>
 
-        {/* Difficulty breakdown */}
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Puzzles Solved by Difficulty</CardTitle>
@@ -248,7 +214,6 @@ function Dashboard() {
         </Card>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Top users */}
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
@@ -289,7 +254,6 @@ function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Recent activity */}
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
@@ -317,7 +281,6 @@ function Dashboard() {
           </Card>
         </div>
 
-        {/* Total attempts */}
         <Card>
           <CardContent className="p-5 flex items-center justify-between">
             <div>
@@ -333,17 +296,25 @@ function Dashboard() {
 }
 
 export default function AdminDashboard() {
-  const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem('admin_unlocked') === 'true');
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, loading: adminLoading } = useIsAdmin();
+
+  if (authLoading || adminLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!user) return <AccessDenied reason="Please sign in with an admin account to access this page." />;
+  if (!isAdmin) return <AccessDenied reason="Your account does not have admin privileges." />;
 
   return (
     <AnimatePresence mode="wait">
-      {unlocked ? (
-        <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <Dashboard />
-        </motion.div>
-      ) : (
-        <PasswordGate key="gate" onUnlock={() => setUnlocked(true)} />
-      )}
+      <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <Dashboard />
+      </motion.div>
     </AnimatePresence>
   );
 }
