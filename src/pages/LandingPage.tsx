@@ -459,9 +459,10 @@ export default function LandingPage() {
           </motion.p>
           <motion.div variants={fadeUp} custom={2}>
             <Link to="/play">
-              <Button size="lg" className="gap-2 text-lg px-10 py-7 shadow-lg hover:shadow-xl transition-shadow">
-                <ArrowRight className="w-5 h-5" />
+              <Button size="lg" className="gap-3 text-lg px-8 py-7 shadow-lg hover:shadow-xl transition-shadow">
+                <MiniBoardThumb size={28} />
                 Unlimited Beginner Puzzles
+                <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
           </motion.div>
