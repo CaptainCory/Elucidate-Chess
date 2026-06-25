@@ -57,7 +57,7 @@ interface AnalysisResultProps {
   onRetry?: () => void;
   puzzleContext?: {
     fen: string;
-    bestMove: string;
+    puzzleId?: string;
     explanation: string;
   };
 }
@@ -251,7 +251,7 @@ export function AnalysisResult({ analysis, onNext, onRetry, puzzleContext }: Ana
           <FollowUpChat
             fen={puzzleContext.fen}
             userMove={analysis.userMove}
-            bestMove={puzzleContext.bestMove}
+            puzzleId={puzzleContext.puzzleId}
             puzzleExplanation={puzzleContext.explanation}
             analysisScore={analysis.score}
             analysisFeedback={analysis.reasoningFeedback}
