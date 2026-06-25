@@ -5,10 +5,13 @@ import { AuthModal } from '@/components/AuthModal';
 import { PageSEO } from '@/components/PageSEO';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 const LazyChessBoard = lazy(() => import('@/components/ChessBoard').then(m => ({ default: m.ChessBoard })));
-import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2, Calendar } from 'lucide-react';
+import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2, Calendar, PartyPopper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
+import { StreakChip } from '@/components/StreakChip';
+import { MiniBoardThumb } from '@/components/MiniBoardThumb';
+import { ScoreConfetti } from '@/components/ScoreConfetti';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
