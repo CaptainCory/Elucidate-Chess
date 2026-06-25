@@ -207,10 +207,10 @@ export default function LandingPage() {
                 className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
               >
                 <Link to="/play">
-                  <Button size="lg" className="gap-2 text-lg px-10 py-7 shadow-lg hover:shadow-xl transition-shadow">
-                    <ArrowRight className="w-5 h-5" />
-                    Try It For Free
-                  </Button>
+                <Button size="lg" className="gap-2 text-lg px-10 py-7 shadow-lg hover:shadow-xl transition-shadow">
+                  <ArrowRight className="w-5 h-5" />
+                  Unlimited Beginner Puzzles
+                </Button>
                 </Link>
                 <Link to="/how-it-works">
                   <Button variant="outline" size="lg" className="gap-2 text-base px-8 py-6">
@@ -410,7 +410,7 @@ export default function LandingPage() {
             <Link to="/play">
               <Button size="lg" className="gap-2 text-lg px-10 py-7 shadow-lg hover:shadow-xl transition-shadow">
                 <ArrowRight className="w-5 h-5" />
-                Try It For Free
+                Unlimited Beginner Puzzles
               </Button>
             </Link>
           </motion.div>
