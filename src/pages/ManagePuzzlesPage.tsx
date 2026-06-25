@@ -60,10 +60,10 @@ export default function ManagePuzzlesPage() {
   };
 
   useEffect(() => {
-    if (authenticated) fetchPuzzles();
-  }, [authenticated]);
+    if (isAdmin) fetchPuzzles();
+  }, [isAdmin]);
 
-  if (loading) {
+  if (loading || adminLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Brain className="w-8 h-8 animate-spin text-primary" />
@@ -95,40 +95,19 @@ export default function ManagePuzzlesPage() {
     );
   }
 
-  if (!authenticated) {
-    const handleSubmitCode = () => {
-      if (codeInput.trim().toUpperCase() === ACCESS_CODE) {
-        setAuthenticated(true);
-        setCodeError(false);
-      } else {
-        setCodeError(true);
-      }
-    };
+  if (!isAdmin) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6 p-6">
         <Lock className="w-16 h-16 text-primary" />
-        <h1 className="text-2xl font-bold text-foreground">Enter Access Code</h1>
-        <div className="w-full max-w-xs space-y-3">
-          <div className="relative">
-            <Input
-              type={showCode ? 'text' : 'password'}
-              placeholder="Access code"
-              value={codeInput}
-              onChange={(e) => { setCodeInput(e.target.value); setCodeError(false); }}
-              onKeyDown={(e) => e.key === 'Enter' && handleSubmitCode()}
-              className={codeError ? 'border-destructive' : ''}
-            />
-            <button type="button" onClick={() => setShowCode(!showCode)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
-              {showCode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-          </div>
-          {codeError && <p className="text-sm text-destructive">Incorrect access code.</p>}
-          <Button onClick={handleSubmitCode} className="w-full bg-primary text-primary-foreground">Enter</Button>
-        </div>
+        <h1 className="text-2xl font-bold text-foreground">Admin Access Required</h1>
+        <p className="text-muted-foreground text-center max-w-md">
+          Only accounts with the admin role can manage puzzles.
+        </p>
         <Link to="/play" className="text-sm text-muted-foreground hover:text-foreground">← Back to puzzles</Link>
       </div>
     );
   }
+
 
   const sanitizeAlphanumeric = (value: string) => value.replace(/[^a-zA-Z0-9 .,;:!?'"\-()+=]/g, '').slice(0, 500);
   const sanitizeFen = (value: string) => value.replace(/[^rnbqkpRNBQKP1-8wbKQa-h0-9 /\-]/g, '').slice(0, 100);
