@@ -39,19 +39,19 @@ export function ScoreConfetti({ trigger }: { trigger: boolean }) {
     ];
 
     const particles: Particle[] = [];
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 140; i++) {
       const angle = (Math.random() * Math.PI * 2);
-      const speed = 2 + Math.random() * 4;
+      const speed = 2.5 + Math.random() * 6;
       particles.push({
         x: w / 2,
         y: h / 2,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 2,
+        vy: Math.sin(angle) * speed - 3,
         color: colors[Math.floor(Math.random() * colors.length)],
-        size: 3 + Math.random() * 4,
+        size: 4 + Math.random() * 6,
         life: 1,
         rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.3,
+        rotationSpeed: (Math.random() - 0.5) * 0.4,
       });
     }
 

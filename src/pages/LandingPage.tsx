@@ -5,10 +5,13 @@ import { AuthModal } from '@/components/AuthModal';
 import { PageSEO } from '@/components/PageSEO';
 import { ChessQuoteFooter } from '@/components/ChessQuoteFooter';
 const LazyChessBoard = lazy(() => import('@/components/ChessBoard').then(m => ({ default: m.ChessBoard })));
-import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2, Calendar } from 'lucide-react';
+import { Brain, Target, MessageSquare, BarChart3, Crown, ArrowRight, Sparkles, Trophy, Lightbulb, CheckCircle2, Calendar, PartyPopper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { LiveVisitorsBadge } from '@/components/LiveVisitorsBadge';
+import { StreakChip } from '@/components/StreakChip';
+import { MiniBoardThumb } from '@/components/MiniBoardThumb';
+import { ScoreConfetti } from '@/components/ScoreConfetti';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -53,6 +56,15 @@ const DEMO_FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq 
 export default function LandingPage() {
   const { user, loading } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
+  const [demoSolved, setDemoSolved] = useState(false);
+
+  // Win condition for the demo board: Qxf7# (queen takes f7, checkmate).
+  const handleDemoMove = (san: string) => {
+    if (san.replace(/[+#]/g, '').toLowerCase() === 'qxf7') {
+      setDemoSolved(true);
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
@@ -123,6 +135,7 @@ export default function LandingPage() {
             <Crown className="w-6 h-6 text-primary" />
             <span className="text-lg font-bold font-display text-foreground">Elucidate Chess</span>
             <LiveVisitorsBadge className="ml-1" />
+            <StreakChip className="ml-1" />
           </div>
           <div className="flex items-center gap-4">
             <Link to="/how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
@@ -207,9 +220,10 @@ export default function LandingPage() {
                 className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
               >
                 <Link to="/play">
-                <Button size="lg" className="gap-2 text-lg px-10 py-7 shadow-lg hover:shadow-xl transition-shadow">
-                  <ArrowRight className="w-5 h-5" />
+                <Button size="lg" className="gap-3 text-lg px-8 py-7 shadow-lg hover:shadow-xl transition-shadow">
+                  <MiniBoardThumb size={28} />
                   Unlimited Beginner Puzzles
+                  <ArrowRight className="w-5 h-5" />
                 </Button>
                 </Link>
                 <Link to="/how-it-works">
@@ -221,7 +235,7 @@ export default function LandingPage() {
               </motion.div>
             </motion.div>
 
-            {/* Right: Interactive Demo Board */}
+            {/* Right: Interactive Demo Board — playable right on the landing page */}
             <motion.div
               initial={{ opacity: 0, scale: 0.92, rotate: -1 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -231,19 +245,56 @@ export default function LandingPage() {
               {/* Glow behind board */}
               <div className="absolute -inset-6 rounded-2xl pointer-events-none" style={{ background: 'var(--gradient-glow)', filter: 'blur(40px)', opacity: 0.5 }} />
               <div className="relative">
+                {/* Confetti on solve */}
+                <div className="absolute inset-0 pointer-events-none">
+                  <ScoreConfetti trigger={demoSolved} />
+                </div>
                 <Suspense fallback={<div className="aspect-square bg-muted/30 rounded-xl animate-pulse" />}>
-                  <LazyChessBoard fen={DEMO_FEN} orientation="white" interactive={false} />
+                  <LazyChessBoard
+                    key={demoSolved ? 'solved' : 'fresh'}
+                    fen={DEMO_FEN}
+                    orientation="white"
+                    interactive={!demoSolved}
+                    onMove={handleDemoMove}
+                  />
                 </Suspense>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2, duration: 0.5 }}
-                  className="mt-4 text-center"
-                >
-                  <p className="text-sm text-muted-foreground font-display italic">
-                    White to move — can you spot the winning idea?
-                  </p>
-                </motion.div>
+                <AnimatePresence mode="wait">
+                  {!demoSolved ? (
+                    <motion.div
+                      key="prompt"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ delay: 0.3, duration: 0.4 }}
+                      className="mt-4 text-center"
+                    >
+                      <p className="text-sm text-foreground font-display">
+                        ♕ White to move — find checkmate in one
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Drag the queen, no signup needed
+                      </p>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="solved"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, ease: 'backOut' }}
+                      className="mt-4 text-center space-y-3"
+                    >
+                      <p className="text-base text-primary font-display font-semibold flex items-center justify-center gap-2">
+                        <PartyPopper className="w-5 h-5" />
+                        Checkmate! Nicely done.
+                      </p>
+                      <Link to="/play">
+                        <Button size="lg" className="gap-2 shadow-lg">
+                          Play another <ArrowRight className="w-4 h-4" />
+                        </Button>
+                      </Link>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
           </div>
@@ -408,9 +459,10 @@ export default function LandingPage() {
           </motion.p>
           <motion.div variants={fadeUp} custom={2}>
             <Link to="/play">
-              <Button size="lg" className="gap-2 text-lg px-10 py-7 shadow-lg hover:shadow-xl transition-shadow">
-                <ArrowRight className="w-5 h-5" />
+              <Button size="lg" className="gap-3 text-lg px-8 py-7 shadow-lg hover:shadow-xl transition-shadow">
+                <MiniBoardThumb size={28} />
                 Unlimited Beginner Puzzles
+                <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
           </motion.div>

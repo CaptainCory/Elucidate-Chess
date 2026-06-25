@@ -374,7 +374,17 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                 )}
 
                 {!game.isDifficultyLocked && game.gameState === 'thinking' && (
-                  <ThinkingInput onSubmit={game.handleSubmit} isLoading={false} moveSelected={!!game.selectedMove} />
+                  <ThinkingInput
+                    onSubmit={(t) => {
+                      try { localStorage.setItem('ec_first_puzzle_done', '1'); } catch {}
+                      game.handleSubmit(t);
+                    }}
+                    isLoading={false}
+                    moveSelected={!!game.selectedMove}
+                    skipTyping={!user && (() => {
+                      try { return localStorage.getItem('ec_first_puzzle_done') !== '1'; } catch { return false; }
+                    })()}
+                  />
                 )}
 
                 {game.gameState === 'analyzing' && <AnalyzingSequence stage={game.analyzeStage} />}
