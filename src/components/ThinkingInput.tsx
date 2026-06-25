@@ -79,7 +79,7 @@ export function ThinkingInput({ onSubmit, isLoading = false, disabled = false, m
               : 'Just drag a piece. We\'ll skip the typing on your first position.'}
           </p>
           <p className="text-xs text-muted-foreground">
-            From the next puzzle on, you\u2019ll explain your reasoning to get full coaching.
+            From the next puzzle on, you'll explain your reasoning to get full coaching.
           </p>
         </div>
       </motion.div>
