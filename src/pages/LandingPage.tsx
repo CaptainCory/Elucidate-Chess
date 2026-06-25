@@ -220,9 +220,10 @@ export default function LandingPage() {
                 className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
               >
                 <Link to="/play">
-                <Button size="lg" className="gap-2 text-lg px-10 py-7 shadow-lg hover:shadow-xl transition-shadow">
-                  <ArrowRight className="w-5 h-5" />
+                <Button size="lg" className="gap-3 text-lg px-8 py-7 shadow-lg hover:shadow-xl transition-shadow">
+                  <MiniBoardThumb size={28} />
                   Unlimited Beginner Puzzles
+                  <ArrowRight className="w-5 h-5" />
                 </Button>
                 </Link>
                 <Link to="/how-it-works">
@@ -234,7 +235,7 @@ export default function LandingPage() {
               </motion.div>
             </motion.div>
 
-            {/* Right: Interactive Demo Board */}
+            {/* Right: Interactive Demo Board — playable right on the landing page */}
             <motion.div
               initial={{ opacity: 0, scale: 0.92, rotate: -1 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -244,19 +245,56 @@ export default function LandingPage() {
               {/* Glow behind board */}
               <div className="absolute -inset-6 rounded-2xl pointer-events-none" style={{ background: 'var(--gradient-glow)', filter: 'blur(40px)', opacity: 0.5 }} />
               <div className="relative">
+                {/* Confetti on solve */}
+                <div className="absolute inset-0 pointer-events-none">
+                  <ScoreConfetti trigger={demoSolved} />
+                </div>
                 <Suspense fallback={<div className="aspect-square bg-muted/30 rounded-xl animate-pulse" />}>
-                  <LazyChessBoard fen={DEMO_FEN} orientation="white" interactive={false} />
+                  <LazyChessBoard
+                    key={demoSolved ? 'solved' : 'fresh'}
+                    fen={DEMO_FEN}
+                    orientation="white"
+                    interactive={!demoSolved}
+                    onMove={handleDemoMove}
+                  />
                 </Suspense>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2, duration: 0.5 }}
-                  className="mt-4 text-center"
-                >
-                  <p className="text-sm text-muted-foreground font-display italic">
-                    White to move — can you spot the winning idea?
-                  </p>
-                </motion.div>
+                <AnimatePresence mode="wait">
+                  {!demoSolved ? (
+                    <motion.div
+                      key="prompt"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ delay: 0.3, duration: 0.4 }}
+                      className="mt-4 text-center"
+                    >
+                      <p className="text-sm text-foreground font-display">
+                        ♕ White to move — find checkmate in one
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Drag the queen, no signup needed
+                      </p>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="solved"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, ease: 'backOut' }}
+                      className="mt-4 text-center space-y-3"
+                    >
+                      <p className="text-base text-primary font-display font-semibold flex items-center justify-center gap-2">
+                        <PartyPopper className="w-5 h-5" />
+                        Checkmate! Nicely done.
+                      </p>
+                      <Link to="/play">
+                        <Button size="lg" className="gap-2 shadow-lg">
+                          Play another <ArrowRight className="w-4 h-4" />
+                        </Button>
+                      </Link>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
           </div>
