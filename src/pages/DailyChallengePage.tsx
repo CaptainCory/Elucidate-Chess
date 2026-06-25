@@ -294,7 +294,7 @@ export default function DailyChallengePage() {
                   <AnalysisResult
                     analysis={analysis}
                     onNext={() => {}}
-                    puzzleContext={{ fen: puzzle.fen, bestMove: puzzle.bestMove, explanation: puzzle.explanation }}
+                    puzzleContext={{ fen: puzzle.fen, puzzleId: puzzle.id, explanation: puzzle.explanation }}
                   />
                 )}
               </div>

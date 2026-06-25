@@ -386,7 +386,7 @@ function PositionView({ puzzle, user, onReset }: { puzzle: ChessPuzzle; user: an
                     onRetry={game.handleRetry}
                     puzzleContext={{
                       fen: puzzle.fen,
-                      bestMove: puzzle.bestMove,
+                      puzzleId: puzzle.id,
                       explanation: puzzle.explanation,
                     }}
                   />
