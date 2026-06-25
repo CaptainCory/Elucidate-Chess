@@ -3,7 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-cron-secret',
 };
 
 serve(async (req) => {
@@ -12,6 +12,16 @@ serve(async (req) => {
   }
 
   try {
+    // Require cron secret for this internal write endpoint
+    const cronSecret = req.headers.get('x-cron-secret');
+    const expected = Deno.env.get('CRON_SECRET');
+    if (!expected || cronSecret !== expected) {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -20,7 +30,6 @@ serve(async (req) => {
 
     const today = new Date().toISOString().split('T')[0];
 
-    // Check if today already has a challenge
     const { data: existing } = await supabase
       .from('daily_challenges')
       .select('id')
@@ -33,7 +42,6 @@ serve(async (req) => {
       });
     }
 
-    // Pick a random puzzle
     const { data: puzzles, error: puzzleError } = await supabase
       .from('puzzles')
       .select('id')
