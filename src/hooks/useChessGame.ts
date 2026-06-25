@@ -237,7 +237,6 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
       const { data: nextId, error } = await supabase.rpc('get_next_puzzle', {
         p_user_id: user?.id ?? '00000000-0000-0000-0000-000000000000',
         p_current_puzzle_id: puzzle.id,
-        p_is_premium: isPremium,
       });
 
       if (error) {
