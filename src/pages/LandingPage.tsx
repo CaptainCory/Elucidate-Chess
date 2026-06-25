@@ -56,6 +56,15 @@ const DEMO_FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq 
 export default function LandingPage() {
   const { user, loading } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
+  const [demoSolved, setDemoSolved] = useState(false);
+
+  // Win condition for the demo board: Qxf7# (queen takes f7, checkmate).
+  const handleDemoMove = (san: string) => {
+    if (san.replace(/[+#]/g, '').toLowerCase() === 'qxf7') {
+      setDemoSolved(true);
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
