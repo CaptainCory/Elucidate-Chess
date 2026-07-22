@@ -1,0 +1,1 @@
+GRANT SELECT, INSERT, DELETE ON public.user_seen_puzzles TO authenticated; GRANT ALL ON public.user_seen_puzzles TO service_role;
