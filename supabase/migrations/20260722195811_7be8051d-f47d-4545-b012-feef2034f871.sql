@@ -1,0 +1,1 @@
+UPDATE public.puzzles SET previous_fen = fen WHERE id IN ('I2','A11');
