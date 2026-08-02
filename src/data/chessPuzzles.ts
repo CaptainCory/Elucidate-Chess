@@ -74,7 +74,7 @@ export function mapDbPuzzle(data: {
   name: string;
   fen: string;
   previous_fen: string;
-  best_move: string;
+  best_move?: string | null;
   difficulty: string;
   explanation: string;
   themes: string[];
@@ -84,7 +84,7 @@ export function mapDbPuzzle(data: {
     name: data.name,
     fen: data.fen,
     previousFen: data.previous_fen,
-    bestMove: data.best_move,
+    bestMove: data.best_move ?? '',
     difficulty: data.difficulty as ChessPuzzle['difficulty'],
     explanation: data.explanation,
     themes: (data.themes || []) as ChessTheme[],
