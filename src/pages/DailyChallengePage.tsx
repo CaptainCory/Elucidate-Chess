@@ -88,7 +88,7 @@ export default function DailyChallengePage() {
     queryFn: async () => {
       const { data } = await supabase
         .from('puzzles')
-        .select('*')
+        .select('id, name, fen, previous_fen, difficulty, explanation, themes')
         .eq('id', challenge!.puzzle_id)
         .maybeSingle();
       return data ? mapDbPuzzle(data) : null;
@@ -172,7 +172,7 @@ export default function DailyChallengePage() {
         score: data.score,
         moveCorrect: data.moveCorrect,
         userMove: selectedMove,
-        bestMove: puzzle.bestMove,
+        bestMove: data.bestMove ?? puzzle.bestMove,
         reasoningFeedback: data.reasoningFeedback,
         keyInsights: data.keyInsights || [],
         improvement: data.improvement || '',

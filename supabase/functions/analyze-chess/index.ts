@@ -225,7 +225,18 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    const positionVerification = verifyPosition(fen, bestMove, userMove);
+    // Resolve the author's best move server-side (clients can no longer read it)
+    let effectiveBestMove = bestMove ?? '';
+    if (!effectiveBestMove && puzzleId) {
+      const { data: puzzleRow } = await supabase
+        .from('puzzles')
+        .select('best_move')
+        .eq('id', puzzleId)
+        .maybeSingle();
+      effectiveBestMove = puzzleRow?.best_move ?? '';
+    }
+
+    const positionVerification = verifyPosition(fen, effectiveBestMove, userMove);
     const whitePiecesSummary = positionVerification.pieces
       .filter((piece) => piece.color === 'white')
       .map(formatPieceSquare)
@@ -305,7 +316,7 @@ ${userThinking}
 """
 
 === GROUND TRUTH ===
-Best Move (author's intended): ${bestMove}
+Best Move (author's intended): ${effectiveBestMove}
 Correct Explanation: ${puzzleExplanation}
 ${engine ? `
 === ENGINE ANALYSIS (Stockfish, authoritative for move quality) ===
@@ -386,6 +397,7 @@ Now analyze the student's response, grounding every claim in the actual pieces p
     const responsePayload = {
       ...analysis,
       positionVerification,
+      bestMove: effectiveBestMove,
       engine: engine ?? null,
     };
 

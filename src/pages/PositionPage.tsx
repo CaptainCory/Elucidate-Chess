@@ -47,7 +47,7 @@ const PositionPage = () => {
     setLoading(true);
     setNotFound(false);
     setPuzzle(null);
-    supabase.from('puzzles').select('*').eq('id', id).maybeSingle().then(({ data, error }) => {
+    supabase.from('puzzles').select('id, name, fen, previous_fen, difficulty, explanation, themes').eq('id', id).maybeSingle().then(({ data, error }) => {
       if (error || !data) {
         setNotFound(true);
       } else {

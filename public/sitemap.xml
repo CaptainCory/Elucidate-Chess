@@ -211,11 +211,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://elucidatechess.com/position/I2</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://elucidatechess.com/position/A1</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -286,6 +281,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://elucidatechess.com/position/I2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://elucidatechess.com/position/A8</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -327,11 +327,6 @@
   </url>
   <url>
     <loc>https://elucidatechess.com/position/A10</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://elucidatechess.com/position/A11</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -962,6 +957,11 @@
   </url>
   <url>
     <loc>https://elucidatechess.com/position/B23</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://elucidatechess.com/position/A11</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

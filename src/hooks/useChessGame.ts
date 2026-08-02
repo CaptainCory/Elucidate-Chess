@@ -145,7 +145,7 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
         score: data.score,
         moveCorrect: data.moveCorrect,
         userMove: selectedMove,
-        bestMove: puzzle.bestMove,
+        bestMove: data.bestMove ?? puzzle.bestMove,
         feedbackTitle: data.feedbackTitle,
         reasoningFeedback: data.reasoningFeedback,
         keyInsights: data.keyInsights || [],
