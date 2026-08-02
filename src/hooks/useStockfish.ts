@@ -149,7 +149,7 @@ export function useStockfish(elo = 2000) {
    * Score is relative to side-to-move (UCI convention).
    */
   const getEvaluation = useCallback(
-    (fen: string, depth = 14, timeoutMs = 6000): Promise<RawEval> => {
+    (fen: string, depth = 11, timeoutMs = 2500): Promise<RawEval> => {
       return new Promise((resolve) => {
         const worker = workerRef.current;
         if (!worker || state === 'error') {
@@ -177,7 +177,7 @@ export function useStockfish(elo = 2000) {
             setTimeout(() => {
               const acc = evalAccumRef.current;
               safeResolve({ cp: acc.cp, mate: acc.mate, bestMove: null });
-            }, 300);
+            }, 150);
           }
         }, timeoutMs);
       });

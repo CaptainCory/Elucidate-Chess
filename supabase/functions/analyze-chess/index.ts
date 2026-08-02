@@ -339,7 +339,9 @@ Now analyze the student's response, grounding every claim in the actual pieces p
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-3-flash-preview',
+        model: 'google/gemini-3.6-flash',
+        reasoning_effort: 'none',
+        max_tokens: 500,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
