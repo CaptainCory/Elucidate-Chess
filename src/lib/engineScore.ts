@@ -75,9 +75,11 @@ export function cplToScore(cpl: number): number {
 /** Pretty-print a White-perspective eval for the UI. */
 export function formatEval(e: EngineEval): string {
   if (e.mate !== null && e.mate !== undefined) {
+    if (e.mate === 0) return 'Checkmate';
     const n = Math.abs(e.mate);
     return e.mate > 0 ? `Mate in ${n}` : `Mated in ${n}`;
   }
+
   if (e.cp === null || e.cp === undefined) return '—';
   const pawns = e.cp / 100;
   const sign = pawns > 0 ? '+' : '';
