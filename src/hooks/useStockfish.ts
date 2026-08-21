@@ -29,6 +29,8 @@ type PendingEval = ((res: RawEval) => void) | null;
 export function useStockfish(elo = 2000) {
   const workerRef = useRef<Worker | null>(null);
   const [state, setState] = useState<EngineState>('loading');
+  const stateRef = useRef<EngineState>('loading');
+  stateRef.current = state;
   const pendingBestRef = useRef<PendingBest>(null);
   const pendingEvalRef = useRef<PendingEval>(null);
   // Accumulator for the deepest "info" line seen during current eval
@@ -37,6 +39,18 @@ export function useStockfish(elo = 2000) {
     mate: null,
     depth: -1,
   });
+
+  /** Wait (bounded) until the worker exists and has answered `isready`. */
+  const waitForEngine = useCallback(async (maxWaitMs = 6000): Promise<boolean> => {
+    const start = Date.now();
+    while (Date.now() - start < maxWaitMs) {
+      if (stateRef.current === 'error') return false;
+      if (workerRef.current && stateRef.current !== 'loading') return true;
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    return !!workerRef.current;
+  }, []);
+
 
   useEffect(() => {
     let cancelled = false;
