@@ -11,9 +11,11 @@ import { useStockfish } from '@/hooks/useStockfish';
 import {
   centipawnLoss,
   cplToScore,
+  hasEval,
   normalizeEvalToWhite,
   type EngineEval,
 } from '@/lib/engineScore';
+
 
 export type GameState = 'thinking' | 'analyzing' | 'result';
 export type AnalyzeStage = 'idle' | 'sending' | 'thinking' | 'finalizing' | 'done';
