@@ -10,6 +10,12 @@ export interface EngineEval {
   bestMove: string | null;
 }
 
+/** True when the engine actually returned a usable score. */
+export function hasEval(raw: { cp: number | null; mate: number | null } | null | undefined): boolean {
+  if (!raw) return false;
+  return (raw.cp !== null && raw.cp !== undefined) || (raw.mate !== null && raw.mate !== undefined);
+}
+
 /**
  * Convert an evaluation that UCI returned (relative to side-to-move)
  * into an evaluation from White's perspective. Centipawns.
@@ -23,6 +29,8 @@ export function normalizeEvalToWhite(
 ): number {
   const sign = sideToMove === 'w' ? 1 : -1;
   if (raw.mate !== null && raw.mate !== undefined) {
+    // "mate 0" means the side to move is already checkmated.
+    if (raw.mate === 0) return sign * -10000;
     // Closer mates are worth more. Cap at 10000.
     const magnitude = 10000 - Math.min(99, Math.abs(raw.mate)) * 10;
     return sign * Math.sign(raw.mate) * magnitude;
@@ -32,6 +40,7 @@ export function normalizeEvalToWhite(
   }
   return 0;
 }
+
 
 /**
  * Centipawn loss caused by the move that took the position from `before` to `after`.
@@ -66,9 +75,11 @@ export function cplToScore(cpl: number): number {
 /** Pretty-print a White-perspective eval for the UI. */
 export function formatEval(e: EngineEval): string {
   if (e.mate !== null && e.mate !== undefined) {
+    if (e.mate === 0) return 'Checkmate';
     const n = Math.abs(e.mate);
     return e.mate > 0 ? `Mate in ${n}` : `Mated in ${n}`;
   }
+
   if (e.cp === null || e.cp === undefined) return '—';
   const pawns = e.cp / 100;
   const sign = pawns > 0 ? '+' : '';

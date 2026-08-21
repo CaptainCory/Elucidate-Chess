@@ -11,9 +11,11 @@ import { useStockfish } from '@/hooks/useStockfish';
 import {
   centipawnLoss,
   cplToScore,
+  hasEval,
   normalizeEvalToWhite,
   type EngineEval,
 } from '@/lib/engineScore';
+
 
 export type GameState = 'thinking' | 'analyzing' | 'result';
 export type AnalyzeStage = 'idle' | 'sending' | 'thinking' | 'finalizing' | 'done';
@@ -82,9 +84,14 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
           // Apply the user's SAN move with chess.js to get the resulting FEN
           const chess = new Chess(puzzle.fen);
           let fenAfter: string | null = null;
+          let terminalAfter: 'checkmate' | 'draw' | null = null;
           try {
             const applied = chess.move(selectedMove, { strict: false });
-            if (applied) fenAfter = chess.fen();
+            if (applied) {
+              fenAfter = chess.fen();
+              if (chess.isCheckmate()) terminalAfter = 'checkmate';
+              else if (chess.isStalemate() || chess.isDraw()) terminalAfter = 'draw';
+            }
           } catch {
             fenAfter = null;
           }
@@ -93,21 +100,31 @@ export function useChessGame(puzzle: ChessPuzzle, onReset?: () => void) {
           // evaluation at a time; parallel calls clobber each other's
           // pending resolver and the first one ends up timing out.
           const rawBefore = await engineEvaluate(puzzle.fen, 11, 2500);
-          const rawAfter = fenAfter ? await engineEvaluate(fenAfter, 11, 2500) : null;
+          // A finished game has no engine eval — derive it deterministically.
+          const rawAfter = terminalAfter === 'checkmate'
+            ? { cp: null, mate: 0, bestMove: null }
+            : terminalAfter === 'draw'
+              ? { cp: 0, mate: null, bestMove: null }
+              : fenAfter
+                ? await engineEvaluate(fenAfter, 11, 2500)
+                : null;
 
-          if (rawBefore && rawAfter) {
+          if (hasEval(rawBefore) && hasEval(rawAfter)) {
             const beforeWhite = normalizeEvalToWhite(rawBefore, sideToMove);
-            const afterWhite = normalizeEvalToWhite(rawAfter, sideToMove === 'w' ? 'b' : 'w');
+            const afterWhite = normalizeEvalToWhite(rawAfter!, sideToMove === 'w' ? 'b' : 'w');
             const cpl = centipawnLoss(beforeWhite, afterWhite, sideToMove);
             const moveScore = cplToScore(cpl);
             enginePayload = {
               bestMove: rawBefore.bestMove,
               evalBefore: { ...rawBefore },
-              evalAfter: { ...rawAfter },
+              evalAfter: { ...rawAfter! },
               cpl,
               moveScore,
             };
+          } else {
+            console.warn('Engine returned no usable evaluation — scoring on reasoning only.');
           }
+
         }
       } catch (engErr) {
         console.warn('Engine analysis failed, falling back to AI-only scoring:', engErr);
