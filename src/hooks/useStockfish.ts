@@ -141,13 +141,11 @@ export function useStockfish(elo = 2000) {
   }, [elo]);
 
   const getBestMove = useCallback(
-    (fen: string, movetimeMs = 800): Promise<string | null> => {
+    async (fen: string, movetimeMs = 800): Promise<string | null> => {
+      const ok = await waitForEngine();
+      const worker = workerRef.current;
+      if (!ok || !worker) return null;
       return new Promise((resolve) => {
-        const worker = workerRef.current;
-        if (!worker || state === 'error') {
-          resolve(null);
-          return;
-        }
         pendingBestRef.current = resolve;
         setState('thinking');
         worker.postMessage('ucinewgame');
@@ -155,7 +153,7 @@ export function useStockfish(elo = 2000) {
         worker.postMessage(`go movetime ${movetimeMs}`);
       });
     },
-    [state],
+    [waitForEngine],
   );
 
   /**
@@ -163,13 +161,11 @@ export function useStockfish(elo = 2000) {
    * Score is relative to side-to-move (UCI convention).
    */
   const getEvaluation = useCallback(
-    (fen: string, depth = 11, timeoutMs = 2500): Promise<RawEval> => {
+    async (fen: string, depth = 11, timeoutMs = 2500): Promise<RawEval> => {
+      const ok = await waitForEngine();
+      const worker = workerRef.current;
+      if (!ok || !worker) return { cp: null, mate: null, bestMove: null };
       return new Promise((resolve) => {
-        const worker = workerRef.current;
-        if (!worker || state === 'error') {
-          resolve({ cp: null, mate: null, bestMove: null });
-          return;
-        }
         evalAccumRef.current = { cp: null, mate: null, depth: -1 };
         let settled = false;
         const safeResolve = (v: RawEval) => {
@@ -191,13 +187,14 @@ export function useStockfish(elo = 2000) {
             setTimeout(() => {
               const acc = evalAccumRef.current;
               safeResolve({ cp: acc.cp, mate: acc.mate, bestMove: null });
-            }, 150);
+            }, 250);
           }
         }, timeoutMs);
       });
     },
-    [state],
+    [waitForEngine],
   );
+
 
   return { state, getBestMove, getEvaluation };
 }
